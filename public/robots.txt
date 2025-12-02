@@ -1,0 +1,25 @@
+# robots.txt pour BlockPulse.be
+# Permet à tous les robots d'indexer le site
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://blockpulse.be/sitemap.xml
+
+# Règles spécifiques pour les principaux moteurs
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Bloquer les scrapers agressifs (optionnel)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

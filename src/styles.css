@@ -1188,6 +1188,11 @@ a {
   }
 }
 
+/* ====== PAGE TEMPS RÉEL : fond neutre, sans halo bleu ====== */
+.bp-realtime-page {
+  background: #020816;      /* fond sombre propre */
+}
+
 @media (max-width: 600px) {
   .bp-hero {
     padding-top: 48px;

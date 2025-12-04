@@ -4,25 +4,32 @@ export default function Hero() {
   return (
     <section className="bp-hero">
       <div className="bp-container bp-hero-inner">
+
+        {/* Texte principal */}
         <div className="bp-hero-text">
+
           <p className="bp-eyebrow">Bitcoin Compute Node</p>
+
           <h1>
             BlockPulse.be <span>Bitcoin Lottery Node*</span>
           </h1>
+
           <p className="bp-hero-sub">
-            Un ESP32 connecté en temps réel au pool ViaBTC, une visualisation
-            futuriste, et une participation à partir de <strong>{CONFIG.UNIT_PRICE.toFixed(2)} €</strong>{" "}
-            pour soutenir la puissance de calcul.
+            Un module ESP32 relié en temps réel au pool ViaBTC, un système de
+            tirages basé sur l’activité de minage, et une expérience crypto
+            futuriste accessible dès <strong>5,97 €</strong>.
           </p>
+
           <p className="bp-hero-small">
-            *Ce système est un jeu expérimental basé sur le minage de pool
-            Bitcoin. Il ne constitue pas un jeu d&apos;argent au sens légal :
-            vous soutenez un nœud de calcul et recevez un bonus si le pool
-            distribue une récompense.
+            *BlockPulse est une expérience ludique et pédagogique utilisant le
+            protocole Stratum. Vous soutenez un nœud de calcul et obtenez des
+            tickets de tirage selon l’activité du module. Il ne s’agit pas d’un
+            investissement ou d’un jeu d’argent réglementé.
           </p>
+
           <div className="bp-hero-actions">
             <a href="/participer" className="bp-btn-primary bp-btn-large">
-              Participer maintenant — dès {CONFIG.UNIT_PRICE.toFixed(2)} €
+              Participer maintenant — dès 5,97 €
             </a>
             <a href="/comment-ca-marche" className="bp-btn-secondary">
               Voir le fonctionnement
@@ -30,6 +37,7 @@ export default function Hero() {
           </div>
         </div>
 
+        {/* Carte système en direct */}
         <div className="bp-hero-card">
           <h3>Système en direct</h3>
           <ul>
@@ -47,11 +55,13 @@ export default function Hero() {
               <span className="bp-status bp-status-on">ONLINE</span>
             </li>
           </ul>
+
           <p className="bp-hero-note">
-            Les données temps réel sont affichées plus bas et mises à jour
-            directement depuis l&apos;ESP32 via JSON.
+            Les données affichées plus bas proviennent directement de l’ESP32
+            (ou du cloud si celui-ci est momentanément hors ligne).
           </p>
         </div>
+
       </div>
     </section>
   );

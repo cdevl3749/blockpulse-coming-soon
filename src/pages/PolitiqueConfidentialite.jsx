@@ -7,7 +7,7 @@ export default function PolitiqueConfidentialite() {
           <div className="bp-legal-icon">🔒</div>
           <h1>Politique de confidentialité</h1>
           <p className="bp-legal-subtitle">
-            Comment BlockPulse gère vos données personnelles.
+            Comment BlockPulse gère et protège vos données personnelles.
           </p>
         </div>
 
@@ -20,9 +20,15 @@ export default function PolitiqueConfidentialite() {
 
           <div className="bp-legal-card">
             <p>
-              BlockPulse.be respecte la confidentialité des utilisateurs.
-              Ce projet étant expérimental, nous collectons le minimum
-              de données nécessaires à son fonctionnement.
+              BlockPulse.be est un projet technologique expérimental basé sur un
+              module ESP32 connecté au pool ViaBTC.  
+              Le site respecte votre vie privée et collecte uniquement les données
+              nécessaires à son fonctionnement technique.
+            </p>
+
+            <p>
+              BlockPulse ne propose aucun service financier et ne stocke aucune
+              donnée bancaire ou sensible.
             </p>
           </div>
         </section>
@@ -35,18 +41,31 @@ export default function PolitiqueConfidentialite() {
           </div>
 
           <div className="bp-legal-card">
-            <p>Aucune donnée personnelle sensible n’est collectée.</p>
+            <p>
+              BlockPulse collecte uniquement les données strictement
+              nécessaires au fonctionnement du site et du système de contribution technique.
+            </p>
 
-            <p>BlockPulse peut collecter :</p>
+            <p>Nous pouvons collecter :</p>
 
             <ul className="bp-legal-list">
-              <li>Votre adresse e-mail (si vous nous contactez volontairement)</li>
-              <li>Des données techniques anonymisées : navigateur, pages visitées…</li>
-              <li>Le statut du paiement via NOWPayments (aucune donnée bancaire)</li>
+              <li>
+                Votre adresse e-mail (uniquement si vous nous contactez volontairement)
+              </li>
+              <li>
+                Des données techniques anonymisées : type de navigateur, pages
+                visitées, temps passé, etc.
+              </li>
+              <li>
+                Les retours de paiement fournis par <strong>NOWPayments</strong>  
+                (montant, statut, ID de transaction) —  
+                <strong>aucune donnée bancaire</strong> n’est jamais collectée.
+              </li>
             </ul>
 
             <p>
-              BlockPulse ne collecte ni carte bancaire, ni identité, ni adresse.
+              BlockPulse ne collecte ni identité, ni adresse postale, ni numéro
+              de téléphone, ni carte bancaire.
             </p>
           </div>
         </section>
@@ -60,13 +79,14 @@ export default function PolitiqueConfidentialite() {
 
           <div className="bp-legal-card">
             <p>
-              Les paiements sont gérés exclusivement par <strong>NOWPayments</strong>.
-              Aucune donnée de paiement n’est stockée par BlockPulse.
+              Tous les paiements sont traités via la plateforme sécurisée{" "}
+              <strong>NOWPayments</strong>.  
+              BlockPulse ne reçoit et ne stocke aucune donnée de paiement.
             </p>
 
             <p>
-              NOWPayments est conforme aux standards de sécurité
-              du secteur (cryptage, anti-fraude…).
+              NOWPayments applique des standards stricts :  
+              cryptage, conformité, anti-fraude, surveillance des transactions.
             </p>
           </div>
         </section>
@@ -79,11 +99,14 @@ export default function PolitiqueConfidentialite() {
           </div>
 
           <div className="bp-legal-card">
+            <p>Les données collectées servent à :</p>
+
             <ul className="bp-legal-list">
-              <li>Assurer le fonctionnement technique du site</li>
-              <li>Garantir la gestion des paiements</li>
-              <li>Analyser l’utilisation du site (de manière anonyme)</li>
-              <li>Améliorer l’expérience utilisateur</li>
+              <li>Assurer le fonctionnement du site et du tableau de bord</li>
+              <li>Gérer les paiements via NOWPayments</li>
+              <li>Analyser l’utilisation du site (statistiques anonymisées)</li>
+              <li>Déclencher et gérer les tirages techniques</li>
+              <li>Améliorer l’expérience utilisateur et la stabilité du projet</li>
             </ul>
           </div>
         </section>
@@ -96,7 +119,7 @@ export default function PolitiqueConfidentialite() {
           </div>
 
           <div className="bp-legal-card">
-            <p>Conformément au RGPD, vous disposez de :</p>
+            <p>Conformément au RGPD, vous disposez des droits suivants :</p>
 
             <ul className="bp-legal-list">
               <li>Droit d’accès</li>
@@ -106,9 +129,12 @@ export default function PolitiqueConfidentialite() {
             </ul>
 
             <p>
-              Pour exercer vos droits :  
+              Pour exercer vos droits, contactez :  
               <br />
-              📩 <a href="mailto:support@blockpulse.be">support@blockpulse.be</a>
+              📩{" "}
+              <a href="mailto:support@blockpulse.be">
+                support@blockpulse.be
+              </a>
             </p>
           </div>
         </section>
@@ -122,8 +148,8 @@ export default function PolitiqueConfidentialite() {
 
           <div className="bp-legal-card">
             <p>
-              Cette politique peut être mise à jour en fonction des besoins du projet
-              ou de l’évolution de la réglementation.
+              Cette politique pourra être modifiée en fonction des besoins du
+              projet ou des évolutions réglementaires.
             </p>
           </div>
         </section>
@@ -135,3 +161,4 @@ export default function PolitiqueConfidentialite() {
     </div>
   );
 }
+

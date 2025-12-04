@@ -1,96 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    
-    <!-- Title & Description -->
-    <title>BlockPulse.be – Gagnez des Bitcoin avec votre ESP32 | Loterie Bitcoin Belgique</title>
-    <meta name="description" content="Transformez votre ESP32 en nœud Bitcoin et participez à une loterie décentralisée. Pool de 6 BTC. Paiements crypto sécurisés via NOWPayments. Projet belge expérimental." />
-    
-    <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Keywords -->
-    <meta name="keywords" content="Bitcoin, ESP32, loterie bitcoin, crypto, blockchain, node bitcoin, mining pool, gagner bitcoin, ViaBTC, NOWPayments, Belgique" />
-    
-    <!-- Author & Robots -->
-    <meta name="author" content="BlockPulse" />
+
+    <!-- ============================== -->
+    <!-- 🔥 SEO PRINCIPAL (mis à jour) -->
+    <!-- ============================== -->
+    <title>
+      BlockPulse.be – Contribution Technique ESP32 & Tirages Techniques Bitcoin 🇧🇪
+    </title>
+
+    <meta
+      name="description"
+      content="BlockPulse est un projet technique basé sur un ESP32 connecté à un pool Bitcoin. Participez via des contributions techniques et accédez à des tirages techniques déclenchés automatiquement selon l’activité du pool. Projet expérimental européen."
+    />
+
+    <!-- Mots-clés SEO -->
+    <meta
+      name="keywords"
+      content="Bitcoin, ESP32, tirages techniques, contribution technique, ViaBTC, projet expérimental, crypto, microcontrôleur"
+    />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://blockpulse.be/" />
+
+    <!-- ============================== -->
+    <!-- 🔍 Robots / Googlebot -->
+    <!-- ============================== -->
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
+
+    <!-- ============================== -->
+    <!-- 📱 PWA / Icons -->
+    <!-- ============================== -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- ============================== -->
+    <!-- 🟦 OpenGraph (Facebook / Discord) -->
+    <!-- ============================== -->
+    <meta property="og:title" content="BlockPulse.be – Contribution Technique ESP32 & Tirages Techniques Bitcoin" />
+    <meta property="og:description" content="Rejoignez un projet expérimental basé sur un ESP32 connecté à ViaBTC. Participez via des contributions techniques et accédez à des tirages techniques basés sur l’activité du réseau Bitcoin." />
+    <meta property="og:image" content="https://blockpulse.be/og-image.png" />
     <meta property="og:url" content="https://blockpulse.be/" />
-    <meta property="og:title" content="BlockPulse.be – Gagnez des Bitcoin avec votre ESP32" />
-    <meta property="og:description" content="Transformez votre ESP32 en nœud Bitcoin et participez à une loterie décentralisée. Pool de 6 BTC disponible." />
-    <meta property="og:image" content="https://blockpulse.be/og-image.jpg" />
-    <meta property="og:locale" content="fr_BE" />
-    <meta property="og:site_name" content="BlockPulse" />
-    
-    <!-- Twitter Card -->
+    <meta property="og:type" content="website" />
+
+    <!-- ============================== -->
+    <!-- 🐦 Twitter Card -->
+    <!-- ============================== -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://blockpulse.be/" />
-    <meta name="twitter:title" content="BlockPulse.be – Gagnez des Bitcoin avec votre ESP32" />
-    <meta name="twitter:description" content="Loterie Bitcoin décentralisée sur ESP32. Pool de 6 BTC." />
-    <meta name="twitter:image" content="https://blockpulse.be/og-image.jpg" />
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://blockpulse.be/" />
-    
-    <!-- Favicons -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#22D3EE" />
-    
-    <!-- Structured Data - Organization -->
+    <meta name="twitter:title" content="BlockPulse.be – Contribution Technique ESP32" />
+    <meta name="twitter:description" content="Participez à un projet unique basé sur un ESP32 et accédez à des tirages techniques déclenchés automatiquement." />
+    <meta name="twitter:image" content="https://blockpulse.be/og-image.png" />
+
+    <!-- ============================== -->
+    <!-- 🔧 STRUCTURED DATA JSON-LD -->
+    <!-- ============================== -->
+
+    <!-- Organisation -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "BlockPulse",
-      "url": "https://blockpulse.be",
-      "logo": "https://blockpulse.be/logo.png",
-      "description": "Plateforme de loterie Bitcoin basée sur ESP32 en Belgique",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "BE"
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "BlockPulse",
+        "url": "https://blockpulse.be",
+        "logo": "https://blockpulse.be/logo.png",
+        "description": "Projet expérimental basé sur un ESP32 et des tirages techniques liés au pool Bitcoin ViaBTC."
       }
-    }
     </script>
-    
-    <!-- Structured Data - Product -->
+
+    <!-- Produit / Service -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "BlockPulse ESP32 Bitcoin Node",
-      "description": "Nœud Bitcoin sur ESP32 pour participer à une loterie Bitcoin décentralisée",
-      "brand": {
-        "@type": "Brand",
-        "name": "BlockPulse"
-      },
-      "offers": {
-        "@type": "AggregateOffer",
-        "lowPrice": "5.97",
-        "highPrice": "149.25",
-        "priceCurrency": "EUR"
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Contribution Technique BlockPulse",
+        "provider": {
+          "@type": "Organization",
+          "name": "BlockPulse"
+        },
+        "description": "Participation via des contributions techniques donnant accès à des tirages techniques déclenchés automatiquement.",
+        "offers": {
+          "@type": "Offer",
+          "url": "https://blockpulse.be/participer",
+          "priceCurrency": "EUR",
+          "price": "5.97",
+          "availability": "https://schema.org/InStock"
+        }
       }
-    }
     </script>
+
+    <!-- ============================== -->
+    <!-- 📦 Script Vite -->
+    <!-- ============================== -->
+    <script type="module" crossorigin src="/src/main.jsx"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/src/styles.css" />
   </head>
 
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    
-    <!-- Fallback pour navigateurs sans JS -->
-    <noscript>
-      <div style="padding: 20px; text-align: center; font-family: sans-serif;">
-        <h1>BlockPulse.be – ESP32 Bitcoin Node</h1>
-        <p>Ce site nécessite JavaScript pour fonctionner.</p>
-      </div>
-    </noscript>
   </body>
 </html>

@@ -14,7 +14,8 @@ export default function Footer() {
             <span className="bp-logo-label">BlockPulse</span>
           </div>
           <p className="bp-footer-tagline">
-            Projet expérimental de loterie Bitcoin sur ESP32
+            Plateforme de contribution technique basée sur un module ESP32.  
+            Tirages symboliques déclenchés par l’activité du pool ViaBTC.
           </p>
         </div>
 
@@ -46,9 +47,15 @@ export default function Footer() {
                   </linearGradient>
                 </defs>
                 <rect width="80" height="50" rx="6" fill="url(#visaGrad)" />
-                
-                {/* Logo VISA simplifié */}
-                <text x="40" y="32" textAnchor="middle" fill="#FFF" fontSize="20" fontWeight="700" fontFamily="system-ui">
+                <text
+                  x="40"
+                  y="32"
+                  textAnchor="middle"
+                  fill="#FFF"
+                  fontSize="20"
+                  fontWeight="700"
+                  fontFamily="system-ui"
+                >
                   VISA
                 </text>
               </svg>
@@ -63,14 +70,12 @@ export default function Footer() {
                 aria-label="Mastercard"
               >
                 <rect width="80" height="50" rx="6" fill="#000" />
-                
-                {/* Cercles Mastercard */}
                 <circle cx="30" cy="25" r="11" fill="#EB001B" opacity="0.95" />
                 <circle cx="50" cy="25" r="11" fill="#F79E1B" opacity="0.95" />
               </svg>
             </div>
 
-            {/* NOWPayments - Crypto */}
+            {/* NOWPayments */}
             <div className="bp-payment-card">
               <svg
                 viewBox="0 0 80 50"
@@ -91,18 +96,16 @@ export default function Footer() {
                 
                 <rect width="80" height="50" rx="6" fill="url(#cryptoBg)" />
                 <rect width="80" height="50" rx="6" fill="none" stroke="#22D3EE" strokeWidth="1" opacity="0.4" />
-                
-                {/* Symbole Bitcoin */}
+
                 <circle cx="22" cy="25" r="9" fill="url(#cryptoIcon)" />
                 <text x="22" y="30" textAnchor="middle" fill="#0A0F2B" fontSize="13" fontWeight="700">
                   ₿
                 </text>
-                
-                {/* Texte NOW Payments */}
-                <text x="38" y="22" fill="#22D3EE" fontSize="10" fontWeight="700" fontFamily="system-ui">
+
+                <text x="38" y="22" fill="#22D3EE" fontSize="10" fontWeight="700">
                   NOW
                 </text>
-                <text x="38" y="32" fill="#64748B" fontSize="7" fontWeight="500" fontFamily="system-ui">
+                <text x="38" y="32" fill="#64748B" fontSize="7" fontWeight="500">
                   Payments
                 </text>
               </svg>
@@ -125,7 +128,7 @@ export default function Footer() {
             </div>
             <div className="bp-trust-badge">
               <span>🇪🇺</span>
-              <span>EU Host</span>
+              <span>Hébergement EU</span>
             </div>
           </div>
         </div>
@@ -133,9 +136,9 @@ export default function Footer() {
         {/* Disclaimer */}
         <div className="bp-footer-disclaimer">
           <p>
-            Bitcoin, ViaBTC, NOWPayments et les autres marques citées sont la
-            propriété de leurs détenteurs respectifs.
-            Ce site est un projet indépendant et expérimental, sans garantie de gains.
+            Bitcoin, ViaBTC, NOWPayments et les marques citées appartiennent à leurs détenteurs respectifs.  
+            BlockPulse est un projet expérimental et indépendant, sans rendement garanti ni promesse de gains.  
+            Les bonus sont symboliques et liés aux tirages techniques déclenchés par l'activité du pool ViaBTC.
           </p>
         </div>
 

@@ -4,73 +4,90 @@ export default function HowItWorks() {
   return (
     <section className="bp-section">
       <div className="bp-container">
-        <h2>Comment fonctionne BlockPulse.io ?</h2>
+        <h2>Comment fonctionne BlockPulse.be ?</h2>
+
         <div className="bp-grid-3">
+
+          {/* Étape 1 */}
           <div className="bp-card">
-            <h3>1. Contribution technique (dès {CONFIG.UNIT_PRICE.toFixed(2)} €)</h3>
+            <h3>1. Participation technique (dès 5,97 €)</h3>
             <p>
-              Vous achetez une <strong>unité de contribution</strong> d&apos;un
-              montant de <strong>{CONFIG.UNIT_PRICE.toFixed(2)} €</strong>. Cette participation sert
-              à financer l&apos;infrastructure (ESP32, hébergement, monitoring,
-              développement).
+              Vous achetez un <strong>pack de participation</strong> composé de plusieurs parts
+              (valeur de base : {CONFIG.UNIT_PRICE.toFixed(2)} € / part).  
+              Ces parts vous donnent un certain nombre de <strong>tickets techniques</strong>.
             </p>
             <p>
-              Le paiement est géré par <strong>NOWPayments</strong>, un
-              processeur de paiement crypto sécurisé qui accepte{" "}
-              <strong>Bitcoin</strong>, <strong>Ethereum</strong>, <strong>USDT</strong> et plus de 150 cryptomonnaies.
+              Les paiements sont gérés par <strong>NOWPayments</strong> et supportent plus de
+              150 cryptomonnaies (BTC, ETH, USDT, etc.). La transaction vous relie officiellement
+              au nœud BlockPulse.
             </p>
           </div>
 
+          {/* Étape 2 */}
           <div className="bp-card">
-            <h3>2. Minage en pool &amp; bonus éventuels</h3>
+            <h3>2. Activité de minage &amp; événements techniques</h3>
             <p>
-              L&apos;ESP32 est connecté au pool <strong>ViaBTC</strong>. Il
-              envoie des shares (preuves de travail partielles) qui contribuent
-              au minage d&apos;un bloc Bitcoin.
+              Le module ESP32 est connecté au pool <strong>ViaBTC</strong> via le protocole Stratum.
+              Il reçoit des tâches de minage (jobs), calcule des hashs et renvoie des <strong>shares</strong>.
             </p>
             <p>
-              Lorsque le pool trouve un bloc, il distribue un{" "}
-              <strong>bonus technique</strong>. Ce bonus est alors réparti entre
-              les contributeurs selon le nombre d&apos;unités qu&apos;ils ont
-              achetées.
+              Lorsque certaines conditions techniques sont remplies (arrivée d&apos;un nouveau job,
+              découverte d&apos;un bloc par le pool, hausse d&apos;activité…), un <strong>tirage BlockPulse</strong>
+              est déclenché.
             </p>
           </div>
 
+          {/* Étape 3 */}
           <div className="bp-card">
-            <h3>3. Pas une loterie, mais un partage de bonus</h3>
+            <h3>3. Tirage &amp; bonus distribué</h3>
             <p>
-              Vous ne payez pas pour &quot;tenter votre chance&quot; comme dans
-              une loterie classique. Vous soutenez un{" "}
-              <strong>nœud de calcul expérimental</strong>, et en cas de bonus
-              réel issu du pool, vous recevez une{" "}
-              <strong>part proportionnelle</strong>.
+              Chaque tirage sélectionne l&apos;un des participants selon son nombre de tickets.
+              Plus vous avez de parts, plus vous avez de <strong>chances d&apos;être tiré au sort</strong>.
             </p>
             <p>
-              Ce modèle est similaire à un système de{" "}
-              <strong>contribution + récompense</strong> (type Patreon ou
-              plateformes de tips).
+              Le gagnant reçoit un <strong>bonus crypto</strong> (montant variable, généralement petit),
+              entièrement financé par la plateforme ou par une partie des récompenses techniques du pool.
+            </p>
+            <p>
+              Ce système n&apos;est pas un jeu d&apos;argent réglementé : il s&apos;agit d&apos;une{" "}
+              <strong>expérience crypto gamifiée</strong> basée sur une activité réelle de minage.
             </p>
           </div>
+
         </div>
 
+        {/* Exemple simple */}
         <div className="bp-card bp-card-full">
           <h3>4. Exemple simple</h3>
           <p>
-            Vous achetez <strong>1 participation</strong> ({CONFIG.UNIT_PRICE.toFixed(2)} €) et une autre
-            personne en achète 4. Le système comptabilise 5 unités.
+            Vous achetez le Pack Actif : <strong>3 parts</strong> (5,97 €).  
+            Un autre utilisateur possède <strong>6 parts</strong>.
           </p>
+
           <p>
-            Si un bonus de <strong>2,00 €</strong> arrive du pool :
+            Un tirage technique est déclenché suite à un événement du pool :
           </p>
+
           <ul className="bp-list">
-            <li>vous recevez 0,40 € (1/5)</li>
-            <li>l&apos;autre personne reçoit 1,60 € (4/5)</li>
+            <li>vous avez 3 tickets → 3 chances</li>
+            <li>l&apos;autre personne a 6 tickets → 6 chances</li>
           </ul>
+
+          <p>
+            Si le système distribue un bonus de <strong>1,00 €</strong> :
+          </p>
+
+          <ul className="bp-list">
+            <li>vous gagnez 0,33 €</li>
+            <li>l&apos;autre gagne 0,66 €</li>
+          </ul>
+
           <p className="bp-hero-small">
-            Les montants sont donnés à titre d&apos;exemple. Le minage via ESP32
-            reste extrêmement faible et principalement expérimental.
+            Les bonus sont symboliques et servent à récompenser la participation.
+            Le minage via ESP32 reste principalement expérimental.
           </p>
         </div>
+
       </div>
     </section>
   );

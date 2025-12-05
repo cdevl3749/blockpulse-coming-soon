@@ -14,17 +14,19 @@ export default function FAQ() {
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Non. BlockPulse n’est <strong>pas</strong> un jeu d’argent et ne
-          fonctionne pas comme une loterie classique.  
-          Il s’agit d’un système de <strong>contribution technique</strong> :
-          votre participation permet de soutenir un ESP32 configuré pour se 
-          connecter au pool ViaBTC.  
+          Non. BlockPulse n’est <strong>pas</strong> une loterie classique et ne
+          propose aucun gain garanti.
           <br />
           <br />
-          Lorsque le pool déclenche un événement technique (comme la détection
-          d’un nouveau bloc), un <strong>tirage interne</strong> est effectué
-          entre les contributeurs, et un <strong>bonus symbolique</strong> peut
-          être attribué.
+          C’est un système de <strong>participation technique</strong> :
+          chaque pack soutient un ESP32 connecté au pool ViaBTC via le protocole
+          Stratum.
+          <br />
+          <br />
+          Lorsque certaines conditions techniques sont détectées (nouveau job,
+          activité élevée, bloc trouvé…), un <strong>tirage interne</strong> peut
+          être déclenché et un <strong>bonus symbolique</strong> peut être
+          attribué.
         </>
       ),
     },
@@ -33,14 +35,16 @@ export default function FAQ() {
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Non. BlockPulse n’est pas conçu comme un investissement financier.  
-          Les bonus sont <strong>symboliques et non garantis</strong>, car ils
-          dépendent uniquement de l’activité du pool ViaBTC.  
+          Non. BlockPulse n’est pas un investissement financier.
           <br />
           <br />
-          La participation doit être vue comme un soutien à un projet tech
-          expérimental, et non comme un moyen sûr ou rentable de gagner de
-          l’argent.
+          Les bonus (classiques ou spéciaux) sont
+          <strong> symboliques et non garantis</strong>, car ils dépendent
+          entièrement de l’activité réelle du pool ViaBTC.
+          <br />
+          <br />
+          La participation doit être vue comme un soutien à un projet technique
+          expérimental.
         </>
       ),
     },
@@ -49,13 +53,21 @@ export default function FAQ() {
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Les tirages sont déclenchés par l’activité réelle du pool ViaBTC
-          (par exemple lorsqu’un nouveau bloc est détecté).  
+          Le nœud ESP32 échange en temps réel avec ViaBTC.
           <br />
           <br />
-          Chaque part de votre pack équivaut à <strong>un ticket</strong> dans
-          le tirage. Plus vous possédez de parts, plus votre probabilité d’être
-          sélectionné lors d’un tirage technique est élevée.
+          Lorsqu’un événement technique se produit (nouveau job, forte activité,
+          découverte d’un bloc…), un <strong>tirage</strong> peut être lancé.
+          <br />
+          <br />
+          Chaque part = <strong>1 ticket</strong>.  
+          Plus vous avez de parts, plus vos chances d’être sélectionné
+          augmentent.
+          <br />
+          <br />
+          Lorsqu’un bloc Bitcoin est détecté, un{" "}
+          <strong>tirage spécial “Bloc Trouvé”</strong> peut être déclenché,
+          avec un bonus <strong>plus important</strong>.
         </>
       ),
     },
@@ -64,18 +76,17 @@ export default function FAQ() {
       icon: <FaCreditCard className="bp-icon" />,
       content: (
         <>
-          Les paiements sont traités via <strong>NOWPayments</strong>.  
-          Vous pouvez payer en :
+          Les paiements sont effectués <strong>directement</strong> vers les
+          adresses officielles Ledger de BlockPulse.
+          <br />
+          <br />
+          Vous pouvez contribuer en :
           <ul style={{ marginTop: "10px" }}>
+            <li>Bitcoin (BTC)</li>
             <li>Ethereum (ETH)</li>
-            <li>USDT (BSC)</li>
-            <li>USDT (Solana)</li>
-            <li>USDT (Polygon)</li>
-            <li>Bitcoin (selon le pack)</li>
           </ul>
           <br />
-          NOWPayments peut également permettre le paiement par carte via ses
-          partenaires.
+          Aucun intermédiaire. Aucun frais supplémentaire lié à un prestataire.
         </>
       ),
     },
@@ -84,12 +95,13 @@ export default function FAQ() {
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Pour des raisons techniques : les frais réseau Bitcoin peuvent être
-          élevés, parfois supérieurs au montant du pack Actif (5,97 €).  
+          Les frais du réseau Bitcoin peuvent parfois être élevés, parfois
+          supérieurs au montant des <strong>petits packs</strong> (comme le pack
+          Micro à 1 €).
           <br />
           <br />
-          Pour éviter une mauvaise expérience utilisateur, le Bitcoin n’est
-          disponible que pour les packs au montant suffisant.
+          Pour éviter des frais disproportionnés, le Bitcoin n’est proposé que
+          pour les packs dont le montant le permet.
         </>
       ),
     },
@@ -98,10 +110,12 @@ export default function FAQ() {
       icon: <FaLock className="bp-icon" />,
       content: (
         <>
-          Le projet ESP32 utilise un vrai protocole Stratum pour communiquer avec
-          le pool ViaBTC.  
-          Vous pourrez choisir plus tard si vous souhaitez publier le code sur
-          GitHub pour offrir une transparence totale aux utilisateurs.
+          Le module ESP32 utilise un <strong>vrai protocole Stratum</strong> pour
+          communiquer avec ViaBTC.
+          <br />
+          <br />
+          Vous pourrez décider plus tard de publier le code sur GitHub afin de
+          rendre le projet totalement transparent.
         </>
       ),
     },
@@ -110,15 +124,16 @@ export default function FAQ() {
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Les contributions servent à financer :
+          Les contributions financent :
           <ul style={{ marginTop: "10px" }}>
-            <li>L’hébergement du site et du dashboard temps réel</li>
-            <li>Le serveur Netlify pour les paiements</li>
-            <li>L’infrastructure ESP32 & services liés</li>
-            <li>Le développement continu du projet</li>
+            <li>Infrastructure ESP32</li>
+            <li>Dashboard en temps réel</li>
+            <li>Hébergement & serveur Netlify</li>
+            <li>Développement continu</li>
+            <li>Maintenance du nœud</li>
           </ul>
           <br />
-          BlockPulse est un projet indépendant et expérimental.
+          Tout est réinvesti dans le fonctionnement du projet.
         </>
       ),
     },
@@ -127,17 +142,30 @@ export default function FAQ() {
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Les bonus symboliques prévus plus tard seront
-          <strong>réels mais petits</strong>, et vous pourrez les retirer en
-          cryptomonnaie (BTC ou USDT).  
-          Le système sera ajouté après stabilisation du projet.
+          Oui, lorsqu’ils seront activés dans la plateforme.
+          <br />
+          <br />
+          Les bonus sont <strong>réels mais modestes</strong> et pourront être
+          retirés en BTC ou ETH.
         </>
       ),
     },
   ];
 
   return (
-    <section className="bp-section">
+    <section
+      className="bp-section"
+      style={{ paddingTop: "80px", background: "#0a0d17" }}
+    >
+      <style>{`
+        *:focus,
+        *:focus-visible,
+        *:focus-within {
+          outline: none !important;
+          box-shadow: none !important;
+        }
+      `}</style>
+
       <div className="bp-container">
         <h2>FAQ</h2>
 
@@ -159,6 +187,11 @@ export default function FAQ() {
                 className="bp-faq-answer"
                 style={{
                   maxHeight: open === i ? "320px" : "0px",
+                  background: "#0a0d17",
+                  padding: open === i ? "15px 20px" : "0px 20px",
+                  borderRadius: "0 0 12px 12px",
+                  overflow: "hidden",
+                  transition: "max-height 0.3s ease",
                 }}
               >
                 <p style={{ whiteSpace: "pre-line" }}>{item.content}</p>
@@ -170,3 +203,4 @@ export default function FAQ() {
     </section>
   );
 }
+

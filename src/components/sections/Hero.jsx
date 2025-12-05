@@ -15,24 +15,25 @@ export default function Hero() {
           </h1>
 
           <p className="bp-hero-sub">
-            Un module ESP32 relié en temps réel au pool ViaBTC, un système de
-            tirages basé sur l’activité de minage, et une expérience crypto
-            futuriste accessible dès <strong>5,97 €</strong>.
+            Un module ESP32 connecté au pool ViaBTC, un système de tirages
+            techniques lié à l’activité de minage, et une expérience crypto
+            accessible dès{" "}
+            <strong>{CONFIG.UNIT_PRICE.toFixed(2)} €</strong>.
           </p>
 
           <p className="bp-hero-small">
-            *BlockPulse est une expérience ludique et pédagogique utilisant le
-            protocole Stratum. Vous soutenez un nœud de calcul et obtenez des
-            tickets de tirage selon l’activité du module. Il ne s’agit pas d’un
-            investissement ou d’un jeu d’argent réglementé.
+            *BlockPulse est une expérience technique et pédagogique utilisant le
+            protocole Stratum. Vous soutenez un nœud expérimental et recevez des
+            tickets techniques selon votre pack.  
+            Ce n’est pas un investissement ni un jeu d’argent réglementé.
           </p>
 
           <div className="bp-hero-actions">
             <a href="/participer" className="bp-btn-primary bp-btn-large">
-              Participer maintenant — dès 5,97 €
+              Participer — dès {CONFIG.UNIT_PRICE.toFixed(2)} €
             </a>
             <a href="/comment-ca-marche" className="bp-btn-secondary">
-              Voir le fonctionnement
+              Comment ça marche ?
             </a>
           </div>
         </div>
@@ -57,7 +58,7 @@ export default function Hero() {
           </ul>
 
           <p className="bp-hero-note">
-            Les données affichées plus bas proviennent directement de l’ESP32
+            Les données affichées proviennent directement du module ESP32
             (ou du cloud si celui-ci est momentanément hors ligne).
           </p>
         </div>

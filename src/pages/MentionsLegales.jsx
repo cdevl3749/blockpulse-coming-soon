@@ -24,10 +24,11 @@ export default function MentionsLegales() {
           <div className="bp-legal-card">
             <p>
               Le site <strong>BlockPulse.be</strong> est un projet expérimental et
-              indépendant basé sur un module microcontrôleur <strong>ESP32</strong>.  
+              indépendant basé sur un module microcontrôleur
+              <strong> ESP32</strong>.  
               Il propose un système de <strong>contribution technique</strong> donnant
-              accès à des <strong>tirages techniques</strong> déclenchés par l’activité
-              du pool ViaBTC.
+              accès à des <strong>tirages techniques</strong> déclenchés par
+              l’activité du pool ViaBTC.
             </p>
 
             <p>
@@ -38,8 +39,7 @@ export default function MentionsLegales() {
 
             <p>
               BlockPulse n’est ni un service financier, ni un jeu d’argent
-              réglementé.  
-              Aucun rendement ou gain garanti n’est proposé.
+              réglementé. Aucun rendement ou gain garanti n’est proposé.
             </p>
           </div>
         </section>
@@ -79,14 +79,15 @@ export default function MentionsLegales() {
             </p>
 
             <p>
-              Le prix du Bitcoin et les données de pool peuvent fluctuer
-              fortement. BlockPulse ne fournit <strong>aucun conseil financier</strong>
-              et ne garantit aucun résultat.
+              Le prix du Bitcoin, d’Ethereum et les données de pool peuvent
+              fluctuer fortement. BlockPulse ne fournit
+              <strong> aucun conseil financier</strong> et ne garantit
+              aucun résultat.
             </p>
 
             <p>
               Les bonus attribués lors des tirages techniques sont
-              <strong>symboliques et non assurés</strong>.
+              <strong> symboliques et non assurés</strong>.
             </p>
           </div>
         </section>
@@ -106,9 +107,15 @@ export default function MentionsLegales() {
             </p>
 
             <p>
-              Les marques <strong>Bitcoin</strong>, <strong>ViaBTC</strong>,
-              <strong> NOWPayments</strong> et autres logos cités appartiennent à
+              Les marques <strong>Bitcoin</strong>, <strong>Ethereum</strong>,
+              <strong> ViaBTC</strong> et autres logos cités appartiennent à
               leurs détenteurs respectifs.
+            </p>
+
+            <p>
+              Les paiements sont effectués directement vers les adresses
+              <strong> Ledger BTC & ETH</strong> officielles de BlockPulse.
+              Aucun intermédiaire n’est utilisé.
             </p>
           </div>
         </section>

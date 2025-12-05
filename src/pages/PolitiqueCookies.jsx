@@ -66,8 +66,8 @@ export default function PolitiqueCookies() {
                 <strong>Cookies techniques (obligatoires)</strong>
                 <ul>
                   <li>Navigation interne du site</li>
-                  <li>Affichage correcte des pages</li>
-                  <li>Gestion de certaines préférences</li>
+                  <li>Affichage correct des pages</li>
+                  <li>Gestion de certaines préférences utilisateur</li>
                 </ul>
               </li>
 
@@ -83,7 +83,7 @@ export default function PolitiqueCookies() {
           </div>
         </section>
 
-        {/* 04 — Paiements */}
+        {/* 04 — Cookies liés aux paiements */}
         <section className="bp-legal-section">
           <div className="bp-legal-section-header">
             <span className="bp-legal-number">04</span>
@@ -92,21 +92,20 @@ export default function PolitiqueCookies() {
 
           <div className="bp-legal-card">
             <p>
-              Les paiements sont gérés par le prestataire externe{" "}
-              <strong>NOWPayments</strong>.  
-              Pendant un paiement, certains cookies techniques peuvent être créés par
-              NOWPayments afin d’assurer :
+              BlockPulse n’utilise <strong>aucun prestataire externe</strong> pour le traitement
+              des paiements.  
+              Les contributions sont envoyées directement vers les adresses officielles
+              Ledger <strong>BTC</strong> et <strong>ETH</strong> du projet.
             </p>
 
-            <ul className="bp-legal-list">
-              <li>la validation sécurisée du paiement</li>
-              <li>le suivi temporaire de la transaction</li>
-              <li>la détection d’activités suspectes ou frauduleuses</li>
-            </ul>
+            <p>
+              De ce fait, <strong>aucun cookie de paiement</strong> n’est généré, et aucune
+              donnée bancaire ou technique liée à un paiement n’est collectée.
+            </p>
 
             <p>
-              Ces cookies ne contiennent aucune donnée sensible, et ne permettent pas
-              de vous identifier personnellement.
+              Le site ne stocke aucune adresse IP, identifiant ou information personnelle
+              liée à une transaction crypto.
             </p>
           </div>
         </section>
@@ -160,4 +159,3 @@ export default function PolitiqueCookies() {
     </div>
   );
 }
-

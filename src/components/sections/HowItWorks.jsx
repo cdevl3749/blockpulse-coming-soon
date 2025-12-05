@@ -10,47 +10,61 @@ export default function HowItWorks() {
 
           {/* Étape 1 */}
           <div className="bp-card">
-            <h3>1. Participation technique (dès 5,97 €)</h3>
+            <h3>1. Participation technique (dès {CONFIG.UNIT_PRICE.toFixed(2)} €)</h3>
             <p>
-              Vous achetez un <strong>pack de participation</strong> composé de plusieurs parts
-              (valeur de base : {CONFIG.UNIT_PRICE.toFixed(2)} € / part).  
-              Ces parts vous donnent un certain nombre de <strong>tickets techniques</strong>.
+              Vous choisissez un <strong>pack de participation</strong> à partir de 
+              seulement {CONFIG.UNIT_PRICE.toFixed(2)} €.  
+              Chaque pack contient un certain nombre de <strong>parts techniques</strong> 
+              (1 part = {CONFIG.UNIT_PRICE.toFixed(2)} €).
             </p>
             <p>
-              Les paiements sont gérés par <strong>NOWPayments</strong> et supportent plus de
-              150 cryptomonnaies (BTC, ETH, USDT, etc.). La transaction vous relie officiellement
-              au nœud BlockPulse.
+              Chaque part vous donne un <strong>ticket technique</strong> utilisé lors 
+              des tirages BlockPulse. Plus vous avez de parts, plus vous disposez 
+              de tickets.
             </p>
           </div>
 
           {/* Étape 2 */}
           <div className="bp-card">
-            <h3>2. Activité de minage &amp; événements techniques</h3>
+            <h3>2. Activité technique du nœud</h3>
             <p>
-              Le module ESP32 est connecté au pool <strong>ViaBTC</strong> via le protocole Stratum.
-              Il reçoit des tâches de minage (jobs), calcule des hashs et renvoie des <strong>shares</strong>.
+              Le module ESP32 est relié au pool <strong>ViaBTC</strong> via le protocole 
+              Stratum.  
+              Il reçoit des tâches techniques (jobs), envoie des <strong>shares</strong> 
+              et réagit en temps réel à l’activité du réseau.
             </p>
             <p>
-              Lorsque certaines conditions techniques sont remplies (arrivée d&apos;un nouveau job,
-              découverte d&apos;un bloc par le pool, hausse d&apos;activité…), un <strong>tirage BlockPulse</strong>
-              est déclenché.
+              Lorsqu’une condition technique est détectée (nouveau job, pic
+              d’activité, découverte d’un bloc…), un <strong>tirage BlockPulse</strong> 
+              peut être déclenché automatiquement.
             </p>
           </div>
 
           {/* Étape 3 */}
           <div className="bp-card">
-            <h3>3. Tirage &amp; bonus distribué</h3>
+            <h3>3. Tirages & bonus symboliques</h3>
             <p>
-              Chaque tirage sélectionne l&apos;un des participants selon son nombre de tickets.
-              Plus vous avez de parts, plus vous avez de <strong>chances d&apos;être tiré au sort</strong>.
+              À chaque tirage, un participant est sélectionné selon son nombre 
+              de tickets. Plus vous avez de parts, plus vos chances augmentent.
             </p>
+
             <p>
-              Le gagnant reçoit un <strong>bonus crypto</strong> (montant variable, généralement petit),
-              entièrement financé par la plateforme ou par une partie des récompenses techniques du pool.
+              Deux types d’événements existent :
             </p>
+
+            <ul className="bp-list">
+              <li>
+                💠 <strong>Tirage classique :</strong> petit bonus symbolique.
+              </li>
+              <li>
+                🔥 <strong>Tirage spécial “Bloc Trouvé” :</strong> lorsqu’un bloc
+                Bitcoin est découvert, un tirage exceptionnel peut être lancé avec 
+                un bonus plus important.
+              </li>
+            </ul>
+
             <p>
-              Ce système n&apos;est pas un jeu d&apos;argent réglementé : il s&apos;agit d&apos;une{" "}
-              <strong>expérience crypto gamifiée</strong> basée sur une activité réelle de minage.
+              Les bonus sont modestes et servent uniquement à récompenser la participation.
             </p>
           </div>
 
@@ -60,31 +74,32 @@ export default function HowItWorks() {
         <div className="bp-card bp-card-full">
           <h3>4. Exemple simple</h3>
           <p>
-            Vous achetez le Pack Actif : <strong>3 parts</strong> (5,97 €).  
-            Un autre utilisateur possède <strong>6 parts</strong>.
+            Vous choisissez le <strong>Pack Micro</strong> : 1 part → 1 ticket.
+          </p>
+          <p>
+            Un autre utilisateur choisit le <strong>Pack Starter</strong> : 5 parts → 5 tickets.
           </p>
 
-          <p>
-            Un tirage technique est déclenché suite à un événement du pool :
-          </p>
+          <p>Lors d’un tirage technique :</p>
 
           <ul className="bp-list">
-            <li>vous avez 3 tickets → 3 chances</li>
-            <li>l&apos;autre personne a 6 tickets → 6 chances</li>
+            <li>vous avez 1 ticket → 1 chance</li>
+            <li>l’autre personne a 5 tickets → 5 chances</li>
           </ul>
 
           <p>
-            Si le système distribue un bonus de <strong>1,00 €</strong> :
+            Si un bonus total de <strong>0,50 €</strong> est distribué :
           </p>
 
           <ul className="bp-list">
-            <li>vous gagnez 0,33 €</li>
-            <li>l&apos;autre gagne 0,66 €</li>
+            <li>vous recevez 0,08 €</li>
+            <li>l’autre reçoit 0,42 €</li>
           </ul>
 
           <p className="bp-hero-small">
-            Les bonus sont symboliques et servent à récompenser la participation.
-            Le minage via ESP32 reste principalement expérimental.
+            Les bonus sont symboliques et représentent une manière ludique de 
+            récompenser la participation au nœud.  
+            Le système reste une expérience technique expérimentale.
           </p>
         </div>
 
@@ -92,3 +107,4 @@ export default function HowItWorks() {
     </section>
   );
 }
+

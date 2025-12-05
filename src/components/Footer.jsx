@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bp-footer">
       <div className="bp-footer-inner">
-        
+
         {/* Logo et description */}
         <div className="bp-footer-brand">
           <div className="bp-footer-logo">
@@ -26,87 +26,81 @@ export default function Footer() {
           <Link to="/cookies">Cookies</Link>
         </div>
 
-        {/* Paiements sécurisés */}
+        {/* Paiements crypto réels */}
         <div className="bp-footer-payment">
-          <p className="bp-footer-section-title">Paiements sécurisés</p>
+          <p className="bp-footer-section-title">Paiements acceptés</p>
 
           <div className="bp-payment-logos">
 
-            {/* VISA */}
+            {/* Bitcoin */}
             <div className="bp-payment-card">
               <svg
                 viewBox="0 0 80 50"
                 xmlns="http://www.w3.org/2000/svg"
-                role="img"
-                aria-label="Visa"
+                aria-label="Bitcoin"
               >
-                <defs>
-                  <linearGradient id="visaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#1A1F71" />
-                    <stop offset="100%" stopColor="#1434CB" />
-                  </linearGradient>
-                </defs>
-                <rect width="80" height="50" rx="6" fill="url(#visaGrad)" />
+                <rect width="80" height="50" rx="6" fill="#0A0F2B" />
                 <text
                   x="40"
                   y="32"
                   textAnchor="middle"
-                  fill="#FFF"
-                  fontSize="20"
+                  fill="#F7931A"
+                  fontSize="26"
                   fontWeight="700"
                   fontFamily="system-ui"
                 >
-                  VISA
-                </text>
-              </svg>
-            </div>
-
-            {/* Mastercard */}
-            <div className="bp-payment-card">
-              <svg
-                viewBox="0 0 80 50"
-                xmlns="http://www.w3.org/2000/svg"
-                role="img"
-                aria-label="Mastercard"
-              >
-                <rect width="80" height="50" rx="6" fill="#000" />
-                <circle cx="30" cy="25" r="11" fill="#EB001B" opacity="0.95" />
-                <circle cx="50" cy="25" r="11" fill="#F79E1B" opacity="0.95" />
-              </svg>
-            </div>
-
-            {/* NOWPayments */}
-            <div className="bp-payment-card">
-              <svg
-                viewBox="0 0 80 50"
-                xmlns="http://www.w3.org/2000/svg"
-                role="img"
-                aria-label="NOWPayments - Crypto"
-              >
-                <defs>
-                  <linearGradient id="cryptoBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#0A0F2B" />
-                    <stop offset="100%" stopColor="#141B3D" />
-                  </linearGradient>
-                  <linearGradient id="cryptoIcon" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#22D3EE" />
-                    <stop offset="100%" stopColor="#06B6D4" />
-                  </linearGradient>
-                </defs>
-                
-                <rect width="80" height="50" rx="6" fill="url(#cryptoBg)" />
-                <rect width="80" height="50" rx="6" fill="none" stroke="#22D3EE" strokeWidth="1" opacity="0.4" />
-
-                <circle cx="22" cy="25" r="9" fill="url(#cryptoIcon)" />
-                <text x="22" y="30" textAnchor="middle" fill="#0A0F2B" fontSize="13" fontWeight="700">
                   ₿
                 </text>
+              </svg>
+            </div>
 
-                <text x="38" y="22" fill="#22D3EE" fontSize="10" fontWeight="700">
-                  NOW
+            {/* Ethereum */}
+            <div className="bp-payment-card">
+              <svg
+                viewBox="0 0 80 50"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="Ethereum"
+              >
+                <rect width="80" height="50" rx="6" fill="#0A0F2B" />
+                <text
+                  x="40"
+                  y="30"
+                  textAnchor="middle"
+                  fill="#9b59b6"
+                  fontSize="22"
+                  fontWeight="700"
+                >
+                  Ξ
                 </text>
-                <text x="38" y="32" fill="#64748B" fontSize="7" fontWeight="500">
-                  Payments
+              </svg>
+            </div>
+
+            {/* Ledger */}
+            <div className="bp-payment-card">
+              <svg
+                viewBox="0 0 80 50"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="Ledger Wallet"
+              >
+                <rect width="80" height="50" rx="6" fill="#0A0F2B" />
+                <rect
+                  x="22"
+                  y="15"
+                  width="36"
+                  height="20"
+                  rx="4"
+                  fill="#FFF"
+                  opacity="0.9"
+                />
+                <text
+                  x="40"
+                  y="32"
+                  textAnchor="middle"
+                  fill="#0A0F2B"
+                  fontSize="10"
+                  fontWeight="700"
+                >
+                  LEDGER
                 </text>
               </svg>
             </div>
@@ -116,7 +110,7 @@ export default function Footer() {
 
         {/* Badges de confiance */}
         <div className="bp-footer-trust">
-          <p className="bp-footer-section-title">Sécurité & Conformité</p>
+          <p className="bp-footer-section-title">Sécurité & conformité</p>
           <div className="bp-trust-badges">
             <div className="bp-trust-badge">
               <span>🔒</span>
@@ -136,9 +130,10 @@ export default function Footer() {
         {/* Disclaimer */}
         <div className="bp-footer-disclaimer">
           <p>
-            Bitcoin, ViaBTC, NOWPayments et les marques citées appartiennent à leurs détenteurs respectifs.  
-            BlockPulse est un projet expérimental et indépendant, sans rendement garanti ni promesse de gains.  
-            Les bonus sont symboliques et liés aux tirages techniques déclenchés par l'activité du pool ViaBTC.
+            Bitcoin, Ethereum, Ledger et ViaBTC appartiennent à leurs détenteurs respectifs.  
+            BlockPulse est un projet expérimental sans rendement garanti.  
+            Les bonus attribués lors des tirages sont symboliques et dépendants
+            de l’activité réelle du pool ViaBTC.
           </p>
         </div>
 
@@ -151,3 +146,4 @@ export default function Footer() {
     </footer>
   );
 }
+

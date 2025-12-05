@@ -1,3 +1,11 @@
+/* --- Fond global uniforme BlockPulse --- */
+html, body {
+    background: #020617 !important;  /* fond sombre homogène */
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
 :root {
   --bp-bg: #020816;
   --bp-bg-alt: #050c1f;
@@ -1225,4 +1233,9 @@ a {
     width: 100%;
     justify-content: flex-end;
   }
+  .trust-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--bp-accent) !important;
+  box-shadow: 0 16px 40px rgba(0, 255, 200, 0.12);
+}
 }

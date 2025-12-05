@@ -32,25 +32,37 @@ export default function BonusSection() {
   return (
     <section className="bp-section bp-section-alt">
       <div className="bp-container">
-        <h2>Bonus technique &amp; tirages BlockPulse</h2>
+        <h2>Bonus techniques & tirages BlockPulse</h2>
 
         <p className="bp-section-intro">
-          Lorsqu’un événement technique survient sur le pool ViaBTC 
-          (découverte d’un bloc, modification de difficulté, nouvelle série de jobs),
-          un <strong>tirage BlockPulse</strong> peut être déclenché.  
-          Un bonus crypto symbolique est alors distribué à un participant,
-          selon le nombre de parts qu’il possède.
+          Le nœud BlockPulse réagit en temps réel à l’activité du pool ViaBTC.
+          Lorsqu’un événement technique majeur survient (nouveau job, activité élevée,
+          découverte d’un bloc…), un <strong>tirage technique</strong> peut être déclenché.
         </p>
+
+        <p className="bp-section-intro">
+          Deux types de tirages existent :
+        </p>
+
+        <ul className="bp-list" style={{ marginBottom: "32px" }}>
+          <li>
+            💠 <strong>Tirage classique :</strong> un petit bonus symbolique basé sur
+            les événements normaux du pool.
+          </li>
+          <li>
+            🔥 <strong>Tirage spécial “Bloc Trouvé” :</strong> lorsqu’un bloc est
+            découvert par ViaBTC, un tirage exceptionnel peut être déclenché avec
+            un bonus <strong>plus important</strong>. Un événement rare et très attendu.
+          </li>
+        </ul>
 
         <div className="bp-grid-2">
 
           {/* Bloc Bitcoin */}
           <div className="bp-card bp-card-gradient">
-            <h3>💰 Récompense d&apos;un bloc Bitcoin</h3>
+            <h3>💰 Récompense d'un bloc Bitcoin</h3>
 
-            <p className="bp-big-number">
-              {CONFIG.BTC_REWARD} BTC
-            </p>
+            <p className="bp-big-number">{CONFIG.BTC_REWARD} BTC</p>
 
             {rewardEUR && (
               <p
@@ -68,17 +80,17 @@ export default function BonusSection() {
             )}
 
             <p>
-              Lorsque le pool ViaBTC découvre un bloc, cela constitue un 
-              <strong>événement technique majeur</strong>.  
-              BlockPulse ne reçoit pas cette récompense : elle sert uniquement 
-              de <strong>référence pédagogique</strong> pour visualiser la valeur 
-              d’un bloc et contextualiser les tirages.
+              Lorsqu’un bloc est découvert, le pool ViaBTC le signale immédiatement.
+              BlockPulse utilise cet instant pour lancer un{" "}
+              <strong>tirage spécial “Bloc Trouvé”</strong>.  
+              Les bonus restent symboliques, mais peuvent être plus élevés
+              qu’un tirage classique.
             </p>
           </div>
 
           {/* Bonus par unité */}
           <div className="bp-card">
-            <h3>🎯 Exemple de bonus lors d&apos;un tirage</h3>
+            <h3>🎯 Bonus lors d'un tirage classique</h3>
 
             <div
               style={{
@@ -100,7 +112,7 @@ export default function BonusSection() {
                   fontWeight: "600",
                 }}
               >
-                Exemple basé sur un bloc de 6,25 BTC
+                Illustration pédagogique
               </p>
 
               {rewardEUR && (
@@ -109,7 +121,6 @@ export default function BonusSection() {
                     fontSize: "0.95rem",
                     color: "#c9d4e5",
                     margin: "0 0 12px 0",
-                    lineHeight: "1.5",
                   }}
                 >
                   Valeur actuelle du BTC :{" "}
@@ -123,7 +134,6 @@ export default function BonusSection() {
                   fontWeight: "700",
                   color: "#00ffc8",
                   margin: "8px 0",
-                  lineHeight: "1.2",
                 }}
               >
                 {potentialGainPerUnit
@@ -139,23 +149,23 @@ export default function BonusSection() {
                   marginBottom: "0",
                 }}
               >
-                bonus symbolique par part, lors d’un tirage BlockPulse
+                bonus symbolique par part
               </p>
             </div>
 
             <p style={{ marginBottom: "16px", textAlign: "center" }}>
-              Plus vous avez de parts, plus vos chances d’être sélectionné 
-              lors d&apos;un tirage sont importantes.
+              Chaque part = 1 ticket.  
+              Plus vous possédez de parts, plus vos chances d’être tiré au sort augmentent.
             </p>
 
-            {/* Estimation */}
+            {/* Encadré pédagogique */}
             <div
               style={{
                 background: "rgba(255, 200, 100, 0.08)",
                 borderLeft: "3px solid #ffc866",
                 padding: "12px 16px",
                 borderRadius: "8px",
-                marginBottom: "16px",
+                marginBottom: "24px",
               }}
             >
               <p
@@ -165,171 +175,32 @@ export default function BonusSection() {
                   color: "#c9d4e5",
                 }}
               >
-                📊 <strong style={{ color: "#ffc866" }}>Exemple basé sur :</strong>{" "}
-                {CONFIG.TOTAL_UNITS} parts totales et{" "}
-                {CONFIG.POOL_SHARE_PERCENT}% de référence pédagogique.  
-                Ce calcul est illustratif et ne constitue pas un rendement.
+                📊 Illustration basée sur {CONFIG.TOTAL_UNITS} parts totales et{" "}
+                {CONFIG.POOL_SHARE_PERCENT}% de partage pédagogique.
               </p>
             </div>
 
-            {/* Exemples de packs */}
+            {/* Tirage Bloc Trouvé */}
             <div
               style={{
-                background:
-                  "linear-gradient(135deg, rgba(0, 255, 200, 0.15), rgba(91, 140, 255, 0.15))",
-                border: "2px solid rgba(0, 255, 200, 0.4)",
-                borderRadius: "12px",
+                background: "rgba(255, 140, 50, 0.1)",
+                border: "1px solid rgba(255,140,50,0.3)",
                 padding: "18px",
-                marginBottom: "16px",
+                borderRadius: "10px",
+                marginBottom: "20px",
               }}
             >
-              <p
-                style={{
-                  fontSize: "1rem",
-                  color: "#ffffff",
-                  marginBottom: "10px",
-                  fontWeight: "600",
-                  textAlign: "center",
-                }}
-              >
-                💰 Exemples de bonus par pack (tirage)
+              <h4 style={{ margin: "0 0 8px", color: "#ffb45c" }}>
+                🔥 Tirage spécial “Bloc Trouvé”
+              </h4>
+              <p style={{ margin: 0, color: "#e6e6e6", fontSize: "0.9rem" }}>
+                Lorsqu’un bloc Bitcoin est détecté, un tirage exceptionnel peut
+                être déclenché avec un bonus <strong>nettement plus élevé</strong>.  
+                C’est un événement rare lié à une vraie activité du réseau.
               </p>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "12px",
-                  marginTop: "12px",
-                }}
-              >
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "10px",
-                    background: "rgba(0, 255, 200, 0.05)",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: "0 0 4px",
-                      fontSize: "0.85rem",
-                      color: "#a8b2d8",
-                    }}
-                  >
-                    Pack Actif (3 parts)
-                  </p>
-                  <p
-                    style={{
-                      margin: "0",
-                      fontSize: "1.3rem",
-                      fontWeight: "700",
-                      color: "#00ffc8",
-                    }}
-                  >
-                    {potentialGainPerUnit
-                      ? `${(parseFloat(potentialGainPerUnit) * 3).toFixed(2)} €`
-                      : "..."}
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "10px",
-                    background: "rgba(0, 255, 200, 0.05)",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: "0 0 4px",
-                      fontSize: "0.85rem",
-                      color: "#a8b2d8",
-                    }}
-                  >
-                    Pack Populaire (5 parts)
-                  </p>
-                  <p
-                    style={{
-                      margin: "0",
-                      fontSize: "1.3rem",
-                      fontWeight: "700",
-                      color: "#00ffc8",
-                    }}
-                  >
-                    {potentialGainPerUnit
-                      ? `${(parseFloat(potentialGainPerUnit) * 5).toFixed(2)} €`
-                      : "..."}
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "10px",
-                    background: "rgba(0, 255, 200, 0.05)",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: "0 0 4px",
-                      fontSize: "0.85rem",
-                      color: "#a8b2d8",
-                    }}
-                  >
-                    Pack Expert (10 parts)
-                  </p>
-                  <p
-                    style={{
-                      margin: "0",
-                      fontSize: "1.3rem",
-                      fontWeight: "700",
-                      color: "#00ffc8",
-                    }}
-                  >
-                    {potentialGainPerUnit
-                      ? `${(parseFloat(potentialGainPerUnit) * 10).toFixed(2)} €`
-                      : "..."}
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "10px",
-                    background: "rgba(255, 215, 0, 0.1)",
-                    borderRadius: "8px",
-                    border: "1px solid rgba(255, 215, 0, 0.3)",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: "0 0 4px",
-                      fontSize: "0.85rem",
-                      color: "#ffd966",
-                    }}
-                  >
-                    Pack Whale (100 parts)
-                  </p>
-                  <p
-                    style={{
-                      margin: "0",
-                      fontSize: "1.3rem",
-                      fontWeight: "700",
-                      color: "#ffd700",
-                    }}
-                  >
-                    {potentialGainPerUnit
-                      ? `${(parseFloat(potentialGainPerUnit) * 100).toFixed(2)} €`
-                      : "..."}
-                  </p>
-                </div>
-              </div>
             </div>
 
+            {/* Disclaimer */}
             <p
               className="bp-hero-small"
               style={{
@@ -339,10 +210,9 @@ export default function BonusSection() {
                 marginTop: "16px",
               }}
             >
-              ⚠️ <strong>Expérience crypto expérimentale :</strong>  
-              Les bonus sont symboliques et liés aux tirages BlockPulse déclenchés 
-              lors d&apos;événements techniques du pool ViaBTC.  
-              Les récompenses ne sont pas garanties.
+              ⚠️ Expérience crypto expérimentale.  
+              Les bonus (classiques ou spéciaux) sont symboliques et non garantis.
+              Aucun rendement financier n’est promis.
             </p>
 
           </div>
@@ -351,3 +221,4 @@ export default function BonusSection() {
     </section>
   );
 }
+

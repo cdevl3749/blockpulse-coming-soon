@@ -1,173 +1,289 @@
+import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
+
 export default function ContactCard() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [popup, setPopup] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+  // --- Envoi EmailJS ---
+  const sendEmail = async () => {
+  if (!name || !email || !message) {
+  setErrorMessage("Merci de remplir tous les champs avant d’envoyer le message.");
+  return;
+}
+
+
+    setLoading(true);
+
+    try {
+      await emailjs.send(
+        "cdevl3749@gmail.com",
+        "template_nh1kma8",
+        {
+          user_name: name,
+          user_email: email,
+          message: message,
+        },
+        "o3sNWIRA-SH7s2nsx"
+      );
+
+      setPopup(true);
+      setErrorMessage("");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (error) {
+      console.error("Erreur EmailJS :", error);
+      alert("Une erreur est survenue. Réessayez plus tard.");
+    }
+
+    setLoading(false);
+  };
+
   return (
-    <section className="bp-section">
-      <div className="bp-container">
-        <div
-          className="bp-card"
-          style={{
-            maxWidth: "800px",
-            margin: "0 auto",
-            background: "var(--bp-card)",
-            border: "1px solid var(--bp-border)",
-            padding: "32px",
-            boxShadow: "var(--bp-shadow-soft)",
-            borderRadius: "20px",
-          }}
-        >
-          {/* Header */}
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "16px" }}>📬</div>
-            <h2 style={{ margin: "0 0 12px", fontSize: "2rem" }}>
-              Besoin d'aide ou d'informations ?
-            </h2>
-            <p
-              style={{
-                color: "var(--bp-muted)",
-                margin: "0",
-                fontSize: "1.05rem",
-              }}
-            >
-              L'équipe BlockPulse est à votre écoute pour toute question.
-            </p>
-          </div>
+    <>
+      <div className="contact-card">
+        <h3 className="contact-title">📩 Contactez-nous</h3>
 
-          {/* Contact Info Grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-              gap: "24px",
-              marginBottom: "32px",
-            }}
-          >
-            {/* Email */}
-            <div
-              style={{
-                background: "rgba(0, 255, 200, 0.05)",
-                border: "1px solid rgba(0, 255, 200, 0.2)",
-                borderRadius: "12px",
-                padding: "20px",
-                textAlign: "center",
-                transition: "transform 0.2s ease, border-color 0.2s ease",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.borderColor = "rgba(0, 255, 200, 0.5)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.borderColor = "rgba(0, 255, 200, 0.2)";
-              }}
-            >
-              <div style={{ fontSize: "2rem", marginBottom: "12px" }}>📧</div>
-              <h3 style={{ margin: "0 0 8px", fontSize: "1.1rem" }}>Email</h3>
-              <a
-                href="mailto:contact@blockpulse.be"
-                style={{
-                  color: "var(--bp-accent)",
-                  textDecoration: "none",
-                  fontSize: "0.95rem",
-                }}
-              >
-                contact@blockpulse.be
-              </a>
-              <p
-                style={{
-                  fontSize: "0.85rem",
-                  color: "var(--bp-muted)",
-                  margin: "8px 0 0",
-                }}
-              >
-                Réponse sous 24–48h
-              </p>
-            </div>
+        <label className="contact-label">Votre nom</label>
+        <input
+          type="text"
+          className="contact-input"
+          placeholder="Entrez votre nom"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-            {/* Localisation */}
-            <div
-              style={{
-                background: "rgba(255, 200, 100, 0.05)",
-                border: "1px solid rgba(255, 200, 100, 0.2)",
-                borderRadius: "12px",
-                padding: "20px",
-                textAlign: "center",
-                transition: "transform 0.2s ease, border-color 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.borderColor = "rgba(255, 200, 100, 0.5)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.borderColor = "rgba(255, 200, 100, 0.2)";
-              }}
-            >
-              <div style={{ fontSize: "2rem", marginBottom: "12px" }}>📍</div>
-              <h3 style={{ margin: "0 0 8px", fontSize: "1.1rem" }}>
-                Localisation
-              </h3>
-              <p
-                style={{
-                  color: "#ffc866",
-                  margin: "0",
-                  fontSize: "0.95rem",
-                  fontWeight: "600",
-                }}
-              >
-                Montzen, Belgique 🇧🇪
-              </p>
-              <p
-                style={{
-                  fontSize: "0.85rem",
-                  color: "var(--bp-muted)",
-                  margin: "8px 0 0",
-                }}
-              >
-                Projet européen
-              </p>
-            </div>
-          </div>
+        <label className="contact-label">Votre email</label>
+        <input
+          type="email"
+          className="contact-input"
+          placeholder="exemple@domain.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          {/* Support Info */}
-          <div
-            style={{
-              background: "rgba(91, 140, 255, 0.08)",
-              borderLeft: "3px solid #5b8cff",
-              borderRadius: "8px",
-              padding: "16px 20px",
-            }}
-          >
-            <p
-              style={{
-                margin: "0",
-                color: "var(--bp-muted)",
-                fontSize: "0.9rem",
-                lineHeight: "1.6",
-              }}
-            >
-              <strong style={{ color: "#70c3ff" }}>
-                💡 Questions fréquentes :
-              </strong>{" "}
-              Consultez d&apos;abord notre{" "}
-              <a
-                href="/faq"
-                style={{ color: "var(--bp-accent)", textDecoration: "none" }}
-              >
-                FAQ
-              </a>{" "}
-              pour des réponses immédiates. Pour toute question liée à un
-              paiement, vous pouvez nous écrire à{" "}
-              <a
-                href="mailto:contact@blockpulse.be"
-                style={{ color: "var(--bp-accent)", textDecoration: "none" }}
-              >
-                contact@blockpulse.be
-              </a>{" "}
-              ou contacter le support de NOWPayments.
-            </p>
-          </div>
+        <label className="contact-label">Message</label>
+        <textarea
+          className="contact-input"
+          rows="5"
+          placeholder="Écrivez votre message ici..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+
+        <button className="contact-button" onClick={sendEmail} disabled={loading}>
+          {loading ? (
+            "Envoi..."
+          ) : (
+            <>
+              Envoyer <span style={{ fontSize: "1.15rem" }}>✉️</span>
+            </>
+          )}
+        </button>
+
+        {errorMessage && (
+        <div className="contact-error">
+          {errorMessage}
+        </div>
+        )}
+
+        {/* Logos crypto */}
+        <div className="contact-logos">
+          <div className="crypto-icon">₿</div>
+          <div className="crypto-icon">Ξ</div>
+          <div className="crypto-ledger">L</div>
         </div>
       </div>
-    </section>
+
+      {/* Popup */}
+      {popup && (
+        <div className="popup-overlay" onClick={() => setPopup(false)}>
+          <div className="popup-box">
+            <h3>Message envoyé 🎉</h3>
+            <p>Vous recevrez une réponse sous 24–48h.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Styles */}
+      <style>{`
+/* ------ CARD ------ */
+.contact-card {
+  padding: 26px;
+  background: radial-gradient(circle at top, rgba(0, 255, 200, 0.06), rgba(5, 11, 24, 0.95));
+  border-radius: 18px;
+  border: 1px solid rgba(0, 255, 200, 0.15);
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.contact-title {
+  text-align: center;
+  margin: 0 0 20px;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ------ INPUTS ------ */
+.contact-label {
+  margin-top: 14px;
+  margin-bottom: 6px;
+  display: block;
+  color: var(--bp-muted);
+  font-size: 0.9rem;
+}
+
+.contact-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #0d1422;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #fff;
+  font-size: 1rem;
+  transition: 0.25s;
+}
+
+.contact-input:focus {
+  border: 1px solid var(--bp-accent);
+  background: #111a2e;
+}
+
+/* ------ BUTTON ------ */
+.contact-button {
+  margin-top: 20px;
+  padding: 15px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #00ffc8, #4de0ff);
+  color: #020617;
+  transition: 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.contact-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.contact-button:active {
+  transform: scale(0.97);
+}
+
+.contact-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ------ ERROR BOX ------ */
+.contact-error {
+  margin-top: 16px;
+  padding: 13px;
+  border-radius: 10px;
+  background: rgba(255, 80, 80, 0.12);
+  border: 1px solid rgba(255, 80, 80, 0.4);
+  color: #ff7f7f;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeError 0.25s ease;
+}
+
+/* ------ ICONS ------ */
+.contact-logos {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.crypto-icon,
+.crypto-ledger {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #0f1525;
+  border: 1px solid #1f2a44;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 22px;
+}
+
+.crypto-icon {
+  color: var(--bp-accent);
+}
+.crypto-ledger {
+  color: white;
+}
+
+/* ------ POPUP ------ */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn 0.35s ease;
+}
+
+.popup-box {
+  background: #0d1525;
+  padding: 34px 40px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,255,200,0.25);
+  text-align: center;
+  animation: popIn 0.35s ease;
+  box-shadow: 0 25px 60px rgba(0,255,200,0.15);
+}
+
+.popup-box h3 {
+  color: #00ffc8;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.popup-box p {
+  color: #cbd5e1;
+  margin-top: 8px;
+}
+
+/* ------ ANIMATIONS ------ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.82); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeError {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+`}</style>
+</>
   );
 }

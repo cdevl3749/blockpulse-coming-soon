@@ -34,13 +34,33 @@ export default function Dashboard() {
   useEffect(() => {
     fetch("/.netlify/functions/getBtcRecent")
       .then((r) => r.json())
-      .then(setRecentBTC)
-      .catch(console.error);
+      .then((data) => {
+        if (!data || data.error) {
+          console.error("Erreur getBtcRecent:", data?.error);
+          setRecentBTC(null);
+        } else {
+          setRecentBTC(data);
+        }
+      })
+      .catch((err) => {
+        console.error("Erreur fetch getBtcRecent:", err);
+        setRecentBTC(null);
+      });
 
     fetch("/.netlify/functions/getEthRecent")
       .then((r) => r.json())
-      .then(setRecentETH)
-      .catch(console.error);
+      .then((data) => {
+        if (!data || data.error) {
+          console.error("Erreur getEthRecent:", data?.error);
+          setRecentETH(null);
+        } else {
+          setRecentETH(data);
+        }
+      })
+      .catch((err) => {
+        console.error("Erreur fetch getEthRecent:", err);
+        setRecentETH(null);
+      });
   }, []);
 
   // ============================
@@ -254,13 +274,19 @@ export default function Dashboard() {
               <h3 style={{ marginBottom: "12px" }}>Paiements BTC récents</h3>
               <p>
                 <strong>Transactions depuis 1 déc 2025 :</strong>{" "}
-                {recentBTC.count}
+                {recentBTC.count ?? 0}
               </p>
               <p>
-                <strong>Total BTC :</strong> {recentBTC.totalBTC.toFixed(8)}
+                <strong>Total BTC :</strong>{" "}
+                {typeof recentBTC.totalBTC === "number"
+                  ? recentBTC.totalBTC.toFixed(8)
+                  : "0.00000000"}
               </p>
               <p>
-                <strong>Total EUR :</strong> {recentBTC.totalEUR.toFixed(2)} €
+                <strong>Total EUR :</strong>{" "}
+                {typeof recentBTC.totalEUR === "number"
+                  ? `${recentBTC.totalEUR.toFixed(2)} €`
+                  : "Données indisponibles"}
               </p>
               <p>
                 <strong>Dernier paiement :</strong>{" "}
@@ -276,13 +302,19 @@ export default function Dashboard() {
               <h3 style={{ marginBottom: "12px" }}>Paiements ETH récents</h3>
               <p>
                 <strong>Transactions depuis 1 déc 2025 :</strong>{" "}
-                {recentETH.count}
+                {recentETH.count ?? 0}
               </p>
               <p>
-                <strong>Total ETH :</strong> {recentETH.totalETH.toFixed(6)}
+                <strong>Total ETH :</strong>{" "}
+                {typeof recentETH.totalETH === "number"
+                  ? recentETH.totalETH.toFixed(6)
+                  : "0.000000"}
               </p>
               <p>
-                <strong>Total EUR :</strong> {recentETH.totalEUR.toFixed(2)} €
+                <strong>Total EUR :</strong>{" "}
+                {typeof recentETH.totalEUR === "number"
+                  ? `${recentETH.totalEUR.toFixed(2)} €`
+                  : "Données indisponibles"}
               </p>
               <p>
                 <strong>Dernier paiement :</strong>{" "}
@@ -354,7 +386,13 @@ function LedgerAddress({ address }) {
   );
 }
 
-function TwoColumnStats({ leftLabel, leftValue, rightLabel, rightValue, extra }) {
+function TwoColumnStats({
+  leftLabel,
+  leftValue,
+  rightLabel,
+  rightValue,
+  extra,
+}) {
   return (
     <div
       style={{

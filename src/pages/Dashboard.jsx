@@ -17,13 +17,35 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Placeholder visiteurs (à brancher plus tard sur ton outil analytics)
+  // 🔵 Paiements récents BTC & ETH
+  const [recentBTC, setRecentBTC] = useState(null);
+  const [recentETH, setRecentETH] = useState(null);
+
+  // 👁️ Visiteurs (placeholder)
   const [visitorsStats] = useState({
     today: 0,
     last7Days: 0,
     last30Days: 0,
   });
 
+  // ============================
+  // 🔵 Paiements récents API
+  // ============================
+  useEffect(() => {
+    fetch("/.netlify/functions/getBtcRecent")
+      .then((r) => r.json())
+      .then(setRecentBTC)
+      .catch(console.error);
+
+    fetch("/.netlify/functions/getEthRecent")
+      .then((r) => r.json())
+      .then(setRecentETH)
+      .catch(console.error);
+  }, []);
+
+  // ============================
+  // ⚡ Paiements globaux BTC / ETH
+  // ============================
   useEffect(() => {
     async function load() {
       setLoading(true);
@@ -47,7 +69,7 @@ export default function Dashboard() {
           confirmedBalance: btcConfirmed,
         });
 
-        // ---- ETH via Blockscout (exemple, à adapter si besoin) ----
+        // ---- ETH via Blockscout ----
         const ethRes = await fetch(
           `https://eth.blockscout.com/api?module=account&action=txlist&address=${ETH_ADDRESS}`
         );
@@ -62,11 +84,9 @@ export default function Dashboard() {
         let totalInWei = 0n;
 
         txs.forEach((tx) => {
-          // si ton adresse est destinataire
           if (tx.to && tx.to.toLowerCase() === ETH_ADDRESS.toLowerCase()) {
             totalInWei += BigInt(tx.value);
           }
-          // si elle envoie, on soustrait
           if (tx.from && tx.from.toLowerCase() === ETH_ADDRESS.toLowerCase()) {
             totalInWei -= BigInt(tx.value);
           }
@@ -77,7 +97,7 @@ export default function Dashboard() {
         setEthData({
           totalReceived: ethTotalReceived,
           txCount: txs.length,
-          confirmedBalance: ethTotalReceived, // simplifié : pas de notion UTXO comme BTC
+          confirmedBalance: ethTotalReceived,
         });
       } catch (err) {
         console.error(err);
@@ -88,7 +108,7 @@ export default function Dashboard() {
     }
 
     load();
-    const t = setInterval(load, 60000); // refresh toutes les 60s
+    const t = setInterval(load, 60000);
     return () => clearInterval(t);
   }, []);
 
@@ -98,6 +118,7 @@ export default function Dashboard() {
         <h2 style={{ textAlign: "center", marginBottom: "8px" }}>
           Dashboard BlockPulse
         </h2>
+
         <p
           style={{
             textAlign: "center",
@@ -105,17 +126,11 @@ export default function Dashboard() {
             marginBottom: "32px",
           }}
         >
-          Vue d&apos;ensemble des paiements crypto et de l&apos;activité du site.
+          Vue d'ensemble des paiements crypto et de l'activité du site.
         </p>
 
         {loading && (
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--bp-muted)",
-              marginBottom: "24px",
-            }}
-          >
+          <p style={{ textAlign: "center", color: "var(--bp-muted)" }}>
             Chargement des données on-chain…
           </p>
         )}
@@ -135,7 +150,9 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Grille principale : BTC / ETH / Visiteurs */}
+        {/* ====================================== */}
+        {/* 🔵 Grille principale BTC / ETH / Visitors */}
+        {/* ====================================== */}
         <div
           style={{
             display: "grid",
@@ -145,255 +162,224 @@ export default function Dashboard() {
           }}
         >
           {/* Carte BTC */}
-          <div
-            className="bp-card"
-            style={{
-              border: "1px solid var(--bp-border)",
-              borderRadius: "16px",
-              padding: "20px",
-              background: "var(--bp-card)",
-              boxShadow: "var(--bp-shadow-soft)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "12px",
-              }}
-            >
-              <h3 style={{ margin: 0 }}>Paiements BTC</h3>
-              <span style={{ fontSize: "1.4rem" }}>₿</span>
-            </div>
-            <p
-              style={{
-                fontSize: "0.85rem",
-                color: "var(--bp-muted)",
-                marginBottom: "16px",
-              }}
-            >
-              Adresse Ledger :<br />
-              <span style={{ fontSize: "0.8rem", wordBreak: "break-all" }}>
-                {BTC_ADDRESS}
-              </span>
-            </p>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: "12px",
-                fontSize: "0.9rem",
-              }}
-            >
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Total reçu
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {btcData.totalReceived !== null
-                    ? `${btcData.totalReceived.toFixed(8)} BTC`
-                    : "…"}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Solde estimé
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {btcData.confirmedBalance !== null
-                    ? `${btcData.confirmedBalance.toFixed(8)} BTC`
-                    : "…"}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Nb transactions
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {btcData.txCount ?? "…"}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Réseau
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>Bitcoin mainnet</p>
-              </div>
-            </div>
+          <div className="bp-card" style={cardStyle}>
+            <CardTitle title="Paiements BTC" icon="₿" />
+            <LedgerAddress address={BTC_ADDRESS} />
+            <TwoColumnStats
+              leftLabel="Total reçu"
+              leftValue={
+                btcData.totalReceived !== null
+                  ? `${btcData.totalReceived.toFixed(8)} BTC`
+                  : "…"
+              }
+              rightLabel="Solde estimé"
+              rightValue={
+                btcData.confirmedBalance !== null
+                  ? `${btcData.confirmedBalance.toFixed(8)} BTC`
+                  : "…"
+              }
+              extra={[
+                {
+                  label: "Nb transactions",
+                  value: btcData.txCount ?? "…",
+                },
+                { label: "Réseau", value: "Bitcoin mainnet" },
+              ]}
+            />
           </div>
 
           {/* Carte ETH */}
-          <div
-            className="bp-card"
-            style={{
-              border: "1px solid var(--bp-border)",
-              borderRadius: "16px",
-              padding: "20px",
-              background: "var(--bp-card)",
-              boxShadow: "var(--bp-shadow-soft)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "12px",
-              }}
-            >
-              <h3 style={{ margin: 0 }}>Paiements ETH</h3>
-              <span style={{ fontSize: "1.4rem" }}>Ξ</span>
-            </div>
-            <p
-              style={{
-                fontSize: "0.85rem",
-                color: "var(--bp-muted)",
-                marginBottom: "16px",
-              }}
-            >
-              Adresse Ledger :<br />
-              <span style={{ fontSize: "0.8rem", wordBreak: "break-all" }}>
-                {ETH_ADDRESS}
-              </span>
-            </p>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: "12px",
-                fontSize: "0.9rem",
-              }}
-            >
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Solde estimé
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {ethData.confirmedBalance !== null
-                    ? `${ethData.confirmedBalance.toFixed(6)} ETH`
-                    : "…"}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Nb transactions
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {ethData.txCount ?? "…"}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Total reçu net
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {ethData.totalReceived !== null
-                    ? `${ethData.totalReceived.toFixed(6)} ETH`
-                    : "…"}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>Réseau</p>
-                <p style={{ margin: 0, fontWeight: 600 }}>Ethereum mainnet</p>
-              </div>
-            </div>
+          <div className="bp-card" style={cardStyle}>
+            <CardTitle title="Paiements ETH" icon="Ξ" />
+            <LedgerAddress address={ETH_ADDRESS} />
+            <TwoColumnStats
+              leftLabel="Solde estimé"
+              leftValue={
+                ethData.confirmedBalance !== null
+                  ? `${ethData.confirmedBalance.toFixed(6)} ETH`
+                  : "…"
+              }
+              rightLabel="Nb transactions"
+              rightValue={ethData.txCount ?? "…"}
+              extra={[
+                {
+                  label: "Total reçu net",
+                  value:
+                    ethData.totalReceived !== null
+                      ? `${ethData.totalReceived.toFixed(6)} ETH`
+                      : "…",
+                },
+                { label: "Réseau", value: "Ethereum mainnet" },
+              ]}
+            />
           </div>
 
-          {/* Carte visiteurs (placeholder) */}
-          <div
-            className="bp-card"
-            style={{
-              border: "1px solid var(--bp-border)",
-              borderRadius: "16px",
-              padding: "20px",
-              background: "var(--bp-card)",
-              boxShadow: "var(--bp-shadow-soft)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "12px",
-              }}
-            >
-              <h3 style={{ margin: 0 }}>Visiteurs du site</h3>
-              <span style={{ fontSize: "1.4rem" }}>👁️</span>
-            </div>
-            <p
-              style={{
-                fontSize: "0.85rem",
-                color: "var(--bp-muted)",
-                marginBottom: "16px",
-              }}
-            >
-              À connecter plus tard à ton outil d&apos;analytics (Cloudflare,
-              Umami, Plausible…).
+          {/* Carte visiteurs */}
+          <div className="bp-card" style={cardStyle}>
+            <CardTitle title="Visiteurs du site" icon="👁️" />
+            <p style={muted}>
+              À connecter plus tard à ton outil d'analytics (Cloudflare, Umami,
+              Plausible…).
             </p>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: "12px",
-                fontSize: "0.9rem",
-              }}
-            >
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Aujourd&apos;hui
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {visitorsStats.today}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  7 derniers jours
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {visitorsStats.last7Days}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  30 derniers jours
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>
-                  {visitorsStats.last30Days}
-                </p>
-              </div>
-              <div>
-                <p style={{ margin: 0, color: "var(--bp-muted)" }}>
-                  Source données
-                </p>
-                <p style={{ margin: 0, fontWeight: 600 }}>À configurer</p>
-              </div>
-            </div>
+            <TwoColumnStats
+              leftLabel="Aujourd'hui"
+              leftValue={visitorsStats.today}
+              rightLabel="7 derniers jours"
+              rightValue={visitorsStats.last7Days}
+              extra={[
+                {
+                  label: "30 derniers jours",
+                  value: visitorsStats.last30Days,
+                },
+                { label: "Source données", value: "À configurer" },
+              ]}
+            />
           </div>
         </div>
 
-        {/* TODO : section ESP32 plus tard */}
+        {/* ====================================== */}
+        {/* 🔥 CARTES PAIEMENTS RECENTS BTC / ETH */}
+        {/* ====================================== */}
         <div
-          className="bp-card"
           style={{
-            border: "1px solid var(--bp-border)",
-            borderRadius: "16px",
-            padding: "20px",
-            background: "var(--bp-card)",
-            boxShadow: "var(--bp-shadow-soft)",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "20px",
+            marginBottom: "32px",
           }}
         >
+          {recentBTC && (
+            <div className="bp-card" style={cardStyle}>
+              <h3 style={{ marginBottom: "12px" }}>Paiements BTC récents</h3>
+              <p>
+                <strong>Transactions depuis 1 déc 2025 :</strong>{" "}
+                {recentBTC.count}
+              </p>
+              <p>
+                <strong>Total BTC :</strong> {recentBTC.totalBTC.toFixed(8)}
+              </p>
+              <p>
+                <strong>Total EUR :</strong> {recentBTC.totalEUR.toFixed(2)} €
+              </p>
+              <p>
+                <strong>Dernier paiement :</strong>{" "}
+                {recentBTC.lastTx
+                  ? new Date(recentBTC.lastTx * 1000).toLocaleString()
+                  : "Aucun"}
+              </p>
+            </div>
+          )}
+
+          {recentETH && (
+            <div className="bp-card" style={cardStyle}>
+              <h3 style={{ marginBottom: "12px" }}>Paiements ETH récents</h3>
+              <p>
+                <strong>Transactions depuis 1 déc 2025 :</strong>{" "}
+                {recentETH.count}
+              </p>
+              <p>
+                <strong>Total ETH :</strong> {recentETH.totalETH.toFixed(6)}
+              </p>
+              <p>
+                <strong>Total EUR :</strong> {recentETH.totalEUR.toFixed(2)} €
+              </p>
+              <p>
+                <strong>Dernier paiement :</strong>{" "}
+                {recentETH.lastTx
+                  ? new Date(recentETH.lastTx * 1000).toLocaleString()
+                  : "Aucun"}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* ====================================== */}
+        {/* 🔧 Section ESP32 */}
+        {/* ====================================== */}
+        <div className="bp-card" style={cardStyle}>
           <h3 style={{ marginTop: 0 }}>Suivi module ESP32 (à venir)</h3>
-          <p style={{ color: "var(--bp-muted)", fontSize: "0.9rem" }}>
+          <p style={muted}>
             Ici tu pourras afficher les stats temps réel de ton module ESP32 :
-            hashrate, nombre de shares, uptime, statut de connexion au pool,
-            dernier tirage technique, etc. Il suffira d&apos;appeler ton API
-            ESP32 depuis ce composant.
+            hashrate, uptime, statut de connexion au pool, etc.
           </p>
         </div>
       </div>
     </section>
+  );
+}
+
+/* ============================
+   🎨 Small reusable components
+   ============================ */
+
+const cardStyle = {
+  border: "1px solid var(--bp-border)",
+  borderRadius: "16px",
+  padding: "20px",
+  background: "var(--bp-card)",
+  boxShadow: "var(--bp-shadow-soft)",
+};
+
+const muted = {
+  fontSize: "0.85rem",
+  color: "var(--bp-muted)",
+  marginBottom: "16px",
+};
+
+function CardTitle({ title, icon }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        marginBottom: "12px",
+      }}
+    >
+      <h3 style={{ margin: 0 }}>{title}</h3>
+      <span style={{ fontSize: "1.4rem" }}>{icon}</span>
+    </div>
+  );
+}
+
+function LedgerAddress({ address }) {
+  return (
+    <p style={muted}>
+      Adresse Ledger :
+      <br />
+      <span style={{ fontSize: "0.8rem", wordBreak: "break-all" }}>
+        {address}
+      </span>
+    </p>
+  );
+}
+
+function TwoColumnStats({ leftLabel, leftValue, rightLabel, rightValue, extra }) {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+        gap: "12px",
+        fontSize: "0.9rem",
+      }}
+    >
+      <div>
+        <p style={{ margin: 0, color: "var(--bp-muted)" }}>{leftLabel}</p>
+        <p style={{ margin: 0, fontWeight: 600 }}>{leftValue}</p>
+      </div>
+
+      <div>
+        <p style={{ margin: 0, color: "var(--bp-muted)" }}>{rightLabel}</p>
+        <p style={{ margin: 0, fontWeight: 600 }}>{rightValue}</p>
+      </div>
+
+      {extra?.map((row, i) => (
+        <div key={i}>
+          <p style={{ margin: 0, color: "var(--bp-muted)" }}>{row.label}</p>
+          <p style={{ margin: 0, fontWeight: 600 }}>{row.value}</p>
+        </div>
+      ))}
+    </div>
   );
 }

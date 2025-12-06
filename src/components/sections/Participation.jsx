@@ -109,6 +109,14 @@ export default function Participation() {
           élevées.
         </p>
 
+        <div className="bp-ticket-banner">
+          <span className="bp-ticket-icon">⬤</span>
+          <span className="bp-ticket-text">
+            +20 nouveaux tickets techniques ce mois-ci
+          </span>
+        </div>
+
+
         {/* Grille des packs standards */}
         <div
           style={{

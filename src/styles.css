@@ -1196,6 +1196,45 @@ a {
   }
 }
 
+/* Bannière tickets mensuels */
+.bp-ticket-banner {
+  margin: 80px auto 70px auto;  /* <- plus d'espace */
+  padding: 12px 24px;
+  max-width: 480px;
+  border-radius: 50px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 200, 0.12),
+    rgba(0, 180, 255, 0.12)
+  );
+
+  border: 1px solid rgba(0, 255, 200, 0.35);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e9fffa;
+  text-align: center;
+
+  backdrop-filter: blur(6px);
+  animation: fadeInBanner 0.6s ease both;
+}
+
+.bp-ticket-icon {
+  font-size: 10px;
+  color: #00ffcc;
+}
+
+.bp-ticket-text {
+  letter-spacing: 0.5px;
+}
+
+
 /* ====== PAGE TEMPS RÉEL : fond neutre, sans halo bleu ====== */
 .bp-realtime-page {
   background: #020816;      /* fond sombre propre */
@@ -1238,4 +1277,5 @@ a {
   border-color: var(--bp-accent) !important;
   box-shadow: 0 16px 40px rgba(0, 255, 200, 0.12);
 }
+
 }

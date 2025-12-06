@@ -16,28 +16,20 @@
       content="BlockPulse est un projet technique basé sur un ESP32 connecté à un pool Bitcoin. Participez via des contributions techniques et accédez à des tirages techniques déclenchés automatiquement selon l’activité du pool. Projet expérimental européen."
     />
 
-    <!-- Mots-clés SEO -->
     <meta
       name="keywords"
       content="Bitcoin, ESP32, tirages techniques, contribution technique, ViaBTC, projet expérimental, crypto, microcontrôleur"
     />
 
-    <!-- Canonical -->
     <link rel="canonical" href="https://blockpulse.be/" />
 
-    <!-- ============================== -->
-    <!-- 🔍 Robots / Googlebot -->
-    <!-- ============================== -->
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
 
-    <!-- ============================== -->
-    <!-- 📱 PWA / Icons -->
-    <!-- ============================== -->
     <link rel="icon" type="image/png" href="/favicon.png" />
 
     <!-- ============================== -->
-    <!-- 🟦 OpenGraph (Facebook / Discord) -->
+    <!-- 🟦 OpenGraph -->
     <!-- ============================== -->
     <meta property="og:title" content="BlockPulse.be – Contribution Technique ESP32 & Tirages Techniques Bitcoin" />
     <meta property="og:description" content="Rejoignez un projet expérimental basé sur un ESP32 connecté à ViaBTC. Participez via des contributions techniques et accédez à des tirages techniques basés sur l’activité du réseau Bitcoin." />
@@ -45,57 +37,143 @@
     <meta property="og:url" content="https://blockpulse.be/" />
     <meta property="og:type" content="website" />
 
-    <!-- ============================== -->
-    <!-- 🐦 Twitter Card -->
-    <!-- ============================== -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="BlockPulse.be – Contribution Technique ESP32" />
     <meta name="twitter:description" content="Participez à un projet unique basé sur un ESP32 et accédez à des tirages techniques déclenchés automatiquement." />
     <meta name="twitter:image" content="https://blockpulse.be/og-image.png" />
 
     <!-- ============================== -->
-    <!-- 🔧 STRUCTURED DATA JSON-LD -->
+    <!-- 🔧 STRUCTURED DATA JSON-LD COMPLET -->
     <!-- ============================== -->
 
     <!-- Organisation -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "BlockPulse",
+      "url": "https://blockpulse.be",
+      "logo": "https://blockpulse.be/logo.png",
+      "description": "Projet expérimental basé sur un ESP32 avec contributions techniques et tirages techniques liés au pool Bitcoin ViaBTC."
+    }
+    </script>
+
+    <!-- Service -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Contribution Technique BlockPulse",
+      "provider": {
         "@type": "Organization",
         "name": "BlockPulse",
-        "url": "https://blockpulse.be",
-        "logo": "https://blockpulse.be/logo.png",
-        "description": "Projet expérimental basé sur un ESP32 et des tirages techniques liés au pool Bitcoin ViaBTC."
+        "url": "https://blockpulse.be"
+      },
+      "description": "Participation via des contributions techniques donnant accès à des tirages techniques déclenchés automatiquement.",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://blockpulse.be/#packs",
+        "priceCurrency": "EUR",
+        "price": "1.00",
+        "availability": "https://schema.org/InStock"
       }
+    }
     </script>
 
-    <!-- Produit / Service -->
+    <!-- Breadcrumb -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Service",
-        "name": "Contribution Technique BlockPulse",
-        "provider": {
-          "@type": "Organization",
-          "name": "BlockPulse"
-        },
-        "description": "Participation via des contributions techniques donnant accès à des tirages techniques déclenchés automatiquement.",
-        "offers": {
-          "@type": "Offer",
-          "url": "https://blockpulse.be/participer",
-          "priceCurrency": "EUR",
-          "price": "5.97",
-          "availability": "https://schema.org/InStock"
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://blockpulse.be/"
         }
-      }
+      ]
+    }
+    </script>
+
+    <!-- FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que BlockPulse ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "BlockPulse est un projet basé sur un ESP32 connecté au pool Bitcoin ViaBTC, permettant des contributions techniques et des tirages automatisés."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment fonctionnent les tirages techniques ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les tirages techniques sont déclenchés automatiquement，根据 l'activité du pool et vos contributions techniques."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Que fait le module ESP32 ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le module ESP32 se connecte au pool ViaBTC et envoie des shares techniques pour participer à la validation du bloc."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Packs (Product) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "itemListElement": [
+        {
+          "@type": "Product",
+          "name": "Pack Micro",
+          "description": "Ticket d'entrée pour participer aux tirages techniques BlockPulse.",
+          "offers": { "@type": "Offer", "price": "1.00", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" }
+        },
+        {
+          "@type": "Product",
+          "name": "Pack Starter",
+          "description": "Ticket amélioré pour les tirages techniques.",
+          "offers": { "@type": "Offer", "price": "4.00", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" }
+        },
+        {
+          "@type": "Product",
+          "name": "Pack Boost",
+          "description": "Ticket premium pour les tirages BlockPulse.",
+          "offers": { "@type": "Offer", "price": "7.00", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" }
+        },
+        {
+          "@type": "Product",
+          "name": "Pack Pro",
+          "description": "Ticket pro avec avantages supplémentaires.",
+          "offers": { "@type": "Offer", "price": "15.00", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" }
+        },
+        {
+          "@type": "Product",
+          "name": "Pack Whale",
+          "description": "Pack ultime offrant tous les avantages.",
+          "offers": { "@type": "Offer", "price": "35.00", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" }
+        }
+      ]
+    }
     </script>
 
     <!-- ============================== -->
-    <!-- 📦 Script Vite -->
+    <!-- 📦 Vite -->
     <!-- ============================== -->
     <script type="module" crossorigin src="/src/main.jsx"></script>
-
-    <!-- Styles -->
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
 

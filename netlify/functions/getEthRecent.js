@@ -1,61 +1,91 @@
-import fetch from "node-fetch";
+// netlify/functions/getEthRecent.js
 
-export const handler = async () => {
-  const ETH_ADDRESS = "0x3704c62AB88B9a462f81495Eb75Bf57E504bb167";
-  const ONE_DECEMBER_2025 = new Date("2025-12-01").getTime();
+const ETH_ADDRESS = "0x3704c62AB88B9a462f81495Eb75Bf57E504bb167";
+const SINCE_TIMESTAMP = Math.floor(
+  new Date("2025-12-01T00:00:00Z").getTime() / 1000
+);
 
+export async function handler() {
   try {
-    const url = `https://eth.blockscout.com/api/v2/addresses/${ETH_ADDRESS}/transactions?filter=to&limit=100`;
+    // 1) Appel à Blockscout pour l'historique des tx
+    const apiUrl = `https://eth.blockscout.com/api?module=account&action=txlist&address=${ETH_ADDRESS}&sort=desc`;
+    const res = await fetch(apiUrl);
 
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error("Échec API Blockscout");
+    if (!res.ok) {
+      throw new Error("API Blockscout indisponible");
     }
 
-    const data = await response.json();
-
-    if (!data || !data.items) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          recentTransactions: 0,
-          totalReceivedETH: 0,
-          message: "Aucune donnée disponible ou adresse introuvable."
-        })
-      };
+    const json = await res.json();
+    if (json.status !== "1" || !Array.isArray(json.result)) {
+      throw new Error("Réponse ETH inattendue");
     }
 
-    // Filtrer transactions depuis le 1 déc 2025
-    const recent = data.items.filter(tx => {
-      const timestamp = new Date(tx.timestamp).getTime();
-      return timestamp >= ONE_DECEMBER_2025;
+    const allTx = json.result;
+
+    // 2) Transactions entrantes (to = ton adresse) depuis le 1 déc 2025
+    const recentIncoming = allTx.filter((tx) => {
+      const ts = Number(tx.timeStamp || "0");
+      const to = (tx.to || "").toLowerCase();
+      return ts >= SINCE_TIMESTAMP && to === ETH_ADDRESS.toLowerCase();
     });
 
-    const totalReceived = recent.reduce((sum, tx) => {
-      if (tx.to?.hash?.toLowerCase() === ETH_ADDRESS.toLowerCase()) {
-        return sum + Number(tx.value || 0);
+    // 3) Total reçu en wei -> ETH
+    let totalWei = 0n;
+    for (const tx of recentIncoming) {
+      try {
+        totalWei += BigInt(tx.value || "0");
+      } catch (e) {
+        // ignore une tx malformée
       }
-      return sum;
-    }, 0);
+    }
+
+    const totalETH = Number(totalWei) / 1e18;
+
+    // 4) Récupérer prix ETH/EUR
+    let eurPrice = null;
+    try {
+      const priceRes = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=eur"
+      );
+      if (priceRes.ok) {
+        const priceJson = await priceRes.json();
+        eurPrice = priceJson?.ethereum?.eur ?? null;
+      }
+    } catch (e) {
+      // on laisse eurPrice = null si ça plante
+    }
+
+    const totalEUR =
+      eurPrice != null ? Number((totalETH * eurPrice).toFixed(2)) : null;
+
+    const lastTx =
+      recentIncoming.length > 0
+        ? Number(recentIncoming[0].timeStamp)
+        : null;
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        recentTransactions: recent.length,
-        totalReceivedETH: totalReceived / 1e18
-      })
+        ok: true,
+        address: ETH_ADDRESS,
+        since: SINCE_TIMESTAMP,
+        count: recentIncoming.length,
+        totalETH,
+        totalEUR,
+        lastTx,
+      }),
     };
-
   } catch (err) {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        recentTransactions: 0,
-        totalReceivedETH: 0,
-        message: "Aucune donnée récente (API ETH indisponible ou timeout)",
-        error: err.message
-      })
+        ok: false,
+        error: err.message || "Erreur API ETH",
+        count: 0,
+        totalETH: 0,
+        totalEUR: null,
+        lastTx: null,
+      }),
     };
   }
-};
+}

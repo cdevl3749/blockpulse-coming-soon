@@ -1,52 +1,95 @@
-import fetch from "node-fetch";
+// netlify/functions/getBtcRecent.js
 
-export const handler = async () => {
-  const BTC_ADDRESS = "3FULxTDJkQB2jrX8cNzJBAoFt43LUbd4PY";
-  const ONE_DECEMBER_2025 = new Date("2025-12-01").getTime();
+const BTC_ADDRESS = "3FULxTDJkQB2jrX8cNzJBAoFt43LUbd4PY";
+// Transactions depuis le 1 décembre 2025
+const SINCE_TIMESTAMP = Math.floor(
+  new Date("2025-12-01T00:00:00Z").getTime() / 1000
+);
 
+export async function handler() {
   try {
-    const res = await fetch(`https://blockstream.info/api/address/${BTC_ADDRESS}`);
-    const data = await res.json();
+    // 1) Récupérer les tx de l'adresse (dernières pages, suffisant pour ton usage)
+    const txRes = await fetch(
+      `https://blockstream.info/api/address/${BTC_ADDRESS}/txs`
+    );
 
-    // Si l'API retourne null → renvoyer une réponse propre
-    if (!data || !data.chain_stats) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          recentTransactions: 0,
-          totalReceived: 0,
-          message: "Aucune transaction ou adresse introuvable."
-        })
-      };
+    if (!txRes.ok) {
+      throw new Error("API Blockstream indisponible");
     }
 
-    const txs = data?.txs || [];
+    const txs = await txRes.json();
+    if (!Array.isArray(txs)) {
+      throw new Error("Réponse BTC inattendue");
+    }
 
-    const recent = txs.filter(tx => {
-      const timestamp = tx.status?.block_time * 1000;
-      return timestamp && timestamp >= ONE_DECEMBER_2025;
+    // 2) Filtrer les tx où ton adresse reçoit des BTC
+    const incoming = txs.filter((tx) =>
+      (tx.vout || []).some(
+        (out) => out.scriptpubkey_address === BTC_ADDRESS
+      )
+    );
+
+    // 3) Garder seulement celles après le 1er déc 2025
+    const recent = incoming.filter((tx) => {
+      const t = tx.status?.block_time;
+      return typeof t === "number" && t >= SINCE_TIMESTAMP;
     });
 
-    const totalReceived = recent.reduce((sum, tx) => {
-      const received = tx.vout?.reduce((sub, out) => {
-        return out.scriptpubkey_address === BTC_ADDRESS ? sub + out.value : sub;
-      }, 0) || 0;
+    // 4) Calculer le total reçu en sats -> BTC
+    let totalSats = 0;
+    for (const tx of recent) {
+      for (const out of tx.vout || []) {
+        if (out.scriptpubkey_address === BTC_ADDRESS) {
+          totalSats += out.value || 0;
+        }
+      }
+    }
+    const totalBTC = totalSats / 1e8;
 
-      return sum + received;
-    }, 0);
+    // 5) Récupérer le prix BTC/EUR (CoinGecko)
+    let eurPrice = null;
+    try {
+      const priceRes = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur"
+      );
+      if (priceRes.ok) {
+        const priceJson = await priceRes.json();
+        eurPrice = priceJson?.bitcoin?.eur ?? null;
+      }
+    } catch (e) {
+      // si l'API prix plante, on laisse eurPrice = null
+    }
+
+    const totalEUR =
+      eurPrice != null ? Number((totalBTC * eurPrice).toFixed(2)) : null;
+
+    const lastTx =
+      recent.length > 0 ? recent[0].status?.block_time ?? null : null;
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        recentTransactions: recent.length,
-        totalReceivedBTC: totalReceived / 100000000
-      })
+        ok: true,
+        address: BTC_ADDRESS,
+        since: SINCE_TIMESTAMP,
+        count: recent.length,
+        totalBTC,
+        totalEUR,
+        lastTx,
+      }),
     };
-
   } catch (err) {
+    // ⚠️ On renvoie QUAND MÊME 200 pour éviter un 502
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message })
+      statusCode: 200,
+      body: JSON.stringify({
+        ok: false,
+        error: err.message || "Erreur API BTC",
+        count: 0,
+        totalBTC: 0,
+        totalEUR: null,
+        lastTx: null,
+      }),
     };
   }
-};
+}

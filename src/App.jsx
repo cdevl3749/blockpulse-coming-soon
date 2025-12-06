@@ -16,6 +16,8 @@ import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite.jsx";
 import PolitiqueCookies from "./pages/PolitiqueCookies.jsx";
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
+import DashboardSecure from "./pages/DashboardSecure.jsx";
+
 
 // Composant interne pour gérer le scroll
 function ScrollToTop() {
@@ -56,6 +58,9 @@ export default function App() {
           {/* 🔥 Redirections de NOWPayments */}
           <Route path="/success" element={<Success />} />
           <Route path="/cancel" element={<Cancel />} />
+
+          <Route path="/dashboard-admin-blockpulse-8921" element={<DashboardSecure />} />
+ 
         </Routes>
       </main>
       <Footer />

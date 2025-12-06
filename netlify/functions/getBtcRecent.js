@@ -1,40 +1,36 @@
-import fetch from "node-fetch";
-
-export const handler = async () => {
-  const btcAddress = "3FULxTDJkQB2jrX8cNzJBAoFt43LUbd4PY"; // Ton adresse BTC
-  const since = new Date("2025-12-01T00:00:00Z").getTime() / 1000; // timestamp
+exports.handler = async () => {
+  const ADDRESS = "3FULxTDJkQB2jrX8cNzJBAoFt43LUbd4PY";
+  const URL =
+    `https://api.blockchair.com/bitcoin/dashboards/address/${ADDRESS}`;
 
   try {
-    const res = await fetch(
-      `https://blockchain.info/rawaddr/${btcAddress}?cors=true`
-    );
+    const res = await fetch(URL);
     const data = await res.json();
 
-    const recentTx = data.txs.filter(tx => tx.time >= since);
+    const txs = data.data[ADDRESS].transactions;
 
-    let total = 0;
-    if (recentTx.length > 0) {
-      recentTx.forEach(tx => {
-        tx.out.forEach(o => {
-          if (o.addr === btcAddress) total += o.value; 
-        });
-      });
-    }
+    const DECEMBER_1 = 1753929600; // timestamp
+    const recent = txs.filter(tx => tx.time > DECEMBER_1);
 
-    const totalBTC = total / 1e8;
-    const btcPriceRes = await fetch("https://api.coindesk.com/v1/bpi/currentprice/EUR.json");
-    const btcPrice = (await btcPriceRes.json()).bpi.EUR.rate_float;
+    const totalBTC = recent.reduce(
+      (sum, tx) => sum + tx.value / 1e8,
+      0
+    );
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        count: recentTx.length,
+        count: recent.length,
         totalBTC,
-        totalEUR: totalBTC * btcPrice,
-        lastTx: recentTx[0]?.time ?? null,
-      }),
+        totalEUR: totalBTC * 75000,
+        lastTx: recent[0] ? recent[0].time : null
+      })
     };
-  } catch (err) {
-    return { statusCode: 500, body: "BTC error: " + err.message };
+
+  } catch (e) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: e.message })
+    };
   }
 };

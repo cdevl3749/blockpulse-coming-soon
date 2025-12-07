@@ -1,11 +1,13 @@
-import { getStore } from "@netlify/blobs";
+const fs = require("fs");
+const path = require("path");
 
-export async function handler(event) {
+// Dossier PERSISTANT Netlify (autorisé)
+const dataDir = "/tmp/blockpulse";
+const filePath = path.join(dataDir, "payments.json");
+
+exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      body: "Method Not Allowed",
-    };
+    return { statusCode: 405, body: "Method Not Allowed" };
   }
 
   try {
@@ -19,15 +21,21 @@ export async function handler(event) {
       };
     }
 
-    // Ouvre ou crée un store Blobs nommé "payments"
-    const store = getStore("payments");
+    // Création du dossier si absent
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir);
+    }
 
-    // Récupère les paiements existants
+    // Charger fichier existant
     let existing = [];
-    const raw = await store.get("list", { type: "json" });
-    if (raw) existing = raw;
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, "utf8");
+      if (raw.trim()) {
+        existing = JSON.parse(raw);
+      }
+    }
 
-    // Ajoute un nouvel enregistrement
+    // Ajouter nouvelle entrée
     existing.push({
       name,
       email,
@@ -35,14 +43,16 @@ export async function handler(event) {
       packLabel,
       units,
       mode,
+      paid: false, // tu valideras sur ton dashboard
       createdAt: new Date().toISOString(),
     });
 
-    // Sauvegarde dans Netlify Blobs
-    await store.set("list", JSON.stringify(existing), {
-      access: "public",
-      type: "json",
-    });
+    // Sauvegarde
+    fs.writeFileSync(
+      filePath,
+      JSON.stringify(existing, null, 2),
+      "utf8"
+    );
 
     return {
       statusCode: 200,
@@ -55,7 +65,9 @@ export async function handler(event) {
       body: JSON.stringify({ error: "Internal error" }),
     };
   }
-}
+};
+
+
 
 
 

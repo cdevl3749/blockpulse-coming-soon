@@ -1240,6 +1240,22 @@ a {
   background: #020816;      /* fond sombre propre */
 }
 
+.bp-footer-socials {
+  margin-top: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.bp-social-link {
+  color: #0A66C2; /* bleu LinkedIn */
+  transition: opacity 0.2s ease;
+}
+
+.bp-social-link:hover {
+  opacity: 0.7;
+}
+
+
 @media (max-width: 600px) {
   .bp-hero {
     padding-top: 48px;

@@ -1409,21 +1409,29 @@ export default function Participation() {
 
               {/* Bouton Annuler (bas de modale) */}
               <button
-                onClick={closePaymentModal}
-                style={{
-                  width: "100%",
-                  marginTop: "16px",
-                  padding: "12px 12px",
-                  borderRadius: "999px",
-                  border: "1px solid var(--bp-border)",
-                  background: "transparent",
-                  color: "var(--bp-muted)",
-                  fontSize: "0.9rem",
-                  cursor: "pointer",
-                }}
-              >
-                Annuler
-              </button>
+  onClick={closePaymentModal}
+  style={{
+    width: "100%",
+    marginTop: "16px",
+    padding: "12px 12px",
+    borderRadius: "999px",
+    border: paymentConfirmed
+      ? "1px solid var(--bp-accent)"
+      : "1px solid var(--bp-border)",
+    background: paymentConfirmed
+      ? "rgba(0,255,200,0.12)"
+      : "transparent",
+    color: paymentConfirmed
+      ? "var(--bp-accent)"
+      : "var(--bp-muted)",
+    fontSize: "0.9rem",
+    fontWeight: paymentConfirmed ? 600 : 400,
+    cursor: "pointer",
+  }}
+>
+  {paymentConfirmed ? "Terminer" : "Annuler"}
+</button>
+
             </div>
           </div>
         )}

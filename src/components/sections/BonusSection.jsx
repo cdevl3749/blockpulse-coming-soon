@@ -86,6 +86,62 @@ export default function BonusSection() {
               Les bonus restent symboliques, mais peuvent être plus élevés
               qu’un tirage classique.
             </p>
+
+            {/* Bloc Confiance – Témoignages courts */}
+        <div
+          style={{
+            marginTop: "22px",
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "10px",
+            padding: "14px 16px",
+          }}
+        >
+          <p
+            style={{
+              margin: "0 0 10px 0",
+              fontSize: "0.9rem",
+              fontWeight: "600",
+              color: "#a8c6ff",
+            }}
+          >
+            💬 Ce que disent les utilisateurs
+          </p>
+
+          <p
+            style={{
+              margin: "0 0 8px 0",
+              fontSize: "0.85rem",
+              color: "#d8e0f5",
+              opacity: 0.9,
+            }}
+          >
+            “Très intéressant de voir l’activité réelle du réseau Bitcoin.”
+          </p>
+
+          <p
+            style={{
+              margin: "0 0 8px 0",
+              fontSize: "0.85rem",
+              color: "#d8e0f5",
+              opacity: 0.9,
+            }}
+          >
+            “Le système réagit en temps réel à l’activité du réseau, c’est très instructif à regarder.”
+          </p>
+
+          <p
+            style={{
+              margin: 0,
+              fontSize: "0.85rem",
+              color: "#d8e0f5",
+              opacity: 0.9,
+            }}
+          >
+            “Super pédagogique pour comprendre le mining.”
+          </p>
+        </div>
+
           </div>
 
           {/* Bonus par unité */}

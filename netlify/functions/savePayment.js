@@ -1,6 +1,6 @@
-import { put, list } from "@netlify/blobs";
+import { getStore } from "@netlify/blobs";
 
-export const handler = async (event) => {
+export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -19,20 +19,15 @@ export const handler = async (event) => {
       };
     }
 
-    // 🔥 Le fichier "payments.json" dans les blobs Netlify
-    const key = "payments.json";
+    // Ouvre ou crée un store Blobs nommé "payments"
+    const store = getStore("payments");
 
-    // On récupère l’existant
+    // Récupère les paiements existants
     let existing = [];
-    const current = await list(); // liste des blobs
+    const raw = await store.get("list", { type: "json" });
+    if (raw) existing = raw;
 
-    if (current.blobs.includes(key)) {
-      const url = await get(key);
-      const json = await fetch(url).then((r) => r.json());
-      existing = Array.isArray(json) ? json : [];
-    }
-
-    // On ajoute la nouvelle entrée
+    // Ajoute un nouvel enregistrement
     existing.push({
       name,
       email,
@@ -43,9 +38,10 @@ export const handler = async (event) => {
       createdAt: new Date().toISOString(),
     });
 
-    // On réécrit le fichier complet dans les blobs
-    await put(key, JSON.stringify(existing, null, 2), {
-      contentType: "application/json",
+    // Sauvegarde dans Netlify Blobs
+    await store.set("list", JSON.stringify(existing), {
+      access: "public",
+      type: "json",
     });
 
     return {
@@ -59,7 +55,7 @@ export const handler = async (event) => {
       body: JSON.stringify({ error: "Internal error" }),
     };
   }
-};
+}
 
 
 

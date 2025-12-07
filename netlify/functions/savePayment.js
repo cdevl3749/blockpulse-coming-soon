@@ -20,11 +20,11 @@ exports.handler = async (event) => {
       };
     }
 
-    // 📌 Chemin vers /netlify/functions/data
-    const dataDir = path.join(__dirname, "data");
-    const filePath = path.join(dataDir, "payments.json");
+    // 📌 Chemin vers /data/payments.json (racine du projet)
+    const filePath = path.join(process.cwd(), "data", "payments.json");
 
-    // 📁 Créer le dossier data s'il n'existe pas
+    // 📁 Si dossier data manque, on le crée
+    const dataDir = path.dirname(filePath);
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir);
     }
@@ -65,6 +65,7 @@ exports.handler = async (event) => {
     };
   }
 };
+
 
 
 

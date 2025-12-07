@@ -1,8 +1,10 @@
-exports.handler = async (event) => {
+import { NetlifyBlobs } from "@netlify/blobs";
+
+export const handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: "Méthode non autorisée" }),
+      body: "Method Not Allowed",
     };
   }
 
@@ -13,12 +15,19 @@ exports.handler = async (event) => {
     if (!name || !email) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Nom ou email manquant" }),
+        body: JSON.stringify({ error: "Missing name or email" }),
       };
     }
 
-    // Pour l'instant : on log simplement la demande côté serveur
-    console.log("📩 Nouvelle demande de participation :", {
+    const blobs = new NetlifyBlobs({ token: process.env.NETLIFY_BLOBS_TOKEN });
+    const store = blobs.store("payments-store");
+
+    // Récupérer les anciens paiements
+    const existingRaw = await store.get("payments.json");
+    let payments = existingRaw ? JSON.parse(existingRaw) : [];
+
+    // Ajouter le nouveau paiement
+    payments.push({
       name,
       email,
       packId,
@@ -28,20 +37,22 @@ exports.handler = async (event) => {
       createdAt: new Date().toISOString(),
     });
 
-    // Tu pourras venir lire ça dans :
-    // Netlify -> Site -> Functions -> savePayment -> Logs
+    // Sauvegarder
+    await store.set("payments.json", JSON.stringify(payments));
 
     return {
       statusCode: 200,
       body: JSON.stringify({ ok: true }),
     };
   } catch (e) {
-    console.error("Erreur savePayment:", e);
+    console.error("savePayment error:", e);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Erreur serveur" }),
+      body: JSON.stringify({ error: "Internal error" }),
     };
   }
 };
+
+
 
 

@@ -125,10 +125,9 @@ export default function Participation() {
         <div className="bp-ticket-banner">
           <span className="bp-ticket-icon">⬤</span>
           <span className="bp-ticket-text">
-            +20 nouveaux tickets techniques ce mois-ci
+            Activité du mois : 20 tirages techniques déclenchés
           </span>
         </div>
-
 
         {/* Grille des packs standards */}
         <div

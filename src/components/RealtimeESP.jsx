@@ -152,7 +152,7 @@ export default function RealtimeESP() {
     };
 
     load();
-    const interval = setInterval(load, 3000);
+    const interval = setInterval(load, 30000);
     return () => clearInterval(interval);
   }, []);
 

@@ -1,44 +1,47 @@
-const { kv } = require("@netlify/kv");
+const fs = require("fs");
+const path = require("path");
+
+const DATA_FILE = path.join(__dirname, "../../data/payments.json");
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+    return { statusCode: 405, body: "Méthode non autorisée" };
   }
 
   try {
     const { name, email, createdAt } = JSON.parse(event.body);
 
-    let list = (await kv.get("sepa_payments")) || [];
+    let payments = [];
+    if (fs.existsSync(DATA_FILE)) {
+      payments = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+    }
 
-    const index = list.findIndex(
+    const index = payments.findIndex(
       (p) => p.name === name && p.email === email && p.createdAt === createdAt
     );
 
     if (index === -1) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ error: "Payment not found" }),
+        body: JSON.stringify({ error: "Paiement introuvable" }),
       };
     }
 
-    list[index].paid = true;
-    list[index].paidAt = new Date().toISOString();
+    payments[index].paid = true;
+    payments[index].paidAt = new Date().toISOString();
 
-    await kv.set("sepa_payments", list);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(payments, null, 2));
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        ok: true,
-        paidAt: list[index].paidAt,
-      }),
+      body: JSON.stringify({ ok: true, paidAt: payments[index].paidAt }),
     };
   } catch (err) {
+    console.error("Erreur markSepaPaid:", err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.toString() }),
+      body: JSON.stringify({ error: "Erreur interne" }),
     };
   }
 };
-
 

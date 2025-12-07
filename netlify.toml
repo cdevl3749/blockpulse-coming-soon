@@ -3,24 +3,15 @@
   publish = "dist"
   functions = "netlify/functions"
 
-# Autoriser la fonction save-order
-[[redirects]]
-  from = "/.netlify/functions/save-order"
-  to = "/.netlify/functions/save-order"
-  status = 200
-  force = true
+# === NE PAS mettre de redirects vers /.netlify/functions ===
+# Netlify gère automatiquement les endpoints:
+# /.netlify/functions/name
 
-# Autoriser la fonction status (ESP32)
-[[redirects]]
-  from = "/.netlify/functions/status"
-  to = "/.netlify/functions/status"
-  status = 200
-  force = true
-
-# Règle SPA (à laisser en dernier !)
+# Règle SPA (doit être en dernier)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
 
 

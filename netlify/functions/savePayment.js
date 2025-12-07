@@ -1,13 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 
-// Dossier PERSISTANT Netlify (autorisé)
-const dataDir = "/tmp/blockpulse";
-const filePath = path.join(dataDir, "payments.json");
-
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+    return {
+      statusCode: 405,
+      body: "Method Not Allowed",
+    };
   }
 
   try {
@@ -21,12 +20,16 @@ exports.handler = async (event) => {
       };
     }
 
-    // Création du dossier si absent
+    // 📌 Chemin vers /netlify/functions/data
+    const dataDir = path.join(__dirname, "data");
+    const filePath = path.join(dataDir, "payments.json");
+
+    // 📁 Créer le dossier data s'il n'existe pas
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir);
     }
 
-    // Charger fichier existant
+    // 📄 Charger/Créer le fichier JSON
     let existing = [];
     if (fs.existsSync(filePath)) {
       const raw = fs.readFileSync(filePath, "utf8");
@@ -35,7 +38,7 @@ exports.handler = async (event) => {
       }
     }
 
-    // Ajouter nouvelle entrée
+    // ➕ Ajouter une entrée
     existing.push({
       name,
       email,
@@ -43,16 +46,12 @@ exports.handler = async (event) => {
       packLabel,
       units,
       mode,
-      paid: false, // tu valideras sur ton dashboard
       createdAt: new Date().toISOString(),
+      paid: false,
     });
 
-    // Sauvegarde
-    fs.writeFileSync(
-      filePath,
-      JSON.stringify(existing, null, 2),
-      "utf8"
-    );
+    // 💾 Écrire les données
+    fs.writeFileSync(filePath, JSON.stringify(existing, null, 2), "utf8");
 
     return {
       statusCode: 200,
@@ -66,6 +65,7 @@ exports.handler = async (event) => {
     };
   }
 };
+
 
 
 

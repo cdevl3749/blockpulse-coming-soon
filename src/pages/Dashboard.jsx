@@ -146,7 +146,7 @@ export default function Dashboard() {
             marginBottom: "32px",
           }}
         >
-          Vue d'ensemble des paiements crypto et de l'activité du site.
+          Vue d'ensemble des paiements crypto, SEPA et de l'activité du site.
         </p>
 
         {loading && (
@@ -327,6 +327,14 @@ export default function Dashboard() {
         </div>
 
         {/* ====================================== */}
+        {/* 📄 Paiements SEPA enregistrés */}
+        {/* ====================================== */}
+        <div className="bp-card" style={cardStyle}>
+          <h3 style={{ marginBottom: "12px" }}>Paiements SEPA enregistrés</h3>
+          <SEPAList />
+        </div>
+
+        {/* ====================================== */}
         {/* 🔧 Section ESP32 */}
         {/* ====================================== */}
         <div className="bp-card" style={cardStyle}>
@@ -338,6 +346,227 @@ export default function Dashboard() {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ============================
+   📄 Liste paiements SEPA
+   ============================ */
+
+function SEPAList() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState(null);
+  const [markingKey, setMarkingKey] = useState(null);
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    loadPayments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function loadPayments() {
+    setLoading(true);
+    setErr(null);
+    setMessage(null);
+
+    try {
+      const res = await fetch("/.netlify/functions/getSepaPayments");
+      const json = await res.json();
+
+      if (!res.ok || json.error) {
+        throw new Error(json.error || "Erreur lors du chargement");
+      }
+
+      // On attend un tableau "payments"
+      setItems(Array.isArray(json.payments) ? json.payments : []);
+    } catch (e) {
+      console.error("getSepaPayments error:", e);
+      setErr(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleMarkPaid(p) {
+    const key = `${p.email}__${p.createdAt}`;
+
+    if (!window.confirm(`Confirmer que le paiement de ${p.name} est reçu ?`)) {
+      return;
+    }
+
+    setMarkingKey(key);
+    setMessage(null);
+
+    try {
+      const res = await fetch("/.netlify/functions/markSepaPaid", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: p.name,
+          email: p.email,
+          createdAt: p.createdAt,
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok || json.error) {
+        throw new Error(json.error || "Erreur lors de la mise à jour");
+      }
+
+      const paidAt = json.paidAt || new Date().toISOString();
+
+      setItems((prev) =>
+        prev.map((item) => {
+          if (
+            item.name === p.name &&
+            item.email === p.email &&
+            item.createdAt === p.createdAt
+          ) {
+            return {
+              ...item,
+              paid: true,
+              paidAt,
+            };
+          }
+          return item;
+        })
+      );
+
+      setMessage("✅ Paiement marqué comme reçu.");
+    } catch (e) {
+      console.error("markSepaPaid error:", e);
+      setMessage("❌ Impossible de marquer ce paiement comme reçu.");
+    } finally {
+      setMarkingKey(null);
+    }
+  }
+
+  if (loading) {
+    return <p style={muted}>Chargement des paiements SEPA…</p>;
+  }
+
+  if (err) {
+    return (
+      <p style={{ ...muted, color: "#ff8888" }}>
+        Erreur lors du chargement : {err}
+      </p>
+    );
+  }
+
+  if (!items.length) {
+    return <p style={muted}>Aucun paiement SEPA enregistré pour l’instant.</p>;
+  }
+
+  return (
+    <div style={{ marginTop: "4px" }}>
+      {message && (
+        <div
+          style={{
+            marginBottom: "10px",
+            fontSize: "0.85rem",
+            color: message.startsWith("✅") ? "#00ffc8" : "#ff8888",
+          }}
+        >
+          {message}
+        </div>
+      )}
+
+      <div
+        style={{
+          width: "100%",
+          overflowX: "auto",
+        }}
+      >
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            fontSize: "0.85rem",
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={thStyle}>Nom</th>
+              <th style={thStyle}>Email</th>
+              <th style={thStyle}>Pack</th>
+              <th style={thStyle}>Mode</th>
+              <th style={thStyle}>Unités</th>
+              <th style={thStyle}>Créé le</th>
+              <th style={thStyle}>Statut</th>
+              <th style={thStyle}>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((p, idx) => {
+              const key = `${p.email}__${p.createdAt || idx}`;
+              const isPaid = Boolean(p.paid);
+              const rowBg = isPaid
+                ? "rgba(0, 255, 200, 0.06)"
+                : "transparent";
+
+              return (
+                <tr key={key} style={{ background: rowBg }}>
+                  <td style={tdStyle}>{p.name || "-"}</td>
+                  <td style={tdStyle}>{p.email || "-"}</td>
+                  <td style={tdStyle}>{p.packLabel || p.packId || "-"}</td>
+                  <td style={tdStyle}>{p.mode || "sepa"}</td>
+                  <td style={tdStyle}>{p.units ?? "-"}</td>
+                  <td style={tdStyle}>
+                    {p.createdAt
+                      ? new Date(p.createdAt).toLocaleString()
+                      : "-"}
+                  </td>
+                  <td style={tdStyle}>
+                    {isPaid ? (
+                      <span style={{ color: "#00ffc8" }}>
+                        ✓ Payé{" "}
+                        {p.paidAt
+                          ? `(${new Date(p.paidAt).toLocaleDateString()})`
+                          : ""}
+                      </span>
+                    ) : (
+                      <span style={{ color: "#ffb366" }}>En attente</span>
+                    )}
+                  </td>
+                  <td style={tdStyle}>
+                    {isPaid ? (
+                      <span style={{ fontSize: "0.8rem", color: "#777" }}>
+                        Déjà marqué comme payé
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => handleMarkPaid(p)}
+                        disabled={markingKey === key}
+                        style={{
+                          padding: "6px 10px",
+                          borderRadius: "999px",
+                          border: "1px solid var(--bp-border)",
+                          background:
+                            markingKey === key
+                              ? "rgba(255,255,255,0.05)"
+                              : "transparent",
+                          color: "#fff",
+                          fontSize: "0.8rem",
+                          cursor:
+                            markingKey === key ? "not-allowed" : "pointer",
+                        }}
+                      >
+                        {markingKey === key
+                          ? "Mise à jour…"
+                          : "Marquer comme payé"}
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 
@@ -357,6 +586,21 @@ const muted = {
   fontSize: "0.85rem",
   color: "var(--bp-muted)",
   marginBottom: "16px",
+};
+
+const thStyle = {
+  textAlign: "left",
+  padding: "8px 10px",
+  borderBottom: "1px solid rgba(255,255,255,0.06)",
+  fontWeight: "600",
+  color: "#c9d4e5",
+  whiteSpace: "nowrap",
+};
+
+const tdStyle = {
+  padding: "6px 10px",
+  borderBottom: "1px solid rgba(255,255,255,0.04)",
+  verticalAlign: "top",
 };
 
 function CardTitle({ title, icon }) {
@@ -386,38 +630,52 @@ function LedgerAddress({ address }) {
   );
 }
 
-function TwoColumnStats({
-  leftLabel,
-  leftValue,
-  rightLabel,
-  rightValue,
-  extra,
-}) {
+function TwoColumnStats({ leftLabel, leftValue, rightLabel, rightValue, extra }) {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-        gap: "12px",
-        fontSize: "0.9rem",
-      }}
-    >
-      <div>
-        <p style={{ margin: 0, color: "var(--bp-muted)" }}>{leftLabel}</p>
-        <p style={{ margin: 0, fontWeight: 600 }}>{leftValue}</p>
-      </div>
-
-      <div>
-        <p style={{ margin: 0, color: "var(--bp-muted)" }}>{rightLabel}</p>
-        <p style={{ margin: 0, fontWeight: 600 }}>{rightValue}</p>
-      </div>
-
-      {extra?.map((row, i) => (
-        <div key={i}>
-          <p style={{ margin: 0, color: "var(--bp-muted)" }}>{row.label}</p>
-          <p style={{ margin: 0, fontWeight: 600 }}>{row.value}</p>
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "12px",
+        }}
+      >
+        <div>
+          <p style={{ ...muted, marginBottom: "4px" }}>{leftLabel}</p>
+          <p style={{ fontSize: "1rem", fontWeight: 600 }}>{leftValue}</p>
         </div>
-      ))}
+        <div style={{ textAlign: "right" }}>
+          <p style={{ ...muted, marginBottom: "4px" }}>{rightLabel}</p>
+          <p style={{ fontSize: "1rem", fontWeight: 600 }}>{rightValue}</p>
+        </div>
+      </div>
+
+      {extra && extra.length > 0 && (
+        <div
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            paddingTop: "8px",
+            marginTop: "8px",
+          }}
+        >
+          {extra.map((row, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.8rem",
+                color: "var(--bp-muted)",
+                marginBottom: "4px",
+              }}
+            >
+              <span>{row.label}</span>
+              <span style={{ fontWeight: 500 }}>{row.value}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
+

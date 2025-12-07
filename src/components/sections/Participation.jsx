@@ -157,7 +157,7 @@ export default function Participation() {
     setSaveInfoError("");
 
     try {
-      const res = await fetch("/api/savePayment", {
+      const res = await fetch("/.netlify/functions/savePayment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

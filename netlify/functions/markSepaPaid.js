@@ -28,7 +28,10 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ ok: true, paidAt: list[index].paidAt }),
+      body: JSON.stringify({
+        ok: true,
+        paidAt: list[index].paidAt,
+      }),
     };
   } catch (err) {
     return {

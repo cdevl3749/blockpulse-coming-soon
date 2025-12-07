@@ -1,11 +1,49 @@
 const fs = require("fs");
 const path = require("path");
 
+const DATA_DIR =
+  process.env.PAYMENTS_DATA_DIR || path.join("/tmp", "blockpulse-data");
+const DATA_FILE = path.join(DATA_DIR, "payments.json");
+
+const baseHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+function readPayments() {
+  try {
+    if (!fs.existsSync(DATA_FILE)) return [];
+    const raw = fs.readFileSync(DATA_FILE, "utf8") || "[]";
+    const json = JSON.parse(raw);
+    return Array.isArray(json) ? json : [];
+  } catch (e) {
+    console.error("readPayments error:", e);
+    return [];
+  }
+}
+
+function writePayments(payments) {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+  fs.writeFileSync(DATA_FILE, JSON.stringify(payments, null, 2), "utf8");
+}
+
 exports.handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: baseHeaders,
+      body: "",
+    };
+  }
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: "Method Not Allowed",
+      headers: baseHeaders,
+      body: JSON.stringify({ error: "Method Not Allowed" }),
     };
   }
 
@@ -16,69 +54,51 @@ exports.handler = async (event) => {
     if (!name || !email || !createdAt) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: "Missing name, email or createdAt" }),
+        headers: baseHeaders,
+        body: JSON.stringify({
+          error: "Missing fields (name, email, createdAt)",
+        }),
       };
     }
 
-    const dataDir = path.join(__dirname, "data");
-    const filePath = path.join(dataDir, "payments.json");
+    const payments = readPayments();
 
-    if (!fs.existsSync(filePath)) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({ error: "payments.json not found" }),
-      };
-    }
-
-    const raw = fs.readFileSync(filePath, "utf8");
-    const all = raw.trim() ? JSON.parse(raw) : [];
-
-    let updated = false;
-    const now = new Date().toISOString();
-
-    const updatedList = all.map((p) => {
-      if (
+    const idx = payments.findIndex(
+      (p) =>
         p.name === name &&
         p.email === email &&
         p.createdAt === createdAt
-      ) {
-        updated = true;
-        return {
-          ...p,
-          paid: true,
-          paidAt: now,
-        };
-      }
-      return p;
-    });
+    );
 
-    if (!updated) {
+    if (idx === -1) {
       return {
         statusCode: 404,
+        headers: baseHeaders,
         body: JSON.stringify({ error: "Payment not found" }),
       };
     }
 
-    fs.writeFileSync(filePath, JSON.stringify(updatedList, null, 2), "utf8");
+    const now = new Date().toISOString();
+    payments[idx].paid = true;
+    payments[idx].paidAt = now;
 
-    // 👉 Ici on pourrait ajouter un envoi d’email automatique
-    // à toi + à l’utilisateur (via Resend, Mailjet, etc.)
-    // Pour éviter de t’ajouter des clés API maintenant,
-    // je laisse ça pour une prochaine étape.
+    writePayments(payments);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ ok: true, paidAt: now }),
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        ...baseHeaders,
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ ok: true, paidAt: now }),
     };
   } catch (err) {
     console.error("markSepaPaid error:", err);
     return {
       statusCode: 500,
+      headers: baseHeaders,
       body: JSON.stringify({ error: "Internal error" }),
     };
   }
 };
+

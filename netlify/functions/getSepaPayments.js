@@ -1,36 +1,65 @@
 const fs = require("fs");
 const path = require("path");
 
-exports.handler = async () => {
+const DATA_DIR =
+  process.env.PAYMENTS_DATA_DIR || path.join("/tmp", "blockpulse-data");
+const DATA_FILE = path.join(DATA_DIR, "payments.json");
+
+const baseHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+function readPayments() {
   try {
-    const dataDir = path.join(__dirname, "data");
-    const filePath = path.join(dataDir, "payments.json");
+    if (!fs.existsSync(DATA_FILE)) return [];
+    const raw = fs.readFileSync(DATA_FILE, "utf8") || "[]";
+    const json = JSON.parse(raw);
+    return Array.isArray(json) ? json : [];
+  } catch (e) {
+    console.error("getSepaPayments read error:", e);
+    return [];
+  }
+}
 
-    if (!fs.existsSync(filePath)) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ payments: [] }),
-      };
-    }
+exports.handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: baseHeaders,
+      body: "",
+    };
+  }
 
-    const raw = fs.readFileSync(filePath, "utf8");
-    const all = raw.trim() ? JSON.parse(raw) : [];
+  if (event.httpMethod !== "GET") {
+    return {
+      statusCode: 405,
+      headers: baseHeaders,
+      body: JSON.stringify({ error: "Method Not Allowed" }),
+    };
+  }
 
-    // On ne garde que les paiements SEPA
-    const sepaOnly = all.filter((p) => p.mode === "sepa");
+  try {
+    const payments = readPayments();
+
+    // On ne renvoie que les paiements SEPA si tu veux filtrer :
+    // const sepaPayments = payments.filter(p => p.mode === "bank" || p.mode === "sepa");
+    // return ...
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ payments: sepaOnly }),
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        ...baseHeaders,
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ payments }),
     };
   } catch (err) {
     console.error("getSepaPayments error:", err);
     return {
       statusCode: 500,
+      headers: baseHeaders,
       body: JSON.stringify({ error: "Internal error" }),
     };
   }

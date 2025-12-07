@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { FaQuestionCircle, FaCreditCard, FaLock } from "react-icons/fa";
+import { FaQuestionCircle, FaCreditCard, FaLock, FaUniversity } from "react-icons/fa";
 
 export default function FAQ() {
   const [open, setOpen] = useState(null);
 
-  const toggle = (i) => {
-    setOpen(open === i ? null : i);
-  };
+  const toggle = (i) => setOpen(open === i ? null : i);
 
   const data = [
     {
@@ -14,139 +12,132 @@ export default function FAQ() {
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Non. BlockPulse n’est <strong>pas</strong> une loterie classique et ne
-          propose aucun gain garanti.
-          <br />
-          <br />
-          C’est un système de <strong>participation technique</strong> :
-          chaque pack soutient un ESP32 connecté au pool ViaBTC via le protocole
-          Stratum.
-          <br />
-          <br />
-          Lorsque certaines conditions techniques sont détectées (nouveau job,
-          activité élevée, bloc trouvé…), un <strong>tirage interne</strong> peut
-          être déclenché et un <strong>bonus symbolique</strong> peut être
-          attribué.
+          Non. BlockPulse n’est <strong>pas</strong> une loterie classique.
+          <br /><br />
+          C’est une <strong>expérience technique</strong> : un module ESP32 communique en temps réel avec le pool ViaBTC via le protocole Stratum.
+          <br /><br />
+          Lors d’événements techniques (nouveau job, activité élevée, bloc trouvé…), un <strong>tirage interne</strong> peut être déclenché.
+          Les bonus attribués sont <strong>symboliques et non garantis</strong>.
         </>
       ),
     },
+
     {
       title: "Est-ce un investissement ou un moyen de gagner de l’argent ?",
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Non. BlockPulse n’est pas un investissement financier.
-          <br />
-          <br />
-          Les bonus (classiques ou spéciaux) sont
-          <strong> symboliques et non garantis</strong>, car ils dépendent
-          entièrement de l’activité réelle du pool ViaBTC.
-          <br />
-          <br />
-          La participation doit être vue comme un soutien à un projet technique
-          expérimental.
+          Non. BlockPulse n’est <strong>pas</strong> un investissement financier.
+          <br /><br />
+          Les bonus distribués lors des tirages techniques sont <strong>symboliques</strong> 
+          et dépendent de l’activité réelle du pool ViaBTC.
+          <br /><br />
+          Il faut donc voir votre participation comme un <strong>soutien</strong> à un projet tech expérimental.
         </>
       ),
     },
+
     {
       title: "Comment fonctionnent les tirages techniques ?",
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Le nœud ESP32 échange en temps réel avec ViaBTC.
-          <br />
-          <br />
-          Lorsqu’un événement technique se produit (nouveau job, forte activité,
-          découverte d’un bloc…), un <strong>tirage</strong> peut être lancé.
-          <br />
-          <br />
-          Chaque part = <strong>1 ticket</strong>.  
-          Plus vous avez de parts, plus vos chances d’être sélectionné
-          augmentent.
-          <br />
-          <br />
-          Lorsqu’un bloc Bitcoin est détecté, un{" "}
-          <strong>tirage spécial “Bloc Trouvé”</strong> peut être déclenché,
-          avec un bonus <strong>plus important</strong>.
+          Le module ESP32 analyse les signaux du pool ViaBTC en temps réel.
+          <br /><br />
+          Lorsqu’un événement technique spécifique est détecté (nouveau job, activité élevée, bloc trouvé…), 
+          un <strong>tirage technique</strong> peut être activé.
+          <br /><br />
+          Chaque part = <strong>1 ticket</strong>.
+          Plus vous possédez de parts, plus vos chances d’être tiré au sort augmentent.
+          <br /><br />
+          Lorsqu’un bloc Bitcoin est détecté, un <strong>tirage spécial “Bloc Trouvé”</strong> peut également être déclenché.
         </>
       ),
     },
+
     {
       title: "Quels moyens de paiement sont acceptés ?",
       icon: <FaCreditCard className="bp-icon" />,
       content: (
         <>
-          Les paiements sont effectués <strong>directement</strong> vers les
-          adresses officielles Ledger de BlockPulse.
-          <br />
-          <br />
-          Vous pouvez contribuer en :
+          Trois modes de paiement sont disponibles :
           <ul style={{ marginTop: "10px" }}>
-            <li>Bitcoin (BTC)</li>
-            <li>Ethereum (ETH)</li>
+            <li>💰 Bitcoin (BTC)</li>
+            <li>💠 Ethereum (ETH)</li>
+            <li>💳 Virement bancaire SEPA (IBAN belge)</li>
           </ul>
           <br />
-          Aucun intermédiaire. Aucun frais supplémentaire lié à un prestataire.
+          Les paiements crypto sont envoyés vers nos <strong>adresses officielles BTC/ETH</strong>.
+          <br /><br />
+          Le virement SEPA permet de payer facilement <strong>depuis n’importe quelle banque</strong>.
         </>
       ),
     },
+
     {
-      title: "Pourquoi certains packs n’acceptent pas le Bitcoin ?",
-      icon: <FaQuestionCircle className="bp-icon" />,
+      title: "Comment payer par SEPA ? (3 étapes simples)",
+      icon: <FaUniversity className="bp-icon" />,
       content: (
         <>
-          Les frais du réseau Bitcoin peuvent parfois être élevés, parfois
-          supérieurs au montant des <strong>petits packs</strong> (comme le pack
-          Micro à 1 €).
+          Le virement SEPA est le moyen le plus simple pour contribuer sans crypto.
+          <br /><br />
+          <strong>Étape 1 :</strong> Choisissez un pack puis cliquez sur
+          <strong> “Payer par virement SEPA”</strong>.
+          <br /><br />
+          <strong>Étape 2 :</strong> Copiez l’IBAN affiché dans la fenêtre.
           <br />
+          Un IBAN belge : <strong>BE23 0637 6823 5991</strong>.
+          <br /><br />
+          <strong>Étape 3 :</strong> Effectuez un virement depuis votre application bancaire
+          (Belfius, ING, KBC, Bancontact, Revolut, etc.) avec la communication indiquée :
           <br />
-          Pour éviter des frais disproportionnés, le Bitcoin n’est proposé que
-          pour les packs dont le montant le permet.
+          <strong>“BLOCKPULSE + Nom du Pack + Votre Email”</strong>.
+          <br /><br />
+          Votre pack est ensuite activé <strong>dès réception</strong> du paiement.
         </>
       ),
     },
+
     {
       title: "Le code ESP32 est-il open source ?",
       icon: <FaLock className="bp-icon" />,
       content: (
         <>
-          Le module ESP32 utilise un <strong>vrai protocole Stratum</strong> pour
-          communiquer avec ViaBTC.
-          <br />
-          <br />
-          Vous pourrez décider plus tard de publier le code sur GitHub afin de
-          rendre le projet totalement transparent.
+          Le module ESP32 utilise un <strong>vrai protocole Stratum</strong> pour communiquer avec ViaBTC.
+          <br /><br />
+          Une publication du code est prévue afin d'apporter plus de transparence au projet.
         </>
       ),
     },
+
     {
       title: "Comment sont utilisés les fonds des packs ?",
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Les contributions financent :
+          Les contributions soutiennent entièrement :
           <ul style={{ marginTop: "10px" }}>
-            <li>Infrastructure ESP32</li>
-            <li>Dashboard en temps réel</li>
-            <li>Hébergement & serveur Netlify</li>
-            <li>Développement continu</li>
-            <li>Maintenance du nœud</li>
+            <li>l’infrastructure ESP32</li>
+            <li>le dashboard temps réel</li>
+            <li>l'hébergement Netlify</li>
+            <li>la maintenance du nœud</li>
+            <li>les futures évolutions du projet</li>
           </ul>
           <br />
-          Tout est réinvesti dans le fonctionnement du projet.
+          Tout est réinvesti directement dans le fonctionnement du projet.
         </>
       ),
     },
+
     {
       title: "Les bonus peuvent-ils être retirés en crypto ?",
       icon: <FaQuestionCircle className="bp-icon" />,
       content: (
         <>
-          Oui, lorsqu’ils seront activés dans la plateforme.
-          <br />
-          <br />
-          Les bonus sont <strong>réels mais modestes</strong> et pourront être
-          retirés en BTC ou ETH.
+          Oui. Les bonus, lorsqu’ils sont obtenus, pourront être retirés en 
+          <strong> BTC</strong> ou <strong>ETH</strong>.
+          <br /><br />
+          Ils restent toutefois <strong>modestes et rares</strong>, car liés aux tirages techniques et non à un rendement financier.
         </>
       ),
     },
@@ -186,7 +177,7 @@ export default function FAQ() {
               <div
                 className="bp-faq-answer"
                 style={{
-                  maxHeight: open === i ? "320px" : "0px",
+                  maxHeight: open === i ? "360px" : "0px",
                   background: "#0a0d17",
                   padding: open === i ? "15px 20px" : "0px 20px",
                   borderRadius: "0 0 12px 12px",
@@ -203,4 +194,5 @@ export default function FAQ() {
     </section>
   );
 }
+
 

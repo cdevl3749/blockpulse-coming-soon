@@ -75,35 +75,29 @@ export default function Footer() {
               </svg>
             </div>
 
-            {/* Ledger */}
-            <div className="bp-payment-card">
-              <svg
-                viewBox="0 0 80 50"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-label="Ledger Wallet"
-              >
-                <rect width="80" height="50" rx="6" fill="#0A0F2B" />
-                <rect
-                  x="22"
-                  y="15"
-                  width="36"
-                  height="20"
-                  rx="4"
-                  fill="#FFF"
-                  opacity="0.9"
-                />
-                <text
-                  x="40"
-                  y="32"
-                  textAnchor="middle"
-                  fill="#0A0F2B"
-                  fontSize="10"
-                  fontWeight="700"
-                >
-                  LEDGER
-                </text>
-              </svg>
-            </div>
+            {/* SEPA */}
+<div className="bp-payment-card">
+  <svg
+    viewBox="0 0 80 50"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-label="SEPA Bank Transfer"
+  >
+    <rect width="80" height="50" rx="6" fill="#0A0F2B" />
+
+    <text
+      x="40"
+      y="32"
+      textAnchor="middle"
+      fill="#4da3ff"
+      fontSize="18"
+      fontWeight="700"
+      fontFamily="system-ui"
+    >
+      SEPA
+    </text>
+  </svg>
+</div>
+
 
           </div>
         </div>

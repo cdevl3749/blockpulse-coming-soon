@@ -1,6 +1,19 @@
 import { useEffect, useState } from "react";
 import CONFIG from "../../config";
 
+// Fonction pour enregistrer un clic pack
+const logPackClick = async (packId) => {
+  try {
+    await fetch("/api/logPackClick", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pack: packId }),
+    });
+  } catch (err) {
+    console.log("Erreur tracking clic pack:", err);
+  }
+};
+
 const BTC_ADDRESS = "3FULxTDJkQB2jrX8cNzJBAoFt43LUbd4PY";
 // TODO: remplace par ton adresse ETH Ledger
 const ETH_ADDRESS = "0x3704c62AB88B9a462f81495Eb75Bf57E504bb167";
@@ -112,10 +125,9 @@ export default function Participation() {
         <div className="bp-ticket-banner">
           <span className="bp-ticket-icon">⬤</span>
           <span className="bp-ticket-text">
-            +20 nouveaux tickets techniques ce mois-ci
+            Activité du mois : 20 tirages techniques déclenchés
           </span>
         </div>
-
 
         {/* Grille des packs standards */}
         <div
@@ -308,13 +320,17 @@ export default function Participation() {
                   )}
 
                   <div style={{ marginTop: "auto" }}>
-                    <button
-                      className="bp-btn-primary"
-                      style={{ width: "100%" }}
-                      onClick={() => openPaymentModal(pack)}
-                    >
-                      Choisir ce pack
-                    </button>
+                   <button
+                    className="bp-btn-primary"
+                    style={{ width: "100%" }}
+                    onClick={() => {
+                      logPackClick(pack.id);   // 👈 tracking ajouté ici
+                      openPaymentModal(pack);  // 👈 ton code original
+                    }}
+                  >
+                    Choisir ce pack
+                  </button>
+
                   </div>
                 </div>
               </div>
@@ -534,21 +550,24 @@ export default function Participation() {
               </div>
 
               <button
-                className="bp-btn-primary"
-                style={{
-                  width: "100%",
-                  marginTop: "32px",
-                  padding: "16px",
-                  fontSize: "1.1rem",
-                  background:
-                    "linear-gradient(135deg, #ffd700, #ffed4e)",
-                  color: "#020816",
-                  fontWeight: "700",
-                }}
-                onClick={() => openPaymentModal(pack)}
-              >
-                🐋 Devenir une Whale - {price} €
-              </button>
+                  className="bp-btn-primary"
+                  style={{
+                    width: "100%",
+                    marginTop: "32px",
+                    padding: "16px",
+                    fontSize: "1.1rem",
+                    background: "linear-gradient(135deg, #ffd700, #ffed4e)",
+                    color: "#020816",
+                    fontWeight: "700",
+                  }}
+                  onClick={() => {
+                    logPackClick(pack.id);   // 👈 tracking ici aussi
+                    openPaymentModal(pack);
+                  }}
+                >
+                  🐋 Devenir une Whale - {price} €
+                </button>
+
             </div>
           );
         })}
@@ -594,9 +613,10 @@ export default function Participation() {
       <div style={{ fontSize: "40px", marginBottom: "10px" }}>🔒</div>
       <h3 style={{ marginBottom: "10px" }}>Paiements directs</h3>
       <p style={{ color: "var(--bp-muted)" }}>
-        Vos contributions sont envoyées directement à nos adresses{" "}
-        <strong>Ledger BTC</strong> et <strong>ETH</strong>.
+        Vos contributions sont envoyées directement vers nos adresses{" "}
+        <strong>BTC</strong> et <strong>ETH</strong> — depuis n’importe quel portefeuille.
       </p>
+
     </div>
 
     <div

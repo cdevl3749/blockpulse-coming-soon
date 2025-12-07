@@ -613,9 +613,10 @@ export default function Participation() {
       <div style={{ fontSize: "40px", marginBottom: "10px" }}>🔒</div>
       <h3 style={{ marginBottom: "10px" }}>Paiements directs</h3>
       <p style={{ color: "var(--bp-muted)" }}>
-        Vos contributions sont envoyées directement à nos adresses{" "}
-        <strong>Ledger BTC</strong> et <strong>ETH</strong>.
+        Vos contributions sont envoyées directement vers nos adresses{" "}
+        <strong>BTC</strong> et <strong>ETH</strong> — depuis n’importe quel portefeuille.
       </p>
+
     </div>
 
     <div

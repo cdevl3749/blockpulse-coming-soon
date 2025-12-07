@@ -1,4 +1,4 @@
-import { NetlifyBlobs } from "@netlify/blobs";
+import { put, list } from "@netlify/blobs";
 
 export const handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -19,15 +19,21 @@ export const handler = async (event) => {
       };
     }
 
-    const blobs = new NetlifyBlobs({ token: process.env.NETLIFY_BLOBS_TOKEN });
-    const store = blobs.store("payments-store");
+    // 🔥 Le fichier "payments.json" dans les blobs Netlify
+    const key = "payments.json";
 
-    // Récupérer les anciens paiements
-    const existingRaw = await store.get("payments.json");
-    let payments = existingRaw ? JSON.parse(existingRaw) : [];
+    // On récupère l’existant
+    let existing = [];
+    const current = await list(); // liste des blobs
 
-    // Ajouter le nouveau paiement
-    payments.push({
+    if (current.blobs.includes(key)) {
+      const url = await get(key);
+      const json = await fetch(url).then((r) => r.json());
+      existing = Array.isArray(json) ? json : [];
+    }
+
+    // On ajoute la nouvelle entrée
+    existing.push({
       name,
       email,
       packId,
@@ -37,15 +43,17 @@ export const handler = async (event) => {
       createdAt: new Date().toISOString(),
     });
 
-    // Sauvegarder
-    await store.set("payments.json", JSON.stringify(payments));
+    // On réécrit le fichier complet dans les blobs
+    await put(key, JSON.stringify(existing, null, 2), {
+      contentType: "application/json",
+    });
 
     return {
       statusCode: 200,
       body: JSON.stringify({ ok: true }),
     };
-  } catch (e) {
-    console.error("savePayment error:", e);
+  } catch (err) {
+    console.error("savePayment error:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Internal error" }),

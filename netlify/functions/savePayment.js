@@ -1,15 +1,8 @@
-import { kv } from "@netlify/kv";
+const { kv } = require("@netlify/kv");
 
-export default async function handler(event, context) {
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200 };
-  }
-
+exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: "Method Not Allowed" }),
-    };
+    return { statusCode: 405, body: "Method Not Allowed" };
   }
 
   try {
@@ -19,36 +12,30 @@ export default async function handler(event, context) {
     if (!name || !email || !packId) {
       return {
         statusCode: 400,
-        body: JSON.stringify({
-          error: "Missing required fields",
-        }),
+        body: JSON.stringify({ error: "Missing fields" }),
       };
     }
 
-    const payment = {
+    const newPayment = {
       name,
       email,
       packId,
-      packLabel,
-      units,
-      mode,
+      packLabel: packLabel || null,
+      units: units || null,
+      mode: mode || "sepa",
       createdAt: new Date().toISOString(),
       paid: false,
       paidAt: null,
     };
 
-    // Lire la liste existante
-    const existing = (await kv.get("sepa_payments")) || [];
+    let list = (await kv.get("sepa_payments")) || [];
+    list.push(newPayment);
 
-    // Ajouter la nouvelle entrée
-    existing.push(payment);
-
-    // Sauvegarder
-    await kv.set("sepa_payments", existing);
+    await kv.set("sepa_payments", list);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ ok: true, payment }),
+      body: JSON.stringify({ ok: true, payment: newPayment }),
     };
   } catch (err) {
     return {
@@ -56,7 +43,8 @@ export default async function handler(event, context) {
       body: JSON.stringify({ error: err.toString() }),
     };
   }
-}
+};
+
 
 
 

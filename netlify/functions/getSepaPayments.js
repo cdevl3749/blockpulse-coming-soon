@@ -1,6 +1,6 @@
-import { kv } from "@netlify/kv";
+const { kv } = require("@netlify/kv");
 
-export default async function handler() {
+exports.handler = async () => {
   try {
     const payments = (await kv.get("sepa_payments")) || [];
 
@@ -14,5 +14,6 @@ export default async function handler() {
       body: JSON.stringify({ error: err.toString() }),
     };
   }
-}
+};
+
 

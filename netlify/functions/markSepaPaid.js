@@ -1,17 +1,16 @@
-import { kv } from "@netlify/kv";
+const { kv } = require("@netlify/kv");
 
-export default async function handler(event) {
+exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405 };
+    return { statusCode: 405, body: "Method Not Allowed" };
   }
 
   try {
-    const body = JSON.parse(event.body);
-    const { name, email, createdAt } = body;
+    const { name, email, createdAt } = JSON.parse(event.body);
 
-    const payments = (await kv.get("sepa_payments")) || [];
+    let list = (await kv.get("sepa_payments")) || [];
 
-    const index = payments.findIndex(
+    const index = list.findIndex(
       (p) => p.name === name && p.email === email && p.createdAt === createdAt
     );
 
@@ -22,14 +21,14 @@ export default async function handler(event) {
       };
     }
 
-    payments[index].paid = true;
-    payments[index].paidAt = new Date().toISOString();
+    list[index].paid = true;
+    list[index].paidAt = new Date().toISOString();
 
-    await kv.set("sepa_payments", payments);
+    await kv.set("sepa_payments", list);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ ok: true, paidAt: payments[index].paidAt }),
+      body: JSON.stringify({ ok: true, paidAt: list[index].paidAt }),
     };
   } catch (err) {
     return {
@@ -37,6 +36,6 @@ export default async function handler(event) {
       body: JSON.stringify({ error: err.toString() }),
     };
   }
-}
+};
 
 

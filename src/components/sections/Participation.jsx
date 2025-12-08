@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CONFIG from "../../config";
+import emailjs from "@emailjs/browser";
 
 // Fonction pour enregistrer un clic pack
 const logPackClick = async (packId) => {
@@ -135,55 +136,77 @@ export default function Participation() {
   }`;
 
   // ✅ Sauvegarde Nom + Email + Pack + Mode
-  const handleSaveUserInfo = async () => {
-    if (!userName.trim() || !userEmail.trim()) {
-      setSaveInfoError("Merci de renseigner votre nom et votre email.");
-      return;
-    }
+// Étape 1 : on vérifie juste les infos, SANS envoyer d'email ici
+const handleSaveUserInfo = async () => {
+  if (!userName.trim() || !userEmail.trim()) {
+    setSaveInfoError("Merci de renseigner votre nom et votre email.");
+    return;
+  }
 
-    // petit check email basique
-    const emailOk = /.+@.+\..+/.test(userEmail.trim());
-    if (!emailOk) {
-      setSaveInfoError("Merci d’indiquer un email valide.");
-      return;
-    }
+  // Vérification email simple
+  const emailOk = /.+@.+\..+/.test(userEmail.trim());
+  if (!emailOk) {
+    setSaveInfoError("Merci d’indiquer un email valide.");
+    return;
+  }
 
-    if (!selectedPack) {
-      setSaveInfoError("Pack invalide, veuillez fermer et réessayer.");
-      return;
-    }
+  if (!selectedPack) {
+    setSaveInfoError("Pack invalide, veuillez fermer et réessayer.");
+    return;
+  }
 
-    setIsSavingInfo(true);
-    setSaveInfoError("");
+  setIsSavingInfo(true);
+  setSaveInfoError("");
 
-    try {
-      const res = await fetch("/.netlify/functions/savePayment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: userName.trim(),
-          email: userEmail.trim(),
-          packId: selectedPack.id,
-          packLabel: selectedPack.label,
-          units: selectedPack.units,
-          mode: paymentMode,
-        }),
-      });
+  try {
+    // ➜ On NE CONTACTE PAS EmailJS ici
+    setHasUserInfoSaved(true);
+  } catch (err) {
+    console.error("Erreur enregistrement infos:", err);
+    setSaveInfoError(
+      "Impossible d’enregistrer vos informations pour le moment. Merci de réessayer."
+    );
+  } finally {
+    setIsSavingInfo(false);
+  }
+};
 
-      if (!res.ok) {
-        throw new Error("Erreur serveur");
-      }
 
-      setHasUserInfoSaved(true);
-    } catch (err) {
-      console.error("Erreur enregistrement infos:", err);
-      setSaveInfoError(
-        "Impossible d’enregistrer vos informations pour le moment. Merci de réessayer."
-      );
-    } finally {
-      setIsSavingInfo(false);
-    }
-  };
+// ✅ Étape 2 : envoyer l'email UNIQUEMENT quand le client clique
+// "J’ai effectué mon paiement"
+const handleConfirmPayment = async () => {
+  // Affichage du message de confirmation visuel
+  setPaymentConfirmed(true);
+
+  // Vérification des infos avant email
+  if (!selectedPack || !userName.trim() || !userEmail.trim()) {
+    console.warn("Impossible d'envoyer l'email : infos manquantes.");
+    return;
+  }
+
+  try {
+    const templateParams = {
+      user_name: userName.trim(),
+      user_email: userEmail.trim(),
+      pack_id: selectedPack.id,
+      pack_label: selectedPack.label,
+      pack_units: selectedPack.units,
+      payment_mode: paymentMode,
+      pack_price_eur:
+        packPriceEUR ||
+        CONFIG.getPackPrice(selectedPack.units, selectedPack.savings),
+    };
+
+    await emailjs.send(
+      "cdevl3749@gmail.com",   // Ton service ID
+      "template_8ith4gh",      // Ton template ID
+      templateParams,
+      "o3sNWIRA-SH7s2nsx"      // Ta clé publique EmailJS
+    );
+  } catch (err) {
+    console.error("Erreur EmailJS (confirmation):", err);
+  }
+};
 
   return (
     <section className="bp-section">
@@ -1366,23 +1389,26 @@ export default function Participation() {
                   )}
 
                   {/* ✅ Bouton de confirmation de paiement */}
-                  <button
-                    onClick={() => setPaymentConfirmed(true)}
-                    style={{
-                      width: "100%",
-                      marginTop: "14px",
-                      padding: "10px 12px",
-                      borderRadius: "999px",
-                      border: "1px solid var(--bp-accent)",
-                      background: "rgba(0,255,200,0.1)",
-                      color: "var(--bp-accent)",
-                      fontSize: "0.9rem",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                    }}
-                  >
-                    J’ai effectué mon paiement
-                  </button>
+                 {!paymentConfirmed && (
+  <button
+    onClick={handleConfirmPayment}
+    style={{
+      width: "100%",
+      marginTop: "14px",
+      padding: "10px 12px",
+      borderRadius: "999px",
+      border: "1px solid var(--bp-accent)",
+      background: "rgba(0,255,200,0.1)",
+      color: "var(--bp-accent)",
+      fontSize: "0.9rem",
+      fontWeight: 600,
+      cursor: "pointer",
+    }}
+  >
+    J’ai effectué mon paiement
+  </button>
+)}
+
 
                   {paymentConfirmed && (
                     <div

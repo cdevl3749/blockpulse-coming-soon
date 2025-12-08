@@ -15,15 +15,27 @@ const logPackClick = async (packId) => {
 };
 
 const BTC_ADDRESS = "3FULxTDJkQB2jrX8cNzJBAoFt43LUbd4PY";
-// TODO: remplace par ton adresse ETH Ledger
 const ETH_ADDRESS = "0x3704c62AB88B9a462f81495Eb75Bf57E504bb167";
+
+// Coordonnées bancaires (virement SEPA)
+const BANK_IBAN = "BE23 0637 6823 5991";
+const BANK_HOLDER = "Christophe Devleeshouwer";
 
 export default function Participation() {
   const [btcPrice, setBtcPrice] = useState(null);
   const [ethPrice, setEthPrice] = useState(null);
-  const [selectedPack, setSelectedPack] = useState(null); // pour la popup crypto
+  const [selectedPack, setSelectedPack] = useState(null); // pack sélectionné
   const [selectedCrypto, setSelectedCrypto] = useState("btc"); // "btc" ou "eth"
-  const [copiedAddress, setCopiedAddress] = useState(null); // "btc" ou "eth" ou null
+  const [copiedAddress, setCopiedAddress] = useState(null); // "btc" | "eth" | "iban" | null
+  const [paymentMode, setPaymentMode] = useState("crypto"); // "crypto" ou "bank"
+
+  // ❗ Nouveaux états pour Nom / Email / confirmation
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [hasUserInfoSaved, setHasUserInfoSaved] = useState(false);
+  const [isSavingInfo, setIsSavingInfo] = useState(false);
+  const [saveInfoError, setSaveInfoError] = useState("");
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -50,14 +62,34 @@ export default function Participation() {
   const potentialGainPerUnit = CONFIG.getPotentialGainPerUnit(btcPrice);
 
   // Ouvrir la popup pour un pack
-  const openPaymentModal = (pack) => {
+  const openPaymentModal = (pack, mode = "crypto") => {
     setSelectedPack(pack);
-    setSelectedCrypto("btc");
+    setPaymentMode(mode);
+    if (mode === "crypto") {
+      setSelectedCrypto("btc");
+    }
+
+    // reset des infos utilisateur à chaque ouverture
+    setUserName("");
+    setUserEmail("");
+    setHasUserInfoSaved(false);
+    setIsSavingInfo(false);
+    setSaveInfoError("");
+    setPaymentConfirmed(false);
+    setCopiedAddress(null);
   };
 
   // Fermer la popup
   const closePaymentModal = () => {
     setSelectedPack(null);
+    setCopiedAddress(null);
+    setPaymentMode("crypto");
+    setUserName("");
+    setUserEmail("");
+    setHasUserInfoSaved(false);
+    setIsSavingInfo(false);
+    setSaveInfoError("");
+    setPaymentConfirmed(false);
   };
 
   const copyToClipboard = async (text, type) => {
@@ -102,6 +134,57 @@ export default function Participation() {
     packEthAmount ? `?amount=${packEthAmount}` : ""
   }`;
 
+  // ✅ Sauvegarde Nom + Email + Pack + Mode
+  const handleSaveUserInfo = async () => {
+    if (!userName.trim() || !userEmail.trim()) {
+      setSaveInfoError("Merci de renseigner votre nom et votre email.");
+      return;
+    }
+
+    // petit check email basique
+    const emailOk = /.+@.+\..+/.test(userEmail.trim());
+    if (!emailOk) {
+      setSaveInfoError("Merci d’indiquer un email valide.");
+      return;
+    }
+
+    if (!selectedPack) {
+      setSaveInfoError("Pack invalide, veuillez fermer et réessayer.");
+      return;
+    }
+
+    setIsSavingInfo(true);
+    setSaveInfoError("");
+
+    try {
+      const res = await fetch("/.netlify/functions/savePayment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: userName.trim(),
+          email: userEmail.trim(),
+          packId: selectedPack.id,
+          packLabel: selectedPack.label,
+          units: selectedPack.units,
+          mode: paymentMode,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Erreur serveur");
+      }
+
+      setHasUserInfoSaved(true);
+    } catch (err) {
+      console.error("Erreur enregistrement infos:", err);
+      setSaveInfoError(
+        "Impossible d’enregistrer vos informations pour le moment. Merci de réessayer."
+      );
+    } finally {
+      setIsSavingInfo(false);
+    }
+  };
+
   return (
     <section className="bp-section">
       <div className="bp-container">
@@ -113,7 +196,7 @@ export default function Participation() {
             textAlign: "center",
             color: "var(--bp-muted)",
             maxWidth: "700px",
-            margin: "0 auto 56px",
+            margin: "0 auto 24px",
           }}
         >
           Choisissez votre pack de participation. Chaque part vous donne un
@@ -121,6 +204,45 @@ export default function Participation() {
           plus vos chances d&apos;être sélectionné lors d&apos;un tirage sont
           élevées.
         </p>
+
+        {/* 🟢 BANNIÈRE SEPA BIEN VISIBLE */}
+        <div
+          style={{
+            background: "rgba(0, 255, 200, 0.08)",
+            border: "2px solid rgba(0, 255, 200, 0.3)",
+            padding: "18px 22px",
+            borderRadius: "12px",
+            margin: "0 auto 32px",
+            maxWidth: "620px",
+            textAlign: "center",
+          }}
+        >
+          <p
+            style={{
+              fontSize: "1rem",
+              color: "#00ffc8",
+              margin: 0,
+              fontWeight: 600,
+            }}
+          >
+            💳 Paiement SEPA disponible
+          </p>
+          <p
+            style={{
+              fontSize: "0.9rem",
+              color: "#a8b2d8",
+              marginTop: "6px",
+              lineHeight: 1.5,
+            }}
+          >
+            Vous pouvez payer votre pack facilement par{" "}
+            <strong>virement bancaire SEPA</strong> vers notre IBAN :{" "}
+            <strong>{BANK_IBAN}</strong>.
+            <br />
+            Votre pack est activé dès réception du virement (généralement sous{" "}
+            <strong>24h ouvrables</strong>).
+          </p>
+        </div>
 
         <div className="bp-ticket-banner">
           <span className="bp-ticket-icon">⬤</span>
@@ -199,7 +321,14 @@ export default function Participation() {
                   </div>
                 )}
 
-                <div style={{ textAlign: "center", flex: 1, display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    textAlign: "center",
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   <div style={{ fontSize: "2.5rem", marginBottom: "8px" }}>
                     {pack.badge}
                   </div>
@@ -320,23 +449,34 @@ export default function Participation() {
                   )}
 
                   <div style={{ marginTop: "auto" }}>
-                   <button
-                    className="bp-btn-primary"
-                    style={{ width: "100%" }}
-                    onClick={() => {
-                      logPackClick(pack.id);   // 👈 tracking ajouté ici
-                      openPaymentModal(pack);  // 👈 ton code original
-                    }}
-                  >
-                    Choisir ce pack
-                  </button>
+                    {/* Crypto */}
+                    <button
+                      className="bp-btn-primary"
+                      style={{ width: "100%" }}
+                      onClick={() => {
+                        logPackClick(pack.id);
+                        openPaymentModal(pack, "crypto");
+                      }}
+                    >
+                      💰 Payer en BTC / ETH
+                    </button>
 
+                    {/* Virement SEPA */}
+                    <button
+                      className="bp-btn-secondary"
+                      style={{ width: "100%", marginTop: "8px" }}
+                      onClick={() => {
+                        logPackClick(pack.id);
+                        openPaymentModal(pack, "bank");
+                      }}
+                    >
+                      💳 Payer par virement SEPA
+                    </button>
                   </div>
                 </div>
               </div>
             );
           })}
-          
         </div>
 
         {/* Pack VIP Whale - Mise en avant spéciale */}
@@ -549,119 +689,132 @@ export default function Participation() {
                 </div>
               </div>
 
+              {/* Boutons Whale */}
               <button
-                  className="bp-btn-primary"
-                  style={{
-                    width: "100%",
-                    marginTop: "32px",
-                    padding: "16px",
-                    fontSize: "1.1rem",
-                    background: "linear-gradient(135deg, #ffd700, #ffed4e)",
-                    color: "#020816",
-                    fontWeight: "700",
-                  }}
-                  onClick={() => {
-                    logPackClick(pack.id);   // 👈 tracking ici aussi
-                    openPaymentModal(pack);
-                  }}
-                >
-                  🐋 Devenir une Whale - {price} €
-                </button>
+                className="bp-btn-primary"
+                style={{
+                  width: "100%",
+                  marginTop: "32px",
+                  padding: "16px",
+                  fontSize: "1.1rem",
+                  background: "linear-gradient(135deg, #ffd700, #ffed4e)",
+                  color: "#020816",
+                  fontWeight: "700",
+                }}
+                onClick={() => {
+                  logPackClick(pack.id);
+                  openPaymentModal(pack, "crypto");
+                }}
+              >
+                🐋 Devenir une Whale - {price} € (BTC / ETH)
+              </button>
 
+              <button
+                className="bp-btn-secondary"
+                style={{
+                  width: "100%",
+                  marginTop: "10px",
+                  padding: "14px",
+                  fontSize: "1rem",
+                }}
+                onClick={() => {
+                  logPackClick(pack.id);
+                  openPaymentModal(pack, "bank");
+                }}
+              >
+                💳 Devenir une Whale par virement SEPA
+              </button>
             </div>
           );
         })}
 
         {/* SECTION : Pourquoi faire confiance à BlockPulse ? */}
-{/* SECTION : Pourquoi faire confiance à BlockPulse ? */}
-<section
-  style={{
-    marginTop: "80px",
-    padding: "0 10px",
-  }}
->
-  <h2
-    style={{
-      textAlign: "center",
-      fontSize: "2rem",
-      marginBottom: "40px",
-      fontWeight: "700",
-    }}
-  >
-    Pourquoi faire confiance à{" "}
-    <span style={{ color: "var(--bp-accent)" }}>BlockPulse</span> ?
-  </h2>
+        <section
+          style={{
+            marginTop: "80px",
+            padding: "0 10px",
+          }}
+        >
+          <h2
+            style={{
+              textAlign: "center",
+              fontSize: "2rem",
+              marginBottom: "40px",
+              fontWeight: "700",
+            }}
+          >
+            Pourquoi faire confiance à{" "}
+            <span style={{ color: "var(--bp-accent)" }}>BlockPulse</span> ?
+          </h2>
 
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-      gap: "26px",
-    }}
-  >
-    <div
-      className="trust-card"
-      style={{
-        background: "var(--bp-card)",
-        padding: "24px",
-        borderRadius: "12px",
-        border: "1px solid var(--bp-border)",
-        textAlign: "center",
-        transition: "0.25s",
-      }}
-    >
-      <div style={{ fontSize: "40px", marginBottom: "10px" }}>🔒</div>
-      <h3 style={{ marginBottom: "10px" }}>Paiements directs</h3>
-      <p style={{ color: "var(--bp-muted)" }}>
-        Vos contributions sont envoyées directement vers nos adresses{" "}
-        <strong>BTC</strong> et <strong>ETH</strong> — depuis n’importe quel portefeuille.
-      </p>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+              gap: "26px",
+            }}
+          >
+            <div
+              className="trust-card"
+              style={{
+                background: "var(--bp-card)",
+                padding: "24px",
+                borderRadius: "12px",
+                border: "1px solid var(--bp-border)",
+                textAlign: "center",
+                transition: "0.25s",
+              }}
+            >
+              <div style={{ fontSize: "40px", marginBottom: "10px" }}>🔒</div>
+              <h3 style={{ marginBottom: "10px" }}>Paiements directs</h3>
+              <p style={{ color: "var(--bp-muted)" }}>
+                Vos contributions sont envoyées directement vers nos adresses{" "}
+                <strong>BTC</strong> et <strong>ETH</strong> — depuis n’importe
+                quel portefeuille ou via virement SEPA.
+              </p>
+            </div>
 
-    </div>
+            <div
+              className="trust-card"
+              style={{
+                background: "var(--bp-card)",
+                padding: "24px",
+                borderRadius: "12px",
+                border: "1px solid var(--bp-border)",
+                textAlign: "center",
+                transition: "0.25s",
+              }}
+            >
+              <div style={{ fontSize: "40px", marginBottom: "10px" }}>💡</div>
+              <h3 style={{ marginBottom: "10px" }}>Projet 100% réel</h3>
+              <p style={{ color: "var(--bp-muted)" }}>
+                Module <strong>ESP32</strong> connecté au pool{" "}
+                <strong>ViaBTC</strong> via Stratum.
+              </p>
+            </div>
 
-    <div
-      className="trust-card"
-      style={{
-        background: "var(--bp-card)",
-        padding: "24px",
-        borderRadius: "12px",
-        border: "1px solid var(--bp-border)",
-        textAlign: "center",
-        transition: "0.25s",
-      }}
-    >
-      <div style={{ fontSize: "40px", marginBottom: "10px" }}>💡</div>
-      <h3 style={{ marginBottom: "10px" }}>Projet 100% réel</h3>
-      <p style={{ color: "var(--bp-muted)" }}>
-        Module <strong>ESP32</strong> connecté au pool <strong>ViaBTC</strong>{" "}
-        via Stratum.
-      </p>
-    </div>
+            <div
+              className="trust-card"
+              style={{
+                background: "var(--bp-card)",
+                padding: "24px",
+                borderRadius: "12px",
+                border: "1px solid var(--bp-border)",
+                textAlign: "center",
+                transition: "0.25s",
+              }}
+            >
+              <div style={{ fontSize: "40px", marginBottom: "10px" }}>📊</div>
+              <h3 style={{ marginBottom: "10px" }}>Transparence</h3>
+              <p style={{ color: "var(--bp-muted)" }}>
+                Stats techniques affichées directement depuis le module en temps
+                réel.
+              </p>
+            </div>
+          </div>
+        </section>
 
-    <div
-      className="trust-card"
-      style={{
-        background: "var(--bp-card)",
-        padding: "24px",
-        borderRadius: "12px",
-        border: "1px solid var(--bp-border)",
-        textAlign: "center",
-        transition: "0.25s",
-      }}
-    >
-      <div style={{ fontSize: "40px", marginBottom: "10px" }}>📊</div>
-      <h3 style={{ marginBottom: "10px" }}>Transparence</h3>
-      <p style={{ color: "var(--bp-muted)" }}>
-        Stats techniques affichées directement depuis le module en temps réel.
-      </p>
-    </div>
-
-  </div>
-</section>
-
-
-
-                {/* MODALE PAIEMENT CRYPTO DIRECT (BTC / ETH) */}
+        {/* MODALE PAIEMENT (Nom/Email -> Crypto ou SEPA) */}
         {selectedPack && (
           <div
             style={{
@@ -683,7 +836,7 @@ export default function Participation() {
                 borderRadius: "16px",
                 padding: "20px",
                 width: "100%",
-                maxWidth: "440px",
+                maxWidth: "460px",
                 boxShadow: "0 24px 56px rgba(0,0,0,0.7)",
                 border: "1px solid var(--bp-border)",
                 margin: "auto",
@@ -715,10 +868,12 @@ export default function Participation() {
                   margin: "0 0 8px",
                   fontSize: "1.3rem",
                   textAlign: "center",
-                  paddingRight: "24px", // laisser la place pour le X
+                  paddingRight: "24px",
                 }}
               >
-                Finaliser votre participation
+                {paymentMode === "crypto"
+                  ? "Finaliser votre participation (crypto)"
+                  : "Payer par virement bancaire (SEPA)"}
               </h3>
 
               <p
@@ -738,270 +893,541 @@ export default function Participation() {
                 €
               </p>
 
-              {/* Message anti-arnaque */}
-              <p
-                style={{
-                  margin: "0 0 12px",
-                  fontSize: "0.8rem",
-                  color: "#ffb366",
-                  textAlign: "center",
-                }}
-              >
-                ⚠️ Ne jamais envoyer de fonds vers une autre adresse que celles
-                affichées ici sur BlockPulse.be. Vérifiez toujours l’URL du site.
-              </p>
-
-              {/* Choix BTC / ETH */}
-              <div
-                style={{
-                  display: "flex",
-                  gap: "8px",
-                  marginBottom: "16px",
-                }}
-              >
-                <button
-                  onClick={() => setSelectedCrypto("btc")}
+              {/* ✅ Étape 1 : Nom + Email obligatoire */}
+              {!hasUserInfoSaved && (
+                <div
                   style={{
-                    flex: 1,
-                    padding: "10px 0",
-                    borderRadius: "999px",
-                    border:
-                      selectedCrypto === "btc"
-                        ? "1px solid var(--bp-accent)"
-                        : "1px solid var(--bp-border)",
-                    background:
-                      selectedCrypto === "btc"
-                        ? "rgba(0,255,200,0.12)"
-                        : "transparent",
-                    color: "#fff",
-                    fontSize: "0.9rem",
-                    cursor: "pointer",
+                    background: "rgba(15,23,42,0.9)",
+                    borderRadius: "12px",
+                    padding: "14px 16px",
+                    marginBottom: "16px",
+                    border: "1px solid var(--bp-border)",
                   }}
                 >
-                  ₿ Bitcoin
-                </button>
-
-                <button
-                  onClick={() => setSelectedCrypto("eth")}
-                  style={{
-                    flex: 1,
-                    padding: "10px 0",
-                    borderRadius: "999px",
-                    border:
-                      selectedCrypto === "eth"
-                        ? "1px solid var(--bp-accent)"
-                        : "1px solid var(--bp-border)",
-                    background:
-                      selectedCrypto === "eth"
-                        ? "rgba(0,255,200,0.12)"
-                        : "transparent",
-                    color: "#fff",
-                    fontSize: "0.9rem",
-                    cursor: "pointer",
-                  }}
-                >
-                  Ξ Ethereum
-                </button>
-              </div>
-
-              {/* Zone QR + infos selon crypto choisie */}
-              {selectedCrypto === "btc" ? (
-                <div style={{ textAlign: "center" }}>
                   <p
                     style={{
+                      margin: "0 0 10px",
                       fontSize: "0.9rem",
-                      color: "var(--bp-muted)",
-                      marginBottom: "8px",
+                      color: "#e5e7eb",
+                      textAlign: "center",
                     }}
                   >
-                    Envoyez exactement :
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "1.4rem",
-                      fontWeight: "600",
-                      margin: "0 0 4px",
-                    }}
-                  >
-                    {packBtcAmount || "..."} BTC
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--bp-muted)",
-                      margin: "0 0 16px",
-                    }}
-                  >
-                    (~ {packPriceEUR || "…"} € au taux actuel)
+                    Indiquez votre <strong>nom</strong> et votre{" "}
+                    <strong>email</strong> pour que nous puissions activer votre
+                    pack après réception du paiement.
                   </p>
 
-                  <img
-                    src={btcQrUrl}
-                    alt="QR Bitcoin"
-                    style={{
-                      width: "160px",
-                      height: "160px",
-                      borderRadius: "12px",
-                      margin: "12px auto",
-                      display: "block",
-                    }}
-                  />
+                  <div style={{ marginBottom: "10px" }}>
+                    <label
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "var(--bp-muted)",
+                        display: "block",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Nom complet
+                    </label>
+                    <input
+                      type="text"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      placeholder="Votre nom"
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        border: "1px solid var(--bp-border)",
+                        background: "rgba(15,23,42,0.9)",
+                        color: "#e5e7eb",
+                        fontSize: "0.9rem",
+                      }}
+                    />
+                  </div>
 
-                  <p
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--bp-muted)",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    Adresse BTC :
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "0.85rem",
-                      wordBreak: "break-all",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    {BTC_ADDRESS}
-                  </p>
+                  <div style={{ marginBottom: "10px" }}>
+                    <label
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "var(--bp-muted)",
+                        display: "block",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      Email pour activer votre pack
+                    </label>
+                    <input
+                      type="email"
+                      value={userEmail}
+                      onChange={(e) => setUserEmail(e.target.value)}
+                      placeholder="vous@exemple.com"
+                      style={{
+                        width: "100%",
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        border: "1px solid var(--bp-border)",
+                        background: "rgba(15,23,42,0.9)",
+                        color: "#e5e7eb",
+                        fontSize: "0.9rem",
+                      }}
+                    />
+                  </div>
+
+                  {saveInfoError && (
+                    <p
+                      style={{
+                        color: "#fca5a5",
+                        fontSize: "0.8rem",
+                        margin: "4px 0 0",
+                        textAlign: "center",
+                      }}
+                    >
+                      {saveInfoError}
+                    </p>
+                  )}
+
                   <button
-                    onClick={() => copyToClipboard(BTC_ADDRESS, "btc")}
+                    onClick={handleSaveUserInfo}
+                    disabled={isSavingInfo}
                     style={{
-                      padding: "8px 12px",
-                      borderRadius: "999px",
-                      border:
-                        copiedAddress === "btc"
-                          ? "1px solid var(--bp-accent)"
-                          : "1px solid var(--bp-border)",
-                      background:
-                        copiedAddress === "btc"
-                          ? "rgba(0, 255, 200, 0.12)"
-                          : "transparent",
-                      color:
-                        copiedAddress === "btc"
-                          ? "var(--bp-accent)"
-                          : "var(--bp-muted)",
-                      fontSize: "0.85rem",
-                      cursor: "pointer",
                       width: "100%",
-                      marginBottom: "6px",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {copiedAddress === "btc"
-                      ? "✓ Copié !"
-                      : "Copier l'adresse BTC"}
-                  </button>
-                </div>
-              ) : (
-                <div style={{ textAlign: "center" }}>
-                  <p
-                    style={{
+                      marginTop: "10px",
+                      padding: "10px 12px",
+                      borderRadius: "999px",
+                      border: "none",
+                      background:
+                        "linear-gradient(135deg, #00ffc8, #5b8cff)",
+                      color: "#020816",
                       fontSize: "0.9rem",
-                      color: "var(--bp-muted)",
-                      marginBottom: "8px",
+                      fontWeight: 600,
+                      cursor: isSavingInfo ? "default" : "pointer",
+                      opacity: isSavingInfo ? 0.7 : 1,
                     }}
                   >
-                    Envoyez exactement :
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "1.4rem",
-                      fontWeight: "600",
-                      margin: "0 0 4px",
-                    }}
-                  >
-                    {packEthAmount || "..."} ETH
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--bp-muted)",
-                      margin: "0 0 16px",
-                    }}
-                  >
-                    (~ {packPriceEUR || "…"} € au taux actuel)
-                  </p>
-
-                  <img
-                    src={ethQrUrl}
-                    alt="QR Ethereum"
-                    style={{
-                      width: "160px",
-                      height: "160px",
-                      borderRadius: "12px",
-                      margin: "12px auto",
-                      display: "block",
-                    }}
-                  />
-
-                  <p
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--bp-muted)",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    Adresse ETH :
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "0.85rem",
-                      wordBreak: "break-all",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    {ETH_ADDRESS}
-                  </p>
-                  <button
-                    onClick={() => copyToClipboard(ETH_ADDRESS, "eth")}
-                    style={{
-                      padding: "8px 12px",
-                      borderRadius: "999px",
-                      border:
-                        copiedAddress === "eth"
-                          ? "1px solid var(--bp-accent)"
-                          : "1px solid var(--bp-border)",
-                      background:
-                        copiedAddress === "eth"
-                          ? "rgba(0, 255, 200, 0.12)"
-                          : "transparent",
-                      color:
-                        copiedAddress === "eth"
-                          ? "var(--bp-accent)"
-                          : "var(--bp-muted)",
-                      fontSize: "0.85rem",
-                      cursor: "pointer",
-                      width: "100%",
-                      marginBottom: "6px",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {copiedAddress === "eth"
-                      ? "✓ Copié !"
-                      : "Copier l'adresse ETH"}
+                    {isSavingInfo
+                      ? "Enregistrement..."
+                      : "Continuer vers le paiement"}
                   </button>
                 </div>
               )}
 
+              {/* ✅ Étape 2 : Instructions de paiement (affichées seulement après enregistrement Nom + Email) */}
+              {hasUserInfoSaved && (
+                <>
+                  {paymentMode === "crypto" ? (
+                    <>
+                      {/* Message anti-arnaque */}
+                      <p
+                        style={{
+                          margin: "0 0 12px",
+                          fontSize: "0.8rem",
+                          color: "#ffb366",
+                          textAlign: "center",
+                        }}
+                      >
+                        ⚠️ Ne jamais envoyer de fonds vers une autre adresse que
+                        celles affichées ici sur BlockPulse.be. Vérifiez toujours
+                        l’URL du site.
+                      </p>
+
+                      {/* Choix BTC / ETH */}
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "8px",
+                          marginBottom: "16px",
+                        }}
+                      >
+                        <button
+                          onClick={() => setSelectedCrypto("btc")}
+                          style={{
+                            flex: 1,
+                            padding: "10px 0",
+                            borderRadius: "999px",
+                            border:
+                              selectedCrypto === "btc"
+                                ? "1px solid var(--bp-accent)"
+                                : "1px solid var(--bp-border)",
+                            background:
+                              selectedCrypto === "btc"
+                                ? "rgba(0,255,200,0.12)"
+                                : "transparent",
+                            color: "#fff",
+                            fontSize: "0.9rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          ₿ Bitcoin
+                        </button>
+
+                        <button
+                          onClick={() => setSelectedCrypto("eth")}
+                          style={{
+                            flex: 1,
+                            padding: "10px 0",
+                            borderRadius: "999px",
+                            border:
+                              selectedCrypto === "eth"
+                                ? "1px solid var(--bp-accent)"
+                                : "1px solid var(--bp-border)",
+                            background:
+                              selectedCrypto === "eth"
+                                ? "rgba(0,255,200,0.12)"
+                                : "transparent",
+                            color: "#fff",
+                            fontSize: "0.9rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Ξ Ethereum
+                        </button>
+                      </div>
+
+                      {/* Zone QR + infos selon crypto choisie */}
+                      {selectedCrypto === "btc" ? (
+                        <div style={{ textAlign: "center" }}>
+                          <p
+                            style={{
+                              fontSize: "0.9rem",
+                              color: "var(--bp-muted)",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            Envoyez exactement :
+                          </p>
+                          <p
+                            style={{
+                              fontSize: "1.4rem",
+                              fontWeight: "600",
+                              margin: "0 0 4px",
+                            }}
+                          >
+                            {packBtcAmount || "..."} BTC
+                          </p>
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              margin: "0 0 16px",
+                            }}
+                          >
+                            (~ {packPriceEUR || "…"} € au taux actuel)
+                          </p>
+
+                          <img
+                            src={btcQrUrl}
+                            alt="QR Bitcoin"
+                            style={{
+                              width: "160px",
+                              height: "160px",
+                              borderRadius: "12px",
+                              margin: "12px auto",
+                              display: "block",
+                            }}
+                          />
+
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            Adresse BTC :
+                          </p>
+                          <p
+                            style={{
+                              fontSize: "0.85rem",
+                              wordBreak: "break-all",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            {BTC_ADDRESS}
+                          </p>
+                          <button
+                            onClick={() => copyToClipboard(BTC_ADDRESS, "btc")}
+                            style={{
+                              padding: "8px 12px",
+                              borderRadius: "999px",
+                              border:
+                                copiedAddress === "btc"
+                                  ? "1px solid var(--bp-accent)"
+                                  : "1px solid var(--bp-border)",
+                              background:
+                                copiedAddress === "btc"
+                                  ? "rgba(0, 255, 200, 0.12)"
+                                  : "transparent",
+                              color:
+                                copiedAddress === "btc"
+                                  ? "var(--bp-accent)"
+                                  : "var(--bp-muted)",
+                              fontSize: "0.85rem",
+                              cursor: "pointer",
+                              width: "100%",
+                              marginBottom: "6px",
+                              transition: "all 0.2s ease",
+                            }}
+                          >
+                            {copiedAddress === "btc"
+                              ? "✓ Copié !"
+                              : "Copier l'adresse BTC"}
+                          </button>
+                        </div>
+                      ) : (
+                        <div style={{ textAlign: "center" }}>
+                          <p
+                            style={{
+                              fontSize: "0.9rem",
+                              color: "var(--bp-muted)",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            Envoyez exactement :
+                          </p>
+                          <p
+                            style={{
+                              fontSize: "1.4rem",
+                              fontWeight: "600",
+                              margin: "0 0 4px",
+                            }}
+                          >
+                            {packEthAmount || "..."} ETH
+                          </p>
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              margin: "0 0 16px",
+                            }}
+                          >
+                            (~ {packPriceEUR || "…"} € au taux actuel)
+                          </p>
+
+                          <img
+                            src={ethQrUrl}
+                            alt="QR Ethereum"
+                            style={{
+                              width: "160px",
+                              height: "160px",
+                              borderRadius: "12px",
+                              margin: "12px auto",
+                              display: "block",
+                            }}
+                          />
+
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            Adresse ETH :
+                          </p>
+                          <p
+                            style={{
+                              fontSize: "0.85rem",
+                              wordBreak: "break-all",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            {ETH_ADDRESS}
+                          </p>
+                          <button
+                            onClick={() => copyToClipboard(ETH_ADDRESS, "eth")}
+                            style={{
+                              padding: "8px 12px",
+                              borderRadius: "999px",
+                              border:
+                                copiedAddress === "eth"
+                                  ? "1px solid var(--bp-accent)"
+                                  : "1px solid var(--bp-border)",
+                              background:
+                                copiedAddress === "eth"
+                                  ? "rgba(0, 255, 200, 0.12)"
+                                  : "transparent",
+                              color:
+                                copiedAddress === "eth"
+                                  ? "var(--bp-accent)"
+                                  : "var(--bp-muted)",
+                              fontSize: "0.85rem",
+                              cursor: "pointer",
+                              width: "100%",
+                              marginBottom: "6px",
+                              transition: "all 0.2s ease",
+                            }}
+                          >
+                            {copiedAddress === "eth"
+                              ? "✓ Copié !"
+                              : "Copier l'adresse ETH"}
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {/* MODE VIREMENT SEPA */}
+                      <p
+                        style={{
+                          margin: "0 0 12px",
+                          fontSize: "0.85rem",
+                          color: "#ffb366",
+                          textAlign: "center",
+                        }}
+                      >
+                        Effectuez un virement SEPA depuis votre application
+                        bancaire. Votre pack sera activé dès réception.
+                      </p>
+
+                      <div
+                        style={{
+                          background: "rgba(15,23,42,0.9)",
+                          borderRadius: "12px",
+                          padding: "12px 14px",
+                          marginBottom: "12px",
+                          border: "1px solid var(--bp-border)",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        <p style={{ margin: "0 0 6px" }}>
+                          <strong>Bénéficiaire :</strong> {BANK_HOLDER}
+                        </p>
+                        <p style={{ margin: "0 0 6px" }}>
+                          <strong>IBAN :</strong>{" "}
+                          <span style={{ wordBreak: "break-all" }}>
+                            {BANK_IBAN}
+                          </span>
+                        </p>
+                        <p style={{ margin: 0 }}>
+                          <strong>Montant :</strong>{" "}
+                          {packPriceEUR ||
+                            CONFIG.getPackPrice(
+                              selectedPack.units,
+                              selectedPack.savings
+                            )}{" "}
+                          €
+                        </p>
+                      </div>
+
+                      <p
+                        style={{
+                          fontSize: "0.85rem",
+                          color: "var(--bp-muted)",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <strong>Communication :</strong>{" "}
+                        <span style={{ color: "#e5e7eb" }}>
+                          BLOCKPULSE {selectedPack.label.toUpperCase()} + votre
+                          email
+                        </span>
+                      </p>
+
+                      <button
+                        onClick={() => copyToClipboard(BANK_IBAN, "iban")}
+                        style={{
+                          padding: "10px 12px",
+                          borderRadius: "999px",
+                          border:
+                            copiedAddress === "iban"
+                              ? "1px solid var(--bp-accent)"
+                              : "1px solid var(--bp-border)",
+                          background:
+                            copiedAddress === "iban"
+                              ? "rgba(0, 255, 200, 0.12)"
+                              : "transparent",
+                          color:
+                            copiedAddress === "iban"
+                              ? "var(--bp-accent)"
+                              : "var(--bp-muted)",
+                          fontSize: "0.9rem",
+                          cursor: "pointer",
+                          width: "100%",
+                          marginBottom: "8px",
+                          transition: "all 0.2s ease",
+                        }}
+                      >
+                        {copiedAddress === "iban"
+                          ? "✓ IBAN copié"
+                          : "Copier l’IBAN"}
+                      </button>
+
+                      <p
+                        style={{
+                          fontSize: "0.8rem",
+                          color: "var(--bp-muted)",
+                          textAlign: "center",
+                        }}
+                      >
+                        Dès que le virement est reçu, vos parts seront ajoutées
+                        sur BlockPulse (en général sous 24h ouvrables).
+                      </p>
+                    </>
+                  )}
+
+                  {/* ✅ Bouton de confirmation de paiement */}
+                  <button
+                    onClick={() => setPaymentConfirmed(true)}
+                    style={{
+                      width: "100%",
+                      marginTop: "14px",
+                      padding: "10px 12px",
+                      borderRadius: "999px",
+                      border: "1px solid var(--bp-accent)",
+                      background: "rgba(0,255,200,0.1)",
+                      color: "var(--bp-accent)",
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                    }}
+                  >
+                    J’ai effectué mon paiement
+                  </button>
+
+                  {paymentConfirmed && (
+                    <div
+                      style={{
+                        marginTop: "10px",
+                        background: "rgba(0, 255, 200, 0.1)",
+                        borderRadius: "8px",
+                        border: "1px solid rgba(0,255,200,0.4)",
+                        padding: "10px 12px",
+                        fontSize: "0.85rem",
+                        color: "#d1fae5",
+                        textAlign: "center",
+                      }}
+                    >
+                      💚 <strong>Paiement enregistré !</strong>
+                      <br />
+                      Merci pour votre participation. Dès que votre paiement
+                      sera reçu (SEPA : généralement sous 24h), votre pack sera
+                      activé et vous recevrez un message de confirmation.
+                    </div>
+                  )}
+                </>
+              )}
+
               {/* Bouton Annuler (bas de modale) */}
-              <button
-                onClick={closePaymentModal}
-                style={{
-                  width: "100%",
-                  marginTop: "14px",
-                  padding: "12px 12px",
-                  borderRadius: "999px",
-                  border: "1px solid var(--bp-border)",
-                  background: "transparent",
-                  color: "var(--bp-muted)",
-                  fontSize: "0.9rem",
-                  cursor: "pointer",
-                }}
-              >
-                Annuler
-              </button>
+          {/* Bouton visible uniquement après confirmation */}
+{paymentConfirmed && (
+  <button
+    onClick={closePaymentModal}
+    style={{
+      width: "100%",
+      marginTop: "16px",
+      padding: "12px 12px",
+      borderRadius: "999px",
+      border: "1px solid var(--bp-accent)",
+      background: "rgba(0,255,200,0.12)",
+      color: "var(--bp-accent)",
+      fontSize: "0.9rem",
+      fontWeight: 600,
+      cursor: "pointer",
+    }}
+  >
+    Terminer
+  </button>
+)}
             </div>
           </div>
         )}
@@ -1011,9 +1437,40 @@ export default function Participation() {
           <div className="bp-card">
             <h3>💳 Paiement crypto direct</h3>
             <p>
-              Les paiements sont envoyés directement vers vos adresses{" "}
-              <strong>BTC</strong> et <strong>ETH</strong> sécurisées sur Ledger.
+              Les paiements crypto sont envoyés directement vers nos adresses{" "}
+              <strong>BTC</strong> et <strong>ETH</strong>. Vous pouvez aussi
+              choisir le virement SEPA si vous préférez payer en euros.
             </p>
+
+            {/* Encadré SEPA plus visible */}
+            <div
+              style={{
+                background: "rgba(255, 255, 255, 0.05)",
+                padding: "14px 16px",
+                borderRadius: "8px",
+                marginTop: "15px",
+                borderLeft: "3px solid #00ffc8",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "0.9rem",
+                  color: "#c9d4e5",
+                  margin: 0,
+                  lineHeight: 1.5,
+                }}
+              >
+                💳 <strong>Paiement SEPA disponible :</strong> le virement
+                bancaire est simple, sécurisé et idéal si vous préférez payer en
+                euros.
+                <br />
+                IBAN : <strong>{BANK_IBAN}</strong>
+                <br />
+                Votre pack est activé dès réception du paiement (sous{" "}
+                <strong>24h ouvrables</strong>).
+              </p>
+            </div>
+
             <ul className="bp-list">
               <li>✅ Aucun intermédiaire</li>
               <li>✅ BTC &amp; ETH supportés</li>
@@ -1056,8 +1513,8 @@ export default function Participation() {
             ⚠️{" "}
             <strong style={{ color: "#ffb366" }}>Important :</strong> Ce n&apos;est
             pas un jeu d&apos;argent. Les bonus sont rares et dépendent
-            entièrement du pool ViaBTC. Considérez cette participation
-            comme un soutien à un projet tech innovant.
+            entièrement du pool ViaBTC. Considérez cette participation comme un
+            soutien à un projet tech innovant.
           </p>
         </div>
       </div>

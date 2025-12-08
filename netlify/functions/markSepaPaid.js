@@ -1,103 +1,66 @@
 const fs = require("fs");
 const path = require("path");
 
-const DATA_DIR =
-  process.env.PAYMENTS_DATA_DIR || path.join("/tmp", "blockpulse-data");
+const DATA_DIR = path.join(__dirname, "../../data");
 const DATA_FILE = path.join(DATA_DIR, "payments.json");
 
-const baseHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST,OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
-
-function readPayments() {
-  try {
-    if (!fs.existsSync(DATA_FILE)) return [];
-    const raw = fs.readFileSync(DATA_FILE, "utf8") || "[]";
-    const json = JSON.parse(raw);
-    return Array.isArray(json) ? json : [];
-  } catch (e) {
-    console.error("readPayments error:", e);
-    return [];
-  }
-}
-
-function writePayments(payments) {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  fs.writeFileSync(DATA_FILE, JSON.stringify(payments, null, 2), "utf8");
-}
-
 exports.handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers: baseHeaders,
-      body: "",
-    };
-  }
-
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      headers: baseHeaders,
-      body: JSON.stringify({ error: "Method Not Allowed" }),
+      body: JSON.stringify({ error: "Method not allowed" }),
     };
   }
 
   try {
     const body = JSON.parse(event.body || "{}");
-    const { name, email, createdAt } = body;
+    const { id } = body;
 
-    if (!name || !email || !createdAt) {
+    if (!id) {
       return {
         statusCode: 400,
-        headers: baseHeaders,
-        body: JSON.stringify({
-          error: "Missing fields (name, email, createdAt)",
-        }),
+        body: JSON.stringify({ error: "Missing payment ID" }),
       };
     }
 
-    const payments = readPayments();
+    if (!fs.existsSync(DATA_FILE)) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ ok: true }),
+      };
+    }
 
-    const idx = payments.findIndex(
-      (p) =>
-        p.name === name &&
-        p.email === email &&
-        p.createdAt === createdAt
-    );
+    const raw = fs.readFileSync(DATA_FILE, "utf8") || "[]";
+    const payments = JSON.parse(raw);
 
-    if (idx === -1) {
+    // Trouver le paiement
+    const item = payments.find((p) => p.id === id);
+
+    if (!item) {
       return {
         statusCode: 404,
-        headers: baseHeaders,
         body: JSON.stringify({ error: "Payment not found" }),
       };
     }
 
-    const now = new Date().toISOString();
-    payments[idx].paid = true;
-    payments[idx].paidAt = now;
+    // Marquer comme payé
+    item.paid = true;
+    item.paidAt = new Date().toISOString();
 
-    writePayments(payments);
+    // Réécriture SAFE
+    fs.writeFileSync(DATA_FILE, JSON.stringify(payments, null, 2), "utf8");
 
     return {
       statusCode: 200,
-      headers: {
-        ...baseHeaders,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ok: true, paidAt: now }),
+      body: JSON.stringify({ ok: true, payment: item }),
     };
+
   } catch (err) {
-    console.error("markSepaPaid error:", err);
+    console.error("markSepaPaid ERROR:", err);
+
     return {
       statusCode: 500,
-      headers: baseHeaders,
-      body: JSON.stringify({ error: "Internal error" }),
+      body: JSON.stringify({ error: "Erreur interne (markPaid)" }),
     };
   }
 };

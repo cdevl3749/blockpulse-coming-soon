@@ -1,33 +1,46 @@
 const fs = require("fs");
 const path = require("path");
 
-// On stocke dans /tmp (écriture autorisée sur Netlify)
-// Tu peux changer ce chemin via une variable d'env PAYMENTS_DATA_DIR si tu veux.
-const DATA_DIR =
-  process.env.PAYMENTS_DATA_DIR || path.join("/tmp", "blockpulse-data");
+// 📌 Stockage PERSISTANT dans ton repo Netlify
+const DATA_DIR = path.join(__dirname, "../../data");
 const DATA_FILE = path.join(DATA_DIR, "payments.json");
 
+// 📌 S'assure que /data existe (normalement oui)
 function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+  } catch (e) {
+    console.error("Erreur création DATA_DIR:", e);
   }
 }
 
+// 📌 Lit les paiements de façon sécurisée
 function readPayments() {
   try {
-    if (!fs.existsSync(DATA_FILE)) return [];
+    if (!fs.existsSync(DATA_FILE)) {
+      return [];
+    }
+
     const raw = fs.readFileSync(DATA_FILE, "utf8") || "[]";
     const json = JSON.parse(raw);
+
     return Array.isArray(json) ? json : [];
   } catch (e) {
-    console.error("readPayments error:", e);
+    console.error("Erreur lecture payments.json:", e);
     return [];
   }
 }
 
+// 📌 Écrit les paiements en évitant tout crash
 function writePayments(payments) {
-  ensureDataDir();
-  fs.writeFileSync(DATA_FILE, JSON.stringify(payments, null, 2), "utf8");
+  try {
+    ensureDataDir();
+    fs.writeFileSync(DATA_FILE, JSON.stringify(payments, null, 2), "utf8");
+  } catch (e) {
+    console.error("Erreur écriture payments.json:", e);
+  }
 }
 
 const baseHeaders = {
@@ -37,7 +50,6 @@ const baseHeaders = {
 };
 
 exports.handler = async (event) => {
-  // Préflight CORS
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
@@ -71,11 +83,12 @@ exports.handler = async (event) => {
     const createdAt = new Date().toISOString();
 
     const newPayment = {
+      id: Date.now(), // 🔐 ID unique
       name,
       email,
       packId,
       packLabel: packLabel || null,
-      units: typeof units === "number" ? units : Number(units) || null,
+      units: Number(units) || null,
       mode: mode || "sepa",
       createdAt,
       paid: false,
@@ -97,8 +110,9 @@ exports.handler = async (event) => {
         payment: newPayment,
       }),
     };
+
   } catch (err) {
-    console.error("savePayment error:", err);
+    console.error("savePayment ERROR:", err);
     return {
       statusCode: 500,
       headers: baseHeaders,
@@ -108,11 +122,3 @@ exports.handler = async (event) => {
     };
   }
 };
-
-
-
-
-
-
-
-

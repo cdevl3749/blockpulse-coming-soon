@@ -72,8 +72,13 @@ export default function MonEspace() {
     setPackInfo(pack);
 
     setIsUnlocked(true);
-    setWithdrawDone(false);
-    setError("");
+
+    // récupérer l'état mémorisé
+    const wd = localStorage.getItem("bp_withdraw_done");
+    setWithdrawDone(wd === "true");
+
+setError("");
+
   };
 
   // ------------------------------------------------------
@@ -89,6 +94,7 @@ export default function MonEspace() {
   // ------------------------------------------------------
   const handleWithdraw = async () => {
     setWithdrawDone(true);
+    localStorage.setItem("bp_withdraw_done", "true");
 
     if (!clientInfo || !packInfo || !btcPrice) return;
 

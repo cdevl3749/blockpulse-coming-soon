@@ -1,6 +1,11 @@
+import { useState } from "react";
 import CONFIG from "../../config";
+import ModalAbout from "./ModalAbout";
 
 export default function Hero() {
+
+  const [aboutOpen, setAboutOpen] = useState(false);
+
   return (
     <section className="bp-hero">
       <div className="bp-container bp-hero-inner">
@@ -29,29 +34,56 @@ export default function Hero() {
             Ce n’est pas un investissement financier ni un jeu d’argent réglementé.
           </p>
 
-          <div className="bp-hero-actions">
-            <a href="/participer" className="bp-btn-primary bp-btn-large">
-              Participer — dès {CONFIG.UNIT_PRICE.toFixed(2)} €
-            </a>
-            <a href="/comment-ca-marche" className="bp-btn-secondary">
-              Comment ça marche ?
-            </a>
+          {/* 🎯 ACTIONS : réorganisées avec bouton fondateur centré */}
+          <div 
+            className="bp-hero-actions" 
+            style={{
+              flexDirection: "column",
+              gap: "14px",
+              alignItems: "center",
+              textAlign: "center"
+            }}
+          >
+
+            {/* Boutons principaux */}
+            <div style={{ display: "flex", gap: "12px" }}>
+              <a href="/participer" className="bp-btn-primary bp-btn-large">
+                Participer — dès {CONFIG.UNIT_PRICE.toFixed(2)} €
+              </a>
+              <a href="/comment-ca-marche" className="bp-btn-secondary">
+                Comment ça marche ?
+              </a>
+            </div>
+
+            {/* Bouton fondateur avec icône 👤 */}
+            <button 
+              onClick={() => setAboutOpen(true)} 
+              className="bp-btn-secondary bp-founder-btn"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "10px 22px",
+                fontSize: "15px",
+                borderRadius: "50px",
+                cursor: "pointer"
+              }}
+            >
+              <span style={{ fontSize: "18px" }}>👤</span>
+              À propos du fondateur
+            </button>
+
           </div>
+
         </div>
 
-        {/* Carte système en direct */}
+        {/* Carte système */}
         <div className="bp-hero-card">
           <h3>Statut du module en direct</h3>
           <ul>
-            <li>
-              <span>Connexion pool :</span> ViaBTC
-            </li>
-            <li>
-              <span>Protocole :</span> Stratum V1
-            </li>
-            <li>
-              <span>Actualisation :</span> toutes les 5 secondes
-            </li>
+            <li><span>Connexion pool :</span> ViaBTC</li>
+            <li><span>Protocole :</span> Stratum V1</li>
+            <li><span>Actualisation :</span> toutes les 5 secondes</li>
             <li>
               <span>Statut :</span>
               <span className="bp-status bp-status-on"> ONLINE</span>
@@ -65,6 +97,10 @@ export default function Hero() {
         </div>
 
       </div>
+
+      {/* Modal fondateur */}
+      <ModalAbout open={aboutOpen} onClose={() => setAboutOpen(false)} />
+
     </section>
   );
 }

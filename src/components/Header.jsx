@@ -18,18 +18,15 @@ export default function Header() {
 
   useEffect(() => {
     fetchBTC();
-    const i = setInterval(fetchBTC, 5000); // Toutes les 5 secondes
+    const i = setInterval(fetchBTC, 5000);
     return () => clearInterval(i);
   }, []);
 
-  // Fermer le menu mobile lors du changement de page
   useEffect(() => {
     setMenuOpen(false);
-    // Scroll vers le haut à chaque changement de page
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location]);
 
-  // Empêcher le scroll quand le menu est ouvert
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden';
@@ -47,7 +44,11 @@ export default function Header() {
 
         {/* LOGO */}
         <Link to="/" className="bp-header-logo">
-          <div className="bp-logo-icon">#</div>
+          <img
+            src="/logo-round.png"
+            alt="BlockPulse logo"
+            className="bp-logo-round"
+          />
           <div className="bp-logo-label">BlockPulse</div>
         </Link>
 

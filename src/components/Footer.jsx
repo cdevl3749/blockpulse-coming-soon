@@ -9,11 +9,15 @@ export default function Footer() {
 
         {/* Section haute compacte */}
         <div style={{ textAlign: "center", marginBottom: "25px" }}>
-          <div className="bp-footer-logo" style={{ justifyContent: "center" }}>
-            <div className="bp-logo-icon">#</div>
+          <div className="bp-footer-logo" style={{ justifyContent: "center", alignItems: "center", gap: "10px" }}>
+            <img 
+              src="/logo-round.png" 
+              alt="BlockPulse logo" 
+              className="bp-logo-round" 
+              style={{ width: "38px", height: "auto", display: "block" }}
+            />
             <span className="bp-logo-label">BlockPulse</span>
           </div>
-
           <p
             style={{
               marginTop: "10px",

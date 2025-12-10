@@ -2,6 +2,26 @@ import { useEffect, useState } from "react";
 import CONFIG from "../../config";
 import emailjs from "@emailjs/browser";
 
+// 🔑 Clé localStorage pour l'espace client
+const CLIENT_DATA_KEY = "blockpulse_client_data";
+
+// Sauvegarde propre d'une participation dans localStorage
+function saveClientData(entry) {
+  if (typeof window === "undefined") return;
+
+  try {
+    const raw = window.localStorage.getItem(CLIENT_DATA_KEY);
+    const existing = raw ? JSON.parse(raw) : [];
+    const arr = Array.isArray(existing) ? existing : [];
+
+    arr.push(entry);
+
+    window.localStorage.setItem(CLIENT_DATA_KEY, JSON.stringify(arr));
+  } catch (err) {
+    console.error("Erreur localStorage BlockPulse :", err);
+  }
+}
+
 // Fonction pour enregistrer un clic pack
 const logPackClick = async (packId) => {
   try {
@@ -30,7 +50,7 @@ export default function Participation() {
   const [copiedAddress, setCopiedAddress] = useState(null); // "btc" | "eth" | "iban" | null
   const [paymentMode, setPaymentMode] = useState("crypto"); // "crypto" ou "bank"
 
-  // ❗ Nouveaux états pour Nom / Email / confirmation
+  // ⚠ Nouveaux états pour Nom / Email / confirmation
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [hasUserInfoSaved, setHasUserInfoSaved] = useState(false);
@@ -61,6 +81,10 @@ export default function Participation() {
   }, []);
 
   const potentialGainPerUnit = CONFIG.getPotentialGainPerUnit(btcPrice);
+
+  // 📱 Responsive helper (mobile ~ < 768px)
+  const isMobile =
+    typeof window !== "undefined" && window.innerWidth < 768;
 
   // Ouvrir la popup pour un pack
   const openPaymentModal = (pack, mode = "crypto") => {
@@ -104,7 +128,7 @@ export default function Participation() {
       setTimeout(() => setCopiedAddress(null), 2000);
     } catch (err) {
       console.error("Erreur lors de la copie:", err);
-      alert("❌ Erreur lors de la copie. Veuillez copier manuellement l'adresse.");
+      alert("⚠ Erreur lors de la copie. Veuillez copier manuellement l'adresse.");
     }
   };
 
@@ -135,83 +159,108 @@ export default function Participation() {
     packEthAmount ? `?amount=${packEthAmount}` : ""
   }`;
 
-  // ✅ Sauvegarde Nom + Email + Pack + Mode
-// Étape 1 : on vérifie juste les infos, SANS envoyer d'email ici
-const handleSaveUserInfo = async () => {
-  if (!userName.trim() || !userEmail.trim()) {
-    setSaveInfoError("Merci de renseigner votre nom et votre email.");
-    return;
-  }
+  // ✅ Sauvegarde Nom + Email (étape 1)
+  const handleSaveUserInfo = async () => {
+    if (!userName.trim() || !userEmail.trim()) {
+      setSaveInfoError("Merci de renseigner votre nom et votre email.");
+      return;
+    }
 
-  // Vérification email simple
-  const emailOk = /.+@.+\..+/.test(userEmail.trim());
-  if (!emailOk) {
-    setSaveInfoError("Merci d’indiquer un email valide.");
-    return;
-  }
+    // Vérification email simple
+    const emailOk = /.+@.+\..+/.test(userEmail.trim());
+    if (!emailOk) {
+      setSaveInfoError("Merci d'indiquer un email valide.");
+      return;
+    }
 
-  if (!selectedPack) {
-    setSaveInfoError("Pack invalide, veuillez fermer et réessayer.");
-    return;
-  }
+    if (!selectedPack) {
+      setSaveInfoError("Pack invalide, veuillez fermer et réessayer.");
+      return;
+    }
 
-  setIsSavingInfo(true);
-  setSaveInfoError("");
+    setIsSavingInfo(true);
+    setSaveInfoError("");
 
-  try {
-    // ➜ On NE CONTACTE PAS EmailJS ici
-    setHasUserInfoSaved(true);
-  } catch (err) {
-    console.error("Erreur enregistrement infos:", err);
-    setSaveInfoError(
-      "Impossible d’enregistrer vos informations pour le moment. Merci de réessayer."
-    );
-  } finally {
-    setIsSavingInfo(false);
-  }
-};
+    try {
+      setHasUserInfoSaved(true);
+    } catch (err) {
+      console.error("Erreur enregistrement infos:", err);
+      setSaveInfoError(
+        "Impossible d'enregistrer vos informations pour le moment. Merci de réessayer."
+      );
+    } finally {
+      setIsSavingInfo(false);
+    }
+  };
 
+  // ✅ Étape 2 : confirmer paiement + EmailJS + localStorage
+  const handleConfirmPayment = async () => {
+    setPaymentConfirmed(true);
 
-// ✅ Étape 2 : envoyer l'email UNIQUEMENT quand le client clique
-// "J’ai effectué mon paiement"
-const handleConfirmPayment = async () => {
-  // Affichage du message de confirmation visuel
-  setPaymentConfirmed(true);
+    if (!selectedPack || !userName.trim() || !userEmail.trim()) {
+      console.warn("Impossible d'envoyer l'email : infos manquantes.");
+      return;
+    }
 
-  // Vérification des infos avant email
-  if (!selectedPack || !userName.trim() || !userEmail.trim()) {
-    console.warn("Impossible d'envoyer l'email : infos manquantes.");
-    return;
-  }
-
-  try {
-    const templateParams = {
-      user_name: userName.trim(),
-      user_email: userEmail.trim(),
-      pack_id: selectedPack.id,
-      pack_label: selectedPack.label,
-      pack_units: selectedPack.units,
-      payment_mode: paymentMode,
-      pack_price_eur:
+    try {
+      const packPrice =
         packPriceEUR ||
-        CONFIG.getPackPrice(selectedPack.units, selectedPack.savings),
-    };
+        CONFIG.getPackPrice(selectedPack.units, selectedPack.savings);
 
-    await emailjs.send(
-      "cdevl3749@gmail.com",   // Ton service ID
-      "template_8ith4gh",      // Ton template ID
-      templateParams,
-      "o3sNWIRA-SH7s2nsx"      // Ta clé publique EmailJS
-    );
-  } catch (err) {
-    console.error("Erreur EmailJS (confirmation):", err);
-  }
-};
+      const now = new Date().toISOString();
+
+      const templateParams = {
+        user_name: userName.trim(),
+        user_email: userEmail.trim(),
+        pack_id: selectedPack.id,
+        pack_label: selectedPack.label,
+        pack_units: selectedPack.units,
+        payment_mode: paymentMode,
+        pack_price_eur: packPrice,
+        confirmed_at: now,
+      };
+
+      await emailjs.send(
+        "cdevl3749@gmail.com",
+        "template_8ith4gh",
+        templateParams,
+        "o3sNWIRA-SH7s2nsx"
+      );
+
+      saveClientData({
+        name: userName.trim(),
+        email: userEmail.trim(),
+        packId: selectedPack.id,
+        packLabel: selectedPack.label,
+        packUnits: selectedPack.units,
+        paymentMode,
+        packPriceEUR: packPrice,
+        confirmedAt: now,
+      });
+    } catch (err) {
+      console.error("Erreur EmailJS / localStorage :", err);
+    }
+  };
 
   return (
     <section className="bp-section">
-      <div className="bp-container">
-        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+      <div
+        className="bp-container"
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: isMobile ? "0 12px 32px" : "0 20px 48px",
+          display: "flex",
+          flexDirection: "column",
+          gap: isMobile ? "18px" : "28px",
+        }}
+      >
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: isMobile ? "14px" : "20px",
+          }}
+        >
           Participer à BlockPulse
         </h2>
         <p
@@ -219,13 +268,16 @@ const handleConfirmPayment = async () => {
             textAlign: "center",
             color: "var(--bp-muted)",
             maxWidth: "700px",
-            margin: "0 auto 24px",
+            margin: "0 auto",
+            marginBottom: isMobile ? "18px" : "24px",
+            fontSize: isMobile ? "0.9rem" : "1rem",
+            lineHeight: 1.5,
           }}
         >
           Choisissez votre pack de participation. Chaque part vous donne un
-          ticket pour les tirages techniques BlockPulse. Plus vous avez de parts,
-          plus vos chances d&apos;être sélectionné lors d&apos;un tirage sont
-          élevées.
+          ticket pour les tirages techniques BlockPulse. Plus vous avez de
+          parts, plus vos chances d&apos;être sélectionné lors d&apos;un tirage
+          sont élevées.
         </p>
 
         {/* 🟢 BANNIÈRE SEPA BIEN VISIBLE */}
@@ -233,16 +285,16 @@ const handleConfirmPayment = async () => {
           style={{
             background: "rgba(0, 255, 200, 0.08)",
             border: "2px solid rgba(0, 255, 200, 0.3)",
-            padding: "18px 22px",
+            padding: isMobile ? "12px 12px" : "18px 22px",
             borderRadius: "12px",
-            margin: "0 auto 32px",
+            margin: isMobile ? "0 auto 20px" : "0 auto 28px",
             maxWidth: "620px",
             textAlign: "center",
           }}
         >
           <p
             style={{
-              fontSize: "1rem",
+              fontSize: isMobile ? "0.95rem" : "1rem",
               color: "#00ffc8",
               margin: 0,
               fontWeight: 600,
@@ -252,42 +304,44 @@ const handleConfirmPayment = async () => {
           </p>
           <p
             style={{
-              fontSize: "0.9rem",
+              fontSize: isMobile ? "0.85rem" : "0.9rem",
               color: "#a8b2d8",
               marginTop: "6px",
               lineHeight: 1.5,
             }}
           >
             Vous pouvez payer votre pack facilement par{" "}
-            <strong>virement bancaire SEPA</strong> vers notre IBAN :{" "}
-            <strong>{BANK_IBAN}</strong>.
+            <strong>virement bancaire SEPA</strong>. L&apos;IBAN vous sera
+            communiqué automatiquement après avoir sélectionné votre pack.
             <br />
             Votre pack est activé dès réception du virement (généralement sous{" "}
             <strong>24h ouvrables</strong>).
           </p>
         </div>
 
-        <div className="bp-ticket-banner">
-          <span className="bp-ticket-icon">⬤</span>
-          <span className="bp-ticket-text">
-            Activité du mois : 20 tirages techniques déclenchés
-          </span>
-        </div>
-
         {/* Grille des packs standards */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "20px",
-            marginBottom: "32px",
+            gridTemplateColumns: isMobile
+              ? "1fr"
+              : "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: isMobile ? "16px" : "20px",
+            marginBottom: isMobile ? "24px" : "32px",
           }}
         >
           {CONFIG.PACKS.filter((p) => !p.vip).map((pack) => {
-            const price = CONFIG.getPackPrice(pack.units, pack.savings);
-            const originalPrice = (pack.units * CONFIG.UNIT_PRICE).toFixed(2);
+            const price = CONFIG.getPackPrice(
+              pack.units,
+              pack.savings
+            );
+            const originalPrice = (
+              pack.units * CONFIG.UNIT_PRICE
+            ).toFixed(2);
             const potentialGain = potentialGainPerUnit
-              ? (parseFloat(potentialGainPerUnit) * pack.units).toFixed(2)
+              ? (
+                  parseFloat(potentialGainPerUnit) * pack.units
+                ).toFixed(2)
               : null;
 
             return (
@@ -306,20 +360,25 @@ const handleConfirmPayment = async () => {
                     : pack.vip
                     ? "radial-gradient(circle at top, rgba(255, 215, 0, 0.15), rgba(5, 11, 24, 0.95))"
                     : "var(--bp-card)",
-                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  transition:
+                    "transform 0.2s ease, box-shadow 0.2s ease",
                   cursor: "pointer",
                   display: "flex",
                   flexDirection: "column",
+                  padding: isMobile ? "18px" : "24px",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.transform =
+                    "translateY(-4px)";
                   e.currentTarget.style.boxShadow = pack.vip
                     ? "0 24px 56px rgba(255, 215, 0, 0.3)"
                     : "0 24px 56px rgba(0, 0, 0, 0.7)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "var(--bp-shadow-soft)";
+                  e.currentTarget.style.transform =
+                    "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "var(--bp-shadow-soft)";
                 }}
               >
                 {pack.popular && (
@@ -352,10 +411,20 @@ const handleConfirmPayment = async () => {
                     flexDirection: "column",
                   }}
                 >
-                  <div style={{ fontSize: "2.5rem", marginBottom: "8px" }}>
+                  <div
+                    style={{
+                      fontSize: isMobile ? "2.2rem" : "2.5rem",
+                      marginBottom: "8px",
+                    }}
+                  >
                     {pack.badge}
                   </div>
-                  <h3 style={{ margin: "0 0 8px", fontSize: "1.3rem" }}>
+                  <h3
+                    style={{
+                      margin: "0 0 8px",
+                      fontSize: isMobile ? "1.15rem" : "1.3rem",
+                    }}
+                  >
                     Pack {pack.label}
                   </h3>
                   <p
@@ -369,13 +438,20 @@ const handleConfirmPayment = async () => {
                     {pack.units > 1 ? "s" : ""} de contribution
                   </p>
 
-                  <div style={{ minHeight: "36px", marginBottom: "12px" }}>
+                  <div
+                    style={{
+                      minHeight: "36px",
+                      marginBottom: "12px",
+                    }}
+                  >
                     {pack.savings > 0 ? (
                       <div
                         style={{
                           display: "inline-block",
-                          background: "rgba(255, 100, 100, 0.15)",
-                          border: "1px solid rgba(255, 100, 100, 0.4)",
+                          background:
+                            "rgba(255, 100, 100, 0.15)",
+                          border:
+                            "1px solid rgba(255, 100, 100, 0.4)",
                           color: "#ff8888",
                           padding: "4px 12px",
                           borderRadius: "999px",
@@ -389,8 +465,10 @@ const handleConfirmPayment = async () => {
                       <div
                         style={{
                           display: "inline-block",
-                          background: "rgba(0, 255, 200, 0.1)",
-                          border: "1px solid rgba(0, 255, 200, 0.3)",
+                          background:
+                            "rgba(0, 255, 200, 0.1)",
+                          border:
+                            "1px solid rgba(0, 255, 200, 0.3)",
                           color: "var(--bp-accent)",
                           padding: "4px 12px",
                           borderRadius: "999px",
@@ -418,7 +496,7 @@ const handleConfirmPayment = async () => {
                     )}
                     <p
                       style={{
-                        fontSize: "2.2rem",
+                        fontSize: isMobile ? "2rem" : "2.2rem",
                         fontWeight: "700",
                         color: "var(--bp-accent)",
                         margin: "4px 0",
@@ -433,7 +511,10 @@ const handleConfirmPayment = async () => {
                         margin: "0",
                       }}
                     >
-                      {(parseFloat(price) / pack.units).toFixed(2)} € / unité
+                      {(parseFloat(price) / pack.units).toFixed(
+                        2
+                      )}{" "}
+                      € / unité
                     </p>
                   </div>
 
@@ -441,7 +522,8 @@ const handleConfirmPayment = async () => {
                     <div
                       style={{
                         background: "rgba(0, 255, 200, 0.08)",
-                        border: "1px solid rgba(0, 255, 200, 0.2)",
+                        border:
+                          "1px solid rgba(0, 255, 200, 0.2)",
                         borderRadius: "8px",
                         padding: "12px",
                         marginBottom: "16px",
@@ -475,7 +557,10 @@ const handleConfirmPayment = async () => {
                     {/* Crypto */}
                     <button
                       className="bp-btn-primary"
-                      style={{ width: "100%" }}
+                      style={{
+                        width: "100%",
+                        padding: isMobile ? "10px" : "12px",
+                      }}
                       onClick={() => {
                         logPackClick(pack.id);
                         openPaymentModal(pack, "crypto");
@@ -487,7 +572,11 @@ const handleConfirmPayment = async () => {
                     {/* Virement SEPA */}
                     <button
                       className="bp-btn-secondary"
-                      style={{ width: "100%", marginTop: "8px" }}
+                      style={{
+                        width: "100%",
+                        marginTop: "8px",
+                        padding: isMobile ? "9px" : "11px",
+                      }}
                       onClick={() => {
                         logPackClick(pack.id);
                         openPaymentModal(pack, "bank");
@@ -504,10 +593,17 @@ const handleConfirmPayment = async () => {
 
         {/* Pack VIP Whale - Mise en avant spéciale */}
         {CONFIG.PACKS.filter((p) => p.vip).map((pack) => {
-          const price = CONFIG.getPackPrice(pack.units, pack.savings);
-          const originalPrice = (pack.units * CONFIG.UNIT_PRICE).toFixed(2);
+          const price = CONFIG.getPackPrice(
+            pack.units,
+            pack.savings
+          );
+          const originalPrice = (
+            pack.units * CONFIG.UNIT_PRICE
+          ).toFixed(2);
           const potentialGain = potentialGainPerUnit
-            ? (parseFloat(potentialGainPerUnit) * pack.units).toFixed(2)
+            ? (
+                parseFloat(potentialGainPerUnit) * pack.units
+              ).toFixed(2)
             : null;
 
           return (
@@ -519,9 +615,10 @@ const handleConfirmPayment = async () => {
                 border: "3px solid #ffd700",
                 background:
                   "radial-gradient(circle at top, rgba(255, 215, 0, 0.15), rgba(5, 11, 24, 0.95))",
-                padding: "32px",
-                marginBottom: "48px",
-                boxShadow: "0 24px 56px rgba(255, 215, 0, 0.2)",
+                padding: isMobile ? "24px" : "32px",
+                marginBottom: isMobile ? "32px" : "48px",
+                boxShadow:
+                  "0 24px 56px rgba(255, 215, 0, 0.2)",
               }}
             >
               <div
@@ -539,7 +636,10 @@ const handleConfirmPayment = async () => {
                   fontWeight: "700",
                   textTransform: "uppercase",
                   letterSpacing: "0.1em",
-                  boxShadow: "0 6px 16px rgba(255, 215, 0, 0.5)",
+                  boxShadow:
+                    "0 6px 16px rgba(255, 215, 0, 0.5)",
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
                 }}
               >
                 👑 Pack VIP Whale - Exclusif
@@ -548,8 +648,10 @@ const handleConfirmPayment = async () => {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1px 1fr 1px 1fr",
-                  gap: "32px",
+                  gridTemplateColumns: isMobile
+                    ? "1fr"
+                    : "1fr 1px 1fr 1px 1fr",
+                  gap: isMobile ? "18px" : "32px",
                   alignItems: "center",
                   marginTop: "20px",
                 }}
@@ -559,7 +661,7 @@ const handleConfirmPayment = async () => {
                 <div>
                   <div
                     style={{
-                      fontSize: "4rem",
+                      fontSize: isMobile ? "3rem" : "4rem",
                       textAlign: "center",
                       marginBottom: "16px",
                     }}
@@ -569,7 +671,7 @@ const handleConfirmPayment = async () => {
                   <h3
                     style={{
                       margin: "0 0 12px",
-                      fontSize: "1.8rem",
+                      fontSize: isMobile ? "1.4rem" : "1.8rem",
                       textAlign: "center",
                       background:
                         "linear-gradient(135deg, #ffd700, #ffed4e)",
@@ -600,7 +702,8 @@ const handleConfirmPayment = async () => {
                     <div
                       style={{
                         display: "inline-block",
-                        background: "rgba(255, 215, 0, 0.2)",
+                        background:
+                          "rgba(255, 215, 0, 0.2)",
                         border: "1px solid #ffd700",
                         color: "#ffd700",
                         padding: "6px 16px",
@@ -617,9 +720,11 @@ const handleConfirmPayment = async () => {
                 {/* Séparateur */}
                 <div
                   style={{
-                    height: "200px",
-                    width: "1px",
-                    background: "rgba(255, 215, 0, 0.3)",
+                    height: isMobile ? "1px" : "200px",
+                    width: isMobile ? "100%" : "1px",
+                    background:
+                      "rgba(255, 215, 0, 0.3)",
+                    margin: isMobile ? "4px 0" : 0,
                   }}
                 ></div>
 
@@ -648,7 +753,7 @@ const handleConfirmPayment = async () => {
                   </p>
                   <p
                     style={{
-                      fontSize: "3rem",
+                      fontSize: isMobile ? "2.4rem" : "3rem",
                       fontWeight: "700",
                       color: "#ffd700",
                       margin: "8px 0",
@@ -665,16 +770,21 @@ const handleConfirmPayment = async () => {
                       margin: "0",
                     }}
                   >
-                    {(parseFloat(price) / pack.units).toFixed(2)} € / unité
+                    {(parseFloat(price) / pack.units).toFixed(
+                      2
+                    )}{" "}
+                    € / unité
                   </p>
                 </div>
 
                 {/* Séparateur */}
                 <div
                   style={{
-                    height: "200px",
-                    width: "1px",
-                    background: "rgba(255, 215, 0, 0.3)",
+                    height: isMobile ? "1px" : "200px",
+                    width: isMobile ? "100%" : "1px",
+                    background:
+                      "rgba(255, 215, 0, 0.3)",
+                    margin: isMobile ? "4px 0" : 0,
                   }}
                 ></div>
 
@@ -692,23 +802,19 @@ const handleConfirmPayment = async () => {
                     Bonus symbolique estimé / tirage
                   </p>
                   {potentialGain ? (
-                    <>
-                      <p
-                        style={{
-                          fontSize: "3rem",
-                          fontWeight: "700",
-                          color: "#00ffc8",
-                          margin: "8px 0",
-                          textShadow:
-                            "0 0 30px rgba(0, 255, 200, 0.5)",
-                        }}
-                      >
-                        {potentialGain} €
-                      </p>
-                    </>
-                  ) : (
-                    <></>
-                  )}
+                    <p
+                      style={{
+                        fontSize: isMobile ? "2.4rem" : "3rem",
+                        fontWeight: "700",
+                        color: "#00ffc8",
+                        margin: "8px 0",
+                        textShadow:
+                          "0 0 30px rgba(0, 255, 200, 0.5)",
+                      }}
+                    >
+                      {potentialGain} €
+                    </p>
+                  ) : null}
                 </div>
               </div>
 
@@ -717,10 +823,11 @@ const handleConfirmPayment = async () => {
                 className="bp-btn-primary"
                 style={{
                   width: "100%",
-                  marginTop: "32px",
-                  padding: "16px",
-                  fontSize: "1.1rem",
-                  background: "linear-gradient(135deg, #ffd700, #ffed4e)",
+                  marginTop: isMobile ? "24px" : "32px",
+                  padding: isMobile ? "12px" : "16px",
+                  fontSize: isMobile ? "1rem" : "1.1rem",
+                  background:
+                    "linear-gradient(135deg, #ffd700, #ffed4e)",
                   color: "#020816",
                   fontWeight: "700",
                 }}
@@ -737,7 +844,7 @@ const handleConfirmPayment = async () => {
                 style={{
                   width: "100%",
                   marginTop: "10px",
-                  padding: "14px",
+                  padding: isMobile ? "12px" : "14px",
                   fontSize: "1rem",
                 }}
                 onClick={() => {
@@ -754,46 +861,58 @@ const handleConfirmPayment = async () => {
         {/* SECTION : Pourquoi faire confiance à BlockPulse ? */}
         <section
           style={{
-            marginTop: "80px",
+            marginTop: isMobile ? "32px" : "48px",
             padding: "0 10px",
           }}
         >
           <h2
             style={{
               textAlign: "center",
-              fontSize: "2rem",
-              marginBottom: "40px",
+              fontSize: isMobile ? "1.7rem" : "2rem",
+              marginBottom: isMobile ? "24px" : "32px",
               fontWeight: "700",
             }}
           >
             Pourquoi faire confiance à{" "}
-            <span style={{ color: "var(--bp-accent)" }}>BlockPulse</span> ?
+            <span style={{ color: "var(--bp-accent)" }}>
+              BlockPulse
+            </span>{" "}
+            ?
           </h2>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-              gap: "26px",
+              gridTemplateColumns: isMobile
+                ? "1fr"
+                : "repeat(auto-fit, minmax(250px, 1fr))",
+              gap: isMobile ? "18px" : "26px",
             }}
           >
             <div
               className="trust-card"
               style={{
                 background: "var(--bp-card)",
-                padding: "24px",
+                padding: isMobile ? "20px" : "24px",
                 borderRadius: "12px",
                 border: "1px solid var(--bp-border)",
                 textAlign: "center",
                 transition: "0.25s",
               }}
             >
-              <div style={{ fontSize: "40px", marginBottom: "10px" }}>🔒</div>
-              <h3 style={{ marginBottom: "10px" }}>Paiements directs</h3>
+              <div
+                style={{ fontSize: "40px", marginBottom: "10px" }}
+              >
+                🔒
+              </div>
+              <h3 style={{ marginBottom: "10px" }}>
+                Paiements directs
+              </h3>
               <p style={{ color: "var(--bp-muted)" }}>
-                Vos contributions sont envoyées directement vers nos adresses{" "}
-                <strong>BTC</strong> et <strong>ETH</strong> — depuis n’importe
-                quel portefeuille ou via virement SEPA.
+                Vos contributions sont envoyées directement vers nos
+                adresses <strong>BTC</strong> et{" "}
+                <strong>ETH</strong> — depuis n&apos;importe quel
+                portefeuille ou via virement SEPA.
               </p>
             </div>
 
@@ -801,15 +920,21 @@ const handleConfirmPayment = async () => {
               className="trust-card"
               style={{
                 background: "var(--bp-card)",
-                padding: "24px",
+                padding: isMobile ? "20px" : "24px",
                 borderRadius: "12px",
                 border: "1px solid var(--bp-border)",
                 textAlign: "center",
                 transition: "0.25s",
               }}
             >
-              <div style={{ fontSize: "40px", marginBottom: "10px" }}>💡</div>
-              <h3 style={{ marginBottom: "10px" }}>Projet 100% réel</h3>
+              <div
+                style={{ fontSize: "40px", marginBottom: "10px" }}
+              >
+                💡
+              </div>
+              <h3 style={{ marginBottom: "10px" }}>
+                Projet 100% réel
+              </h3>
               <p style={{ color: "var(--bp-muted)" }}>
                 Module <strong>ESP32</strong> connecté au pool{" "}
                 <strong>ViaBTC</strong> via Stratum.
@@ -820,18 +945,22 @@ const handleConfirmPayment = async () => {
               className="trust-card"
               style={{
                 background: "var(--bp-card)",
-                padding: "24px",
+                padding: isMobile ? "20px" : "24px",
                 borderRadius: "12px",
                 border: "1px solid var(--bp-border)",
                 textAlign: "center",
                 transition: "0.25s",
               }}
             >
-              <div style={{ fontSize: "40px", marginBottom: "10px" }}>📊</div>
+              <div
+                style={{ fontSize: "40px", marginBottom: "10px" }}
+              >
+                📊
+              </div>
               <h3 style={{ marginBottom: "10px" }}>Transparence</h3>
               <p style={{ color: "var(--bp-muted)" }}>
-                Stats techniques affichées directement depuis le module en temps
-                réel.
+                Stats techniques affichées directement depuis le
+                module en temps réel.
               </p>
             </div>
           </div>
@@ -860,7 +989,8 @@ const handleConfirmPayment = async () => {
                 padding: "20px",
                 width: "100%",
                 maxWidth: "460px",
-                boxShadow: "0 24px 56px rgba(0,0,0,0.7)",
+                boxShadow:
+                  "0 24px 56px rgba(0,0,0,0.7)",
                 border: "1px solid var(--bp-border)",
                 margin: "auto",
                 position: "relative",
@@ -916,7 +1046,7 @@ const handleConfirmPayment = async () => {
                 €
               </p>
 
-              {/* ✅ Étape 1 : Nom + Email obligatoire */}
+              {/* Étape 1 : Nom + Email */}
               {!hasUserInfoSaved && (
                 <div
                   style={{
@@ -936,8 +1066,8 @@ const handleConfirmPayment = async () => {
                     }}
                   >
                     Indiquez votre <strong>nom</strong> et votre{" "}
-                    <strong>email</strong> pour que nous puissions activer votre
-                    pack après réception du paiement.
+                    <strong>email</strong> pour que nous puissions
+                    activer votre pack après réception du paiement.
                   </p>
 
                   <div style={{ marginBottom: "10px" }}>
@@ -954,14 +1084,18 @@ const handleConfirmPayment = async () => {
                     <input
                       type="text"
                       value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
+                      onChange={(e) =>
+                        setUserName(e.target.value)
+                      }
                       placeholder="Votre nom"
                       style={{
                         width: "100%",
                         padding: "8px 10px",
                         borderRadius: "8px",
-                        border: "1px solid var(--bp-border)",
-                        background: "rgba(15,23,42,0.9)",
+                        border:
+                          "1px solid var(--bp-border)",
+                        background:
+                          "rgba(15,23,42,0.9)",
                         color: "#e5e7eb",
                         fontSize: "0.9rem",
                       }}
@@ -982,14 +1116,18 @@ const handleConfirmPayment = async () => {
                     <input
                       type="email"
                       value={userEmail}
-                      onChange={(e) => setUserEmail(e.target.value)}
+                      onChange={(e) =>
+                        setUserEmail(e.target.value)
+                      }
                       placeholder="vous@exemple.com"
                       style={{
                         width: "100%",
                         padding: "8px 10px",
                         borderRadius: "8px",
-                        border: "1px solid var(--bp-border)",
-                        background: "rgba(15,23,42,0.9)",
+                        border:
+                          "1px solid var(--bp-border)",
+                        background:
+                          "rgba(15,23,42,0.9)",
                         color: "#e5e7eb",
                         fontSize: "0.9rem",
                       }}
@@ -1023,7 +1161,9 @@ const handleConfirmPayment = async () => {
                       color: "#020816",
                       fontSize: "0.9rem",
                       fontWeight: 600,
-                      cursor: isSavingInfo ? "default" : "pointer",
+                      cursor: isSavingInfo
+                        ? "default"
+                        : "pointer",
                       opacity: isSavingInfo ? 0.7 : 1,
                     }}
                   >
@@ -1034,444 +1174,537 @@ const handleConfirmPayment = async () => {
                 </div>
               )}
 
-              {/* ✅ Étape 2 : Instructions de paiement (affichées seulement après enregistrement Nom + Email) */}
+              {/* Étape 2 : instructions de paiement */}
               {hasUserInfoSaved && (
                 <>
-                  {paymentMode === "crypto" ? (
-                    <>
-                      {/* Message anti-arnaque */}
-                      <p
-                        style={{
-                          margin: "0 0 12px",
-                          fontSize: "0.8rem",
-                          color: "#ffb366",
-                          textAlign: "center",
-                        }}
-                      >
-                        ⚠️ Ne jamais envoyer de fonds vers une autre adresse que
-                        celles affichées ici sur BlockPulse.be. Vérifiez toujours
-                        l’URL du site.
-                      </p>
+                 {paymentMode === "crypto" ? (
+  <>
+    <p
+      style={{
+        margin: "0 0 12px",
+        fontSize: "0.8rem",
+        color: "#ffb366",
+        textAlign: "center",
+      }}
+    >
+      ⚠️ Ne jamais envoyer de fonds vers une autre adresse que celles affichées ici sur BlockPulse.be.
+      Vérifiez toujours l'URL du site.
+    </p>
 
-                      {/* Choix BTC / ETH */}
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "8px",
-                          marginBottom: "16px",
-                        }}
-                      >
-                        <button
-                          onClick={() => setSelectedCrypto("btc")}
-                          style={{
-                            flex: 1,
-                            padding: "10px 0",
-                            borderRadius: "999px",
-                            border:
-                              selectedCrypto === "btc"
-                                ? "1px solid var(--bp-accent)"
-                                : "1px solid var(--bp-border)",
-                            background:
-                              selectedCrypto === "btc"
-                                ? "rgba(0,255,200,0.12)"
-                                : "transparent",
-                            color: "#fff",
-                            fontSize: "0.9rem",
-                            cursor: "pointer",
-                          }}
-                        >
-                          ₿ Bitcoin
-                        </button>
+    {/* Sélecteur BTC / ETH */}
+    <div
+      style={{
+        display: "flex",
+        gap: "8px",
+        marginBottom: "16px",
+      }}
+    >
+      <button
+        onClick={() => setSelectedCrypto("btc")}
+        style={{
+          flex: 1,
+          padding: "10px 0",
+          borderRadius: "999px",
+          border:
+            selectedCrypto === "btc"
+              ? "1px solid var(--bp-accent)"
+              : "1px solid var(--bp-border)",
+          background:
+            selectedCrypto === "btc"
+              ? "rgba(0,255,200,0.12)"
+              : "transparent",
+          color: "#fff",
+          fontSize: "0.9rem",
+          cursor: "pointer",
+        }}
+      >
+        ₿ Bitcoin
+      </button>
 
-                        <button
-                          onClick={() => setSelectedCrypto("eth")}
-                          style={{
-                            flex: 1,
-                            padding: "10px 0",
-                            borderRadius: "999px",
-                            border:
-                              selectedCrypto === "eth"
-                                ? "1px solid var(--bp-accent)"
-                                : "1px solid var(--bp-border)",
-                            background:
-                              selectedCrypto === "eth"
-                                ? "rgba(0,255,200,0.12)"
-                                : "transparent",
-                            color: "#fff",
-                            fontSize: "0.9rem",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Ξ Ethereum
-                        </button>
-                      </div>
+      <button
+        onClick={() => setSelectedCrypto("eth")}
+        style={{
+          flex: 1,
+          padding: "10px 0",
+          borderRadius: "999px",
+          border:
+            selectedCrypto === "eth"
+              ? "1px solid var(--bp-accent)"
+              : "1px solid var(--bp-border)",
+          background:
+            selectedCrypto === "eth"
+              ? "rgba(0,255,200,0.12)"
+              : "transparent",
+          color: "#fff",
+          fontSize: "0.9rem",
+          cursor: "pointer",
+        }}
+      >
+        Ξ Ethereum
+      </button>
+    </div>
 
-                      {/* Zone QR + infos selon crypto choisie */}
-                      {selectedCrypto === "btc" ? (
-                        <div style={{ textAlign: "center" }}>
+    {/* BTC */}
+    {selectedCrypto === "btc" ? (
+      <div style={{ textAlign: "center" }}>
+        <p
+          style={{
+            fontSize: "0.9rem",
+            color: "var(--bp-muted)",
+            marginBottom: "8px",
+          }}
+        >
+          Envoyez exactement :
+        </p>
+
+        <p
+          style={{
+            fontSize: "1.4rem",
+            fontWeight: "600",
+            margin: "0 0 4px",
+          }}
+        >
+          {packBtcAmount || "..."} BTC
+        </p>
+
+        <p
+          style={{
+            fontSize: "0.8rem",
+            color: "var(--bp-muted)",
+            margin: "0 0 16px",
+          }}
+        >
+          (~ {packPriceEUR || "…"} € au taux actuel)
+        </p>
+
+        {/* QR BTC */}
+        <img
+          src={btcQrUrl}
+          alt="QR Bitcoin"
+          style={{
+            width: "160px",
+            height: "160px",
+            borderRadius: "12px",
+            margin: "12px auto",
+            display: "block",
+          }}
+        />
+
+        <p
+          style={{
+            fontSize: "0.8rem",
+            color: "var(--bp-muted)",
+            marginBottom: "4px",
+          }}
+        >
+          Adresse BTC :
+        </p>
+
+        <p
+          style={{
+            fontSize: "0.9rem",
+            wordBreak: "break-all",
+            marginBottom: "10px",
+          }}
+        >
+          {BTC_ADDRESS}
+        </p>
+
+        <button
+          onClick={() => copyToClipboard(BTC_ADDRESS, "btc")}
+          style={{
+            padding: "8px 12px",
+            borderRadius: "999px",
+            border:
+              copiedAddress === "btc"
+                ? "1px solid var(--bp-accent)"
+                : "1px solid var(--bp-border)",
+            background:
+              copiedAddress === "btc"
+                ? "rgba(0, 255, 200, 0.12)"
+                : "transparent",
+            color:
+              copiedAddress === "btc"
+                ? "var(--bp-accent)"
+                : "var(--bp-muted)",
+            fontSize: "0.85rem",
+            cursor: "pointer",
+            width: "100%",
+            marginBottom: "6px",
+          }}
+        >
+          {copiedAddress === "btc" ? "✓ Copié !" : "Copier l'adresse BTC"}
+        </button>
+      </div>
+    ) : (
+      /* ETH */
+      <div style={{ textAlign: "center" }}>
+        <p
+          style={{
+            fontSize: "0.9rem",
+            color: "var(--bp-muted)",
+            marginBottom: "8px",
+          }}
+        >
+          Envoyez exactement :
+        </p>
+
+        <p
+          style={{
+            fontSize: "1.4rem",
+            fontWeight: "600",
+            margin: "0 0 4px",
+          }}
+        >
+          {packEthAmount || "..."} ETH
+        </p>
+
+        <p
+          style={{
+            fontSize: "0.8rem",
+            color: "var(--bp-muted)",
+            margin: "0 0 16px",
+          }}
+        >
+          (~ {packPriceEUR || "…"} € au taux actuel)
+        </p>
+
+        {/* QR ETH */}
+        <img
+          src={ethQrUrl}
+          alt="QR Ethereum"
+          style={{
+            width: "160px",
+            height: "160px",
+            borderRadius: "12px",
+            margin: "12px auto",
+            display: "block",
+          }}
+        />
+
+        <p
+          style={{
+            fontSize: "0.8rem",
+            color: "var(--bp-muted)",
+            marginBottom: "4px",
+          }}
+        >
+          Adresse ETH :
+        </p>
+
+        <p
+          style={{
+            fontSize: "0.9rem",
+            wordBreak: "break-all",
+            marginBottom: "10px",
+          }}
+        >
+          {ETH_ADDRESS}
+        </p>
+
+        <button
+          onClick={() => copyToClipboard(ETH_ADDRESS, "eth")}
+          style={{
+            padding: "8px 12px",
+            borderRadius: "999px",
+            border:
+              copiedAddress === "eth"
+                ? "1px solid var(--bp-accent)"
+                : "1px solid var(--bp-border)",
+            background:
+              copiedAddress === "eth"
+                ? "rgba(0, 255, 200, 0.12)"
+                : "transparent",
+            color:
+              copiedAddress === "eth"
+                ? "var(--bp-accent)"
+                : "var(--bp-muted)",
+            fontSize: "0.85rem",
+            cursor: "pointer",
+            width: "100%",
+            marginBottom: "6px",
+          }}
+        >
+          {copiedAddress === "eth" ? "✓ Copié !" : "Copier l'adresse ETH"}
+        </button>
+      </div>
+    )}
+
+    {/* ⭐⭐ CONFIRMATION — LE BOUTON QUI MANQUAIT ⭐⭐ */}
+    {!paymentConfirmed && (
+      <button
+        onClick={handleConfirmPayment}
+        style={{
+          width: "100%",
+          marginTop: "16px",
+          padding: "12px",
+          borderRadius: "999px",
+          background: "rgba(0,255,200,0.12)",
+          border: "1px solid var(--bp-accent)",
+          color: "var(--bp-accent)",
+          fontSize: "0.9rem",
+          fontWeight: 600,
+          cursor: "pointer",
+        }}
+      >
+        ✅ J'ai effectué mon paiement
+      </button>
+    )}
+
+    {paymentConfirmed && (
+      <div
+        style={{
+          marginTop: "12px",
+          textAlign: "center",
+          background: "rgba(0,255,200,0.12)",
+          borderRadius: "8px",
+          padding: "10px",
+          border: "1px solid var(--bp-accent)",
+          color: "var(--bp-accent)",
+        }}
+      >
+        💚 Paiement enregistré !  
+        Nous confirmerons l’activation de votre pack.
+      </div>
+    )}
+  </>
+) : (
+  <>
+
+                      {/* MODE VIREMENT SEPA */}
+                      {!paymentConfirmed && (
+                        <>
                           <p
                             style={{
-                              fontSize: "0.9rem",
-                              color: "var(--bp-muted)",
-                              marginBottom: "8px",
+                              margin: "0 0 12px",
+                              fontSize: "0.85rem",
+                              color: "#ffb366",
+                              textAlign: "center",
                             }}
                           >
-                            Envoyez exactement :
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "1.4rem",
-                              fontWeight: "600",
-                              margin: "0 0 4px",
-                            }}
-                          >
-                            {packBtcAmount || "..."} BTC
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "0.8rem",
-                              color: "var(--bp-muted)",
-                              margin: "0 0 16px",
-                            }}
-                          >
-                            (~ {packPriceEUR || "…"} € au taux actuel)
+                            Effectuez un virement SEPA depuis
+                            votre application bancaire. Votre
+                            pack sera activé dès réception.
                           </p>
 
-                          <img
-                            src={btcQrUrl}
-                            alt="QR Bitcoin"
+                          <div
                             style={{
-                              width: "160px",
-                              height: "160px",
+                              background:
+                                "rgba(15,23,42,0.9)",
                               borderRadius: "12px",
-                              margin: "12px auto",
-                              display: "block",
-                            }}
-                          />
-
-                          <p
-                            style={{
-                              fontSize: "0.8rem",
-                              color: "var(--bp-muted)",
-                              marginBottom: "4px",
+                              padding: "12px 14px",
+                              marginBottom: "12px",
+                              border:
+                                "1px solid var(--bp-border)",
+                              fontSize: "0.9rem",
                             }}
                           >
-                            Adresse BTC :
-                          </p>
+                            <p
+                              style={{ margin: "0 0 6px" }}
+                            >
+                              <strong>
+                                Bénéficiaire :
+                              </strong>{" "}
+                              {BANK_HOLDER}
+                            </p>
+
+                            <p
+                              style={{ margin: "0 0 6px" }}
+                            >
+                              <strong>IBAN :</strong>{" "}
+                              <span
+                                style={{
+                                  wordBreak: "break-all",
+                                }}
+                              >
+                                {BANK_IBAN}
+                              </span>
+                            </p>
+
+                            <p style={{ margin: 0 }}>
+                              <strong>Montant :</strong>{" "}
+                              {packPriceEUR ||
+                                CONFIG.getPackPrice(
+                                  selectedPack.units,
+                                  selectedPack.savings
+                                )}{" "}
+                              €
+                            </p>
+                          </div>
+
                           <p
                             style={{
                               fontSize: "0.85rem",
-                              wordBreak: "break-all",
+                              color: "var(--bp-muted)",
                               marginBottom: "10px",
                             }}
                           >
-                            {BTC_ADDRESS}
+                            <strong>
+                              Communication :
+                            </strong>{" "}
+                            <span
+                              style={{
+                                color: "#e5e7eb",
+                              }}
+                            >
+                              BLOCKPULSE{" "}
+                              {selectedPack.label.toUpperCase()}{" "}
+                              + votre email
+                            </span>
                           </p>
+
                           <button
-                            onClick={() => copyToClipboard(BTC_ADDRESS, "btc")}
+                            onClick={() =>
+                              copyToClipboard(
+                                BANK_IBAN,
+                                "iban"
+                              )
+                            }
                             style={{
-                              padding: "8px 12px",
+                              padding: "10px 12px",
                               borderRadius: "999px",
                               border:
-                                copiedAddress === "btc"
+                                copiedAddress === "iban"
                                   ? "1px solid var(--bp-accent)"
                                   : "1px solid var(--bp-border)",
                               background:
-                                copiedAddress === "btc"
+                                copiedAddress === "iban"
                                   ? "rgba(0, 255, 200, 0.12)"
                                   : "transparent",
                               color:
-                                copiedAddress === "btc"
+                                copiedAddress === "iban"
                                   ? "var(--bp-accent)"
                                   : "var(--bp-muted)",
-                              fontSize: "0.85rem",
-                              cursor: "pointer",
-                              width: "100%",
-                              marginBottom: "6px",
-                              transition: "all 0.2s ease",
-                            }}
-                          >
-                            {copiedAddress === "btc"
-                              ? "✓ Copié !"
-                              : "Copier l'adresse BTC"}
-                          </button>
-                        </div>
-                      ) : (
-                        <div style={{ textAlign: "center" }}>
-                          <p
-                            style={{
                               fontSize: "0.9rem",
-                              color: "var(--bp-muted)",
-                              marginBottom: "8px",
-                            }}
-                          >
-                            Envoyez exactement :
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "1.4rem",
-                              fontWeight: "600",
-                              margin: "0 0 4px",
-                            }}
-                          >
-                            {packEthAmount || "..."} ETH
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "0.8rem",
-                              color: "var(--bp-muted)",
-                              margin: "0 0 16px",
-                            }}
-                          >
-                            (~ {packPriceEUR || "…"} € au taux actuel)
-                          </p>
-
-                          <img
-                            src={ethQrUrl}
-                            alt="QR Ethereum"
-                            style={{
-                              width: "160px",
-                              height: "160px",
-                              borderRadius: "12px",
-                              margin: "12px auto",
-                              display: "block",
-                            }}
-                          />
-
-                          <p
-                            style={{
-                              fontSize: "0.8rem",
-                              color: "var(--bp-muted)",
-                              marginBottom: "4px",
-                            }}
-                          >
-                            Adresse ETH :
-                          </p>
-                          <p
-                            style={{
-                              fontSize: "0.85rem",
-                              wordBreak: "break-all",
-                              marginBottom: "10px",
-                            }}
-                          >
-                            {ETH_ADDRESS}
-                          </p>
-                          <button
-                            onClick={() => copyToClipboard(ETH_ADDRESS, "eth")}
-                            style={{
-                              padding: "8px 12px",
-                              borderRadius: "999px",
-                              border:
-                                copiedAddress === "eth"
-                                  ? "1px solid var(--bp-accent)"
-                                  : "1px solid var(--bp-border)",
-                              background:
-                                copiedAddress === "eth"
-                                  ? "rgba(0, 255, 200, 0.12)"
-                                  : "transparent",
-                              color:
-                                copiedAddress === "eth"
-                                  ? "var(--bp-accent)"
-                                  : "var(--bp-muted)",
-                              fontSize: "0.85rem",
                               cursor: "pointer",
                               width: "100%",
-                              marginBottom: "6px",
+                              marginBottom: "8px",
                               transition: "all 0.2s ease",
                             }}
                           >
-                            {copiedAddress === "eth"
-                              ? "✓ Copié !"
-                              : "Copier l'adresse ETH"}
+                            {copiedAddress === "iban"
+                              ? "✓ IBAN copié"
+                              : "Copier l'IBAN"}
                           </button>
+
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              textAlign: "center",
+                            }}
+                          >
+                            Dès que le virement est reçu, vos
+                            parts seront ajoutées sur BlockPulse
+                            (en général sous 24h ouvrables).
+                          </p>
+                        </>
+                      )}
+
+                      {!paymentConfirmed && (
+                        <button
+                          onClick={handleConfirmPayment}
+                          style={{
+                            width: "100%",
+                            marginTop: "14px",
+                            padding: "10px 12px",
+                            borderRadius: "999px",
+                            border:
+                              "1px solid var(--bp-accent)",
+                            background:
+                              "rgba(0,255,200,0.1)",
+                            color: "var(--bp-accent)",
+                            fontSize: "0.9rem",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                          }}
+                        >
+                          J'ai effectué mon paiement
+                        </button>
+                      )}
+
+                      {paymentConfirmed && (
+                        <div
+                          style={{
+                            marginTop: "10px",
+                            background:
+                              "rgba(0, 255, 200, 0.1)",
+                            borderRadius: "8px",
+                            border:
+                              "1px solid rgba(0,255,200,0.4)",
+                            padding: "10px 12px",
+                            fontSize: "0.85rem",
+                            color: "#d1fae5",
+                            textAlign: "center",
+                          }}
+                        >
+                          💚{" "}
+                          <strong>
+                            Paiement enregistré !
+                          </strong>
+                          <br />
+                          Merci pour votre participation.
+                          Dès que votre paiement sera reçu
+                          (SEPA : généralement sous 24h), votre
+                          pack sera activé et vous recevrez un
+                          message de confirmation.
                         </div>
                       )}
                     </>
-                  ) : (
-                    <>
-                      {/* MODE VIREMENT SEPA */}
-                      <p
-                        style={{
-                          margin: "0 0 12px",
-                          fontSize: "0.85rem",
-                          color: "#ffb366",
-                          textAlign: "center",
-                        }}
-                      >
-                        Effectuez un virement SEPA depuis votre application
-                        bancaire. Votre pack sera activé dès réception.
-                      </p>
-
-                      <div
-                        style={{
-                          background: "rgba(15,23,42,0.9)",
-                          borderRadius: "12px",
-                          padding: "12px 14px",
-                          marginBottom: "12px",
-                          border: "1px solid var(--bp-border)",
-                          fontSize: "0.9rem",
-                        }}
-                      >
-                        <p style={{ margin: "0 0 6px" }}>
-                          <strong>Bénéficiaire :</strong> {BANK_HOLDER}
-                        </p>
-                        <p style={{ margin: "0 0 6px" }}>
-                          <strong>IBAN :</strong>{" "}
-                          <span style={{ wordBreak: "break-all" }}>
-                            {BANK_IBAN}
-                          </span>
-                        </p>
-                        <p style={{ margin: 0 }}>
-                          <strong>Montant :</strong>{" "}
-                          {packPriceEUR ||
-                            CONFIG.getPackPrice(
-                              selectedPack.units,
-                              selectedPack.savings
-                            )}{" "}
-                          €
-                        </p>
-                      </div>
-
-                      <p
-                        style={{
-                          fontSize: "0.85rem",
-                          color: "var(--bp-muted)",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        <strong>Communication :</strong>{" "}
-                        <span style={{ color: "#e5e7eb" }}>
-                          BLOCKPULSE {selectedPack.label.toUpperCase()} + votre
-                          email
-                        </span>
-                      </p>
-
-                      <button
-                        onClick={() => copyToClipboard(BANK_IBAN, "iban")}
-                        style={{
-                          padding: "10px 12px",
-                          borderRadius: "999px",
-                          border:
-                            copiedAddress === "iban"
-                              ? "1px solid var(--bp-accent)"
-                              : "1px solid var(--bp-border)",
-                          background:
-                            copiedAddress === "iban"
-                              ? "rgba(0, 255, 200, 0.12)"
-                              : "transparent",
-                          color:
-                            copiedAddress === "iban"
-                              ? "var(--bp-accent)"
-                              : "var(--bp-muted)",
-                          fontSize: "0.9rem",
-                          cursor: "pointer",
-                          width: "100%",
-                          marginBottom: "8px",
-                          transition: "all 0.2s ease",
-                        }}
-                      >
-                        {copiedAddress === "iban"
-                          ? "✓ IBAN copié"
-                          : "Copier l’IBAN"}
-                      </button>
-
-                      <p
-                        style={{
-                          fontSize: "0.8rem",
-                          color: "var(--bp-muted)",
-                          textAlign: "center",
-                        }}
-                      >
-                        Dès que le virement est reçu, vos parts seront ajoutées
-                        sur BlockPulse (en général sous 24h ouvrables).
-                      </p>
-                    </>
                   )}
 
-                  {/* ✅ Bouton de confirmation de paiement */}
-                 {!paymentConfirmed && (
-  <button
-    onClick={handleConfirmPayment}
-    style={{
-      width: "100%",
-      marginTop: "14px",
-      padding: "10px 12px",
-      borderRadius: "999px",
-      border: "1px solid var(--bp-accent)",
-      background: "rgba(0,255,200,0.1)",
-      color: "var(--bp-accent)",
-      fontSize: "0.9rem",
-      fontWeight: 600,
-      cursor: "pointer",
-    }}
-  >
-    J’ai effectué mon paiement
-  </button>
-)}
-
-
                   {paymentConfirmed && (
-                    <div
+                    <button
+                      onClick={closePaymentModal}
                       style={{
-                        marginTop: "10px",
-                        background: "rgba(0, 255, 200, 0.1)",
-                        borderRadius: "8px",
-                        border: "1px solid rgba(0,255,200,0.4)",
-                        padding: "10px 12px",
-                        fontSize: "0.85rem",
-                        color: "#d1fae5",
-                        textAlign: "center",
+                        width: "100%",
+                        marginTop: "16px",
+                        padding: "12px 12px",
+                        borderRadius: "999px",
+                        border:
+                          "1px solid var(--bp-accent)",
+                        background:
+                          "rgba(0,255,200,0.12)",
+                        color: "var(--bp-accent)",
+                        fontSize: "0.9rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
                       }}
                     >
-                      💚 <strong>Paiement enregistré !</strong>
-                      <br />
-                      Merci pour votre participation. Dès que votre paiement
-                      sera reçu (SEPA : généralement sous 24h), votre pack sera
-                      activé et vous recevrez un message de confirmation.
-                    </div>
+                      Terminer
+                    </button>
                   )}
                 </>
               )}
-
-              {/* Bouton Annuler (bas de modale) */}
-          {/* Bouton visible uniquement après confirmation */}
-{paymentConfirmed && (
-  <button
-    onClick={closePaymentModal}
-    style={{
-      width: "100%",
-      marginTop: "16px",
-      padding: "12px 12px",
-      borderRadius: "999px",
-      border: "1px solid var(--bp-accent)",
-      background: "rgba(0,255,200,0.12)",
-      color: "var(--bp-accent)",
-      fontSize: "0.9rem",
-      fontWeight: 600,
-      cursor: "pointer",
-    }}
-  >
-    Terminer
-  </button>
-)}
             </div>
           </div>
         )}
 
         {/* Informations supplémentaires */}
-        <div className="bp-grid-2">
+        <div
+          className="bp-grid-2"
+          style={{
+            display: "grid",
+            gridTemplateColumns: isMobile
+              ? "1fr"
+              : "repeat(2, minmax(0, 1fr))",
+            gap: isMobile ? "16px" : "24px",
+            marginTop: isMobile ? "24px" : "32px",
+          }}
+        >
           <div className="bp-card">
             <h3>💳 Paiement crypto direct</h3>
             <p>
-              Les paiements crypto sont envoyés directement vers nos adresses{" "}
-              <strong>BTC</strong> et <strong>ETH</strong>. Vous pouvez aussi
-              choisir le virement SEPA si vous préférez payer en euros.
+              Les paiements crypto sont envoyés directement vers
+              nos adresses <strong>BTC</strong> et{" "}
+              <strong>ETH</strong>. Vous pouvez aussi choisir le
+              virement SEPA si vous préférez payer en euros.
             </p>
 
-            {/* Encadré SEPA plus visible */}
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.05)",
+                background:
+                  "rgba(255, 255, 255, 0.05)",
                 padding: "14px 16px",
                 borderRadius: "8px",
                 marginTop: "15px",
@@ -1486,14 +1719,17 @@ const handleConfirmPayment = async () => {
                   lineHeight: 1.5,
                 }}
               >
-                💳 <strong>Paiement SEPA disponible :</strong> le virement
-                bancaire est simple, sécurisé et idéal si vous préférez payer en
-                euros.
+                💳{" "}
+                <strong>
+                  Paiement SEPA disponible :
+                </strong>{" "}
+                le virement bancaire est simple, sécurisé et
+                idéal si vous préférez payer en euros.
                 <br />
                 IBAN : <strong>{BANK_IBAN}</strong>
                 <br />
-                Votre pack est activé dès réception du paiement (sous{" "}
-                <strong>24h ouvrables</strong>).
+                Votre pack est activé dès réception du paiement
+                (sous <strong>24h ouvrables</strong>).
               </p>
             </div>
 
@@ -1509,11 +1745,24 @@ const handleConfirmPayment = async () => {
           <div className="bp-card">
             <h3>📊 Récapitulatif du modèle</h3>
             <ul className="bp-list">
-              <li>✅ Contribution technique au nœud ESP32</li>
-              <li>✅ Tirages techniques basés sur l&apos;activité du pool</li>
-              <li>✅ Transparence totale : stats en temps réel (bientôt)</li>
-              <li>✅ Bonus symboliques distribués lors des tirages</li>
-              <li>⚠️ Gains non garantis - Projet expérimental</li>
+              <li>
+                ✅ Contribution technique au nœud ESP32
+              </li>
+              <li>
+                ✅ Tirages techniques basés sur l&apos;activité
+                du pool
+              </li>
+              <li>
+                ✅ Transparence totale : stats en temps réel
+                (bientôt)
+              </li>
+              <li>
+                ✅ Bonus symboliques distribués lors des
+                tirages
+              </li>
+              <li>
+                ⚠️ Gains non garantis - Projet expérimental
+              </li>
             </ul>
           </div>
         </div>
@@ -1521,7 +1770,7 @@ const handleConfirmPayment = async () => {
         {/* Note importante */}
         <div
           style={{
-            marginTop: "32px",
+            marginTop: isMobile ? "24px" : "32px",
             background: "rgba(255, 140, 0, 0.08)",
             border: "1px solid rgba(255, 140, 0, 0.3)",
             borderRadius: "12px",
@@ -1537,13 +1786,17 @@ const handleConfirmPayment = async () => {
             }}
           >
             ⚠️{" "}
-            <strong style={{ color: "#ffb366" }}>Important :</strong> Ce n&apos;est
-            pas un jeu d&apos;argent. Les bonus sont rares et dépendent
-            entièrement du pool ViaBTC. Considérez cette participation comme un
-            soutien à un projet tech innovant.
+            <strong style={{ color: "#ffb366" }}>
+              Important :
+            </strong>{" "}
+            Ce n&apos;est pas un jeu d&apos;argent. Les bonus
+            sont rares et dépendent entièrement du pool ViaBTC.
+            Considérez cette participation comme un soutien à un
+            projet tech innovant.
           </p>
         </div>
       </div>
     </section>
   );
 }
+

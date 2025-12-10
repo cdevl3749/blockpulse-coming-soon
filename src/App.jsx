@@ -17,6 +17,8 @@ import PolitiqueCookies from "./pages/PolitiqueCookies.jsx";
 import Success from "./pages/Success";
 import Cancel from "./pages/Cancel";
 import DashboardSecure from "./pages/DashboardSecure.jsx";
+import MonEspace from "./pages/MonEspace.jsx";
+import AdminClients from "./pages/AdminClients.jsx";
 
 
 // Composant interne pour gérer le scroll
@@ -60,7 +62,9 @@ export default function App() {
           <Route path="/cancel" element={<Cancel />} />
 
           <Route path="/dashboard-admin-blockpulse-8921" element={<DashboardSecure />} />
- 
+          <Route path="/mon-espace" element={<MonEspace />} />
+          <Route path="/admin-clients" element={<AdminClients />} />
+
         </Routes>
       </main>
       <Footer />

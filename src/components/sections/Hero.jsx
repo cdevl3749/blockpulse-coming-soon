@@ -8,24 +8,25 @@ export default function Hero() {
         {/* Texte principal */}
         <div className="bp-hero-text">
 
-          <p className="bp-eyebrow">Bitcoin Compute Node</p>
+          <p className="bp-eyebrow">Module Bitcoin ESP32 — Tirages Techniques</p>
 
           <h1>
-            BlockPulse.be <span>Bitcoin Lottery Node*</span>
+            BlockPulse.be  
+            <span> Bonus symboliques basés sur le réseau Bitcoin</span>
           </h1>
 
           <p className="bp-hero-sub">
-            Un module ESP32 connecté au pool ViaBTC, un système de tirages
-            techniques lié à l’activité de minage, et une expérience crypto
-            accessible dès{" "}
-            <strong>{CONFIG.UNIT_PRICE.toFixed(2)} €</strong>.
+            Participez au fonctionnement d’un mini-nœud ESP32 connecté au pool ViaBTC.
+            Recevez des <strong>bonus symboliques</strong> basés sur l’activité réelle
+            du réseau Bitcoin et les tirages techniques générés par notre module.  
           </p>
 
           <p className="bp-hero-small">
-            *BlockPulse est une expérience technique et pédagogique utilisant le
-            protocole Stratum. Vous soutenez un nœud expérimental et recevez des
-            tickets techniques selon votre pack.  
-            Ce n’est pas un investissement ni un jeu d’argent réglementé.
+            BlockPulse est un projet <strong>technique & pédagogique</strong> basé sur
+            le protocole Stratum.  
+            Vous soutenez notre module expérimental et recevez des tirages symboliques
+            selon votre pack.  
+            Ce n’est pas un investissement financier ni un jeu d’argent réglementé.
           </p>
 
           <div className="bp-hero-actions">
@@ -40,26 +41,26 @@ export default function Hero() {
 
         {/* Carte système en direct */}
         <div className="bp-hero-card">
-          <h3>Système en direct</h3>
+          <h3>Statut du module en direct</h3>
           <ul>
             <li>
-              <span>Connexion au pool :</span> ViaBTC
+              <span>Connexion pool :</span> ViaBTC
             </li>
             <li>
-              <span>Protocole :</span> Stratum
+              <span>Protocole :</span> Stratum V1
             </li>
             <li>
-              <span>Rafraîchissement :</span> 5 secondes
+              <span>Actualisation :</span> toutes les 5 secondes
             </li>
             <li>
-              <span>Statut :</span>{" "}
-              <span className="bp-status bp-status-on">ONLINE</span>
+              <span>Statut :</span>
+              <span className="bp-status bp-status-on"> ONLINE</span>
             </li>
           </ul>
 
           <p className="bp-hero-note">
-            Les données affichées proviennent directement du module ESP32
-            (ou du cloud si celui-ci est momentanément hors ligne).
+            Le module ESP32 envoie les données techniques utilisées pour les tirages.
+            En cas d'indisponibilité, une source cloud de secours prend le relais.
           </p>
         </div>
 

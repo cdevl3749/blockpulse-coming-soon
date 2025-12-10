@@ -32,27 +32,25 @@ export default function BonusSection() {
   return (
     <section className="bp-section bp-section-alt">
       <div className="bp-container">
+
         <h2>Bonus techniques & tirages BlockPulse</h2>
 
         <p className="bp-section-intro">
-          Le nœud BlockPulse réagit en temps réel à l’activité du pool ViaBTC.
-          Lorsqu’un événement technique majeur survient (nouveau job, activité élevée,
-          découverte d’un bloc…), un <strong>tirage technique</strong> peut être déclenché.
+          BlockPulse réagit en temps réel à l’activité du pool ViaBTC.
+          Lorsqu’un événement technique survient, un <strong>tirage BlockPulse</strong>
+          peut être déclenché automatiquement.
         </p>
 
-        <p className="bp-section-intro">
-          Deux types de tirages existent :
-        </p>
+        <p className="bp-section-intro">Deux types de tirages existent :</p>
 
         <ul className="bp-list" style={{ marginBottom: "32px" }}>
           <li>
-            💠 <strong>Tirage classique :</strong> un petit bonus symbolique basé sur
-            les événements normaux du pool.
+            💠 <strong>Tirage classique :</strong> petit bonus symbolique sur les
+            événements normaux du pool.
           </li>
           <li>
-            🔥 <strong>Tirage spécial “Bloc Trouvé” :</strong> lorsqu’un bloc est
-            découvert par ViaBTC, un tirage exceptionnel peut être déclenché avec
-            un bonus <strong>plus important</strong>. Un événement rare et très attendu.
+            🔥 <strong>Tirage spécial “Bloc Trouvé” :</strong> déclenché lorsqu’un
+            bloc Bitcoin est découvert, bonus plus élevé.
           </li>
         </ul>
 
@@ -80,68 +78,42 @@ export default function BonusSection() {
             )}
 
             <p>
-              Lorsqu’un bloc est découvert, le pool ViaBTC le signale immédiatement.
-              BlockPulse utilise cet instant pour lancer un{" "}
-              <strong>tirage spécial “Bloc Trouvé”</strong>.  
-              Les bonus restent symboliques, mais peuvent être plus élevés
-              qu’un tirage classique.
+              Lorsqu’un bloc est trouvé par ViaBTC, BlockPulse déclenche un{" "}
+              <strong>tirage spécial</strong>.  
+              Les bonus restent symboliques mais sont plus élevés qu’un tirage classique.
             </p>
 
-            {/* Bloc Confiance – Témoignages courts */}
-        <div
-          style={{
-            marginTop: "22px",
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "10px",
-            padding: "14px 16px",
-          }}
-        >
-          <p
-            style={{
-              margin: "0 0 10px 0",
-              fontSize: "0.9rem",
-              fontWeight: "600",
-              color: "#a8c6ff",
-            }}
-          >
-            💬 Ce que disent les utilisateurs
-          </p>
+            {/* Témoignages */}
+            <div
+              style={{
+                marginTop: "22px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: "10px",
+                padding: "14px 16px",
+              }}
+            >
+              <p
+                style={{
+                  margin: "0 0 10px 0",
+                  fontSize: "0.9rem",
+                  fontWeight: "600",
+                  color: "#a8c6ff",
+                }}
+              >
+                💬 Avis des participants
+              </p>
 
-          <p
-            style={{
-              margin: "0 0 8px 0",
-              fontSize: "0.85rem",
-              color: "#d8e0f5",
-              opacity: 0.9,
-            }}
-          >
-            “Très intéressant de voir l’activité réelle du réseau Bitcoin.”
-          </p>
-
-          <p
-            style={{
-              margin: "0 0 8px 0",
-              fontSize: "0.85rem",
-              color: "#d8e0f5",
-              opacity: 0.9,
-            }}
-          >
-            “Le système réagit en temps réel à l’activité du réseau, c’est très instructif à regarder.”
-          </p>
-
-          <p
-            style={{
-              margin: 0,
-              fontSize: "0.85rem",
-              color: "#d8e0f5",
-              opacity: 0.9,
-            }}
-          >
-            “Super pédagogique pour comprendre le mining.”
-          </p>
-        </div>
-
+              <p style={{ margin: "0 0 8px", fontSize: "0.85rem", opacity: 0.9 }}>
+                “Super intéressant pour suivre l’activité réelle du réseau.”
+              </p>
+              <p style={{ margin: "0 0 8px", fontSize: "0.85rem", opacity: 0.9 }}>
+                “Très pédagogique pour comprendre le mining.”
+              </p>
+              <p style={{ margin: 0, fontSize: "0.85rem", opacity: 0.9 }}>
+                “On voit que tout est en direct, c’est rassurant.”
+              </p>
+            </div>
           </div>
 
           {/* Bonus par unité */}
@@ -176,10 +148,10 @@ export default function BonusSection() {
                   style={{
                     fontSize: "0.95rem",
                     color: "#c9d4e5",
-                    margin: "0 0 12px 0",
+                    marginBottom: "12px",
                   }}
                 >
-                  Valeur actuelle du BTC :{" "}
+                  BTC actuel :{" "}
                   <strong style={{ color: "#ffd966" }}>{rewardEUR} €</strong>
                 </p>
               )}
@@ -192,9 +164,7 @@ export default function BonusSection() {
                   margin: "8px 0",
                 }}
               >
-                {potentialGainPerUnit
-                  ? `${potentialGainPerUnit} €`
-                  : "Calcul..."}
+                {potentialGainPerUnit ? `${potentialGainPerUnit} €` : "Calcul..."}
               </p>
 
               <p
@@ -202,7 +172,6 @@ export default function BonusSection() {
                   fontSize: "0.85rem",
                   color: "#70c3ff",
                   marginTop: "6px",
-                  marginBottom: "0",
                 }}
               >
                 bonus symbolique par part
@@ -210,8 +179,8 @@ export default function BonusSection() {
             </div>
 
             <p style={{ marginBottom: "16px", textAlign: "center" }}>
-              Chaque part = 1 ticket.  
-              Plus vous possédez de parts, plus vos chances d’être tiré au sort augmentent.
+              Plus vous possédez de parts, plus vous avez de tickets  
+              et plus vos chances augmentent lors d’un tirage.
             </p>
 
             {/* Encadré pédagogique */}
@@ -250,13 +219,11 @@ export default function BonusSection() {
                 🔥 Tirage spécial “Bloc Trouvé”
               </h4>
               <p style={{ margin: 0, color: "#e6e6e6", fontSize: "0.9rem" }}>
-                Lorsqu’un bloc Bitcoin est détecté, un tirage exceptionnel peut
-                être déclenché avec un bonus <strong>nettement plus élevé</strong>.  
-                C’est un événement rare lié à une vraie activité du réseau.
+                Lorsqu’un bloc est détecté, un tirage exceptionnel peut se produire 
+                avec un bonus <strong>nettement plus élevé</strong>.
               </p>
             </div>
 
-            {/* Disclaimer */}
             <p
               className="bp-hero-small"
               style={{
@@ -267,12 +234,11 @@ export default function BonusSection() {
               }}
             >
               ⚠️ Expérience crypto expérimentale.  
-              Les bonus (classiques ou spéciaux) sont symboliques et non garantis.
-              Aucun rendement financier n’est promis.
+              Les bonus sont symboliques et non garantis — aucune promesse financière.
             </p>
-
           </div>
         </div>
+
       </div>
     </section>
   );

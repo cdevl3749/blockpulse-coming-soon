@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 const CLOUD_ENDPOINT = "https://blockpulse.be/.netlify/functions/status";
 const LOCAL_ENDPOINT = import.meta.env.VITE_ESP32_LOCAL_STATUS || null;
 
-// Petite fonction utilitaire pour avoir un timeout
 async function fetchWithTimeout(url, timeoutMs) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -25,16 +24,11 @@ export default function RealtimeESP() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(false);
 
-  // Historique pour sparkline
   const [hashHistory, setHashHistory] = useState([]);
-
-  // Historique pour flèche hashrate
   const prevHashrate = useRef(null);
 
-  // --- Sparkline générateur ---
   function renderSparkline(arr) {
     if (arr.length === 0) return "";
-
     const chars = ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"];
     const min = Math.min(...arr);
     const max = Math.max(...arr);
@@ -50,7 +44,6 @@ export default function RealtimeESP() {
       .join("");
   }
 
-  // --- Format tendance Hashrate ---
   function formatHashrate(hr) {
     const kh = hr / 1000;
     const formatted = kh.toFixed(1) + " KH/s";
@@ -65,10 +58,10 @@ export default function RealtimeESP() {
 
     const color =
       arrow === "↑"
-        ? "#4ade80" // vert
+        ? "#4ade80"
         : arrow === "↓"
-        ? "#f87171" // rouge
-        : "#9ca3af"; // gris
+        ? "#f87171"
+        : "#9ca3af";
 
     prevHashrate.current = hr;
 
@@ -82,7 +75,6 @@ export default function RealtimeESP() {
     );
   }
 
-  // --- Format humain “Dernière share” ---
   function formatLastShare(v) {
     if (!v) return "—";
 
@@ -98,7 +90,6 @@ export default function RealtimeESP() {
     return v;
   }
 
-  // --- Statut Mining visuel ---
   function formatMiningStatus(active) {
     return (
       <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -120,20 +111,17 @@ export default function RealtimeESP() {
     );
   }
 
-  // --- Chargement des données ---
   useEffect(() => {
     const load = async () => {
       try {
         let json = null;
 
-        // 1) Tentative ESP local
         if (LOCAL_ENDPOINT) {
           try {
             json = await fetchWithTimeout(LOCAL_ENDPOINT, 800);
           } catch {}
         }
 
-        // 2) Sinon → Cloud
         if (!json) {
           json = await fetchWithTimeout(CLOUD_ENDPOINT, 2000);
         }
@@ -141,7 +129,6 @@ export default function RealtimeESP() {
         setData(json);
         setError(false);
 
-        // Historique Hashrate Sparkline
         setHashHistory((prev) => {
           const next = [...prev, json.hashrate];
           return next.length > 20 ? next.slice(next.length - 20) : next;
@@ -185,11 +172,27 @@ export default function RealtimeESP() {
         Données du module ESP32
       </h1>
 
-      {/* --- SPARKLINE A CÔTÉ DE LA SOURCE --- */}
+      {/* 🔵 Bloc explication ajouté */}
+      <div
+        style={{
+          marginTop: "12px",
+          padding: "16px",
+          borderRadius: "12px",
+          background: "rgba(255,255,255,0.03)",
+          border: "1px solid rgba(255,255,255,0.08)",
+        }}
+      >
+        <p style={{ margin: 0, color: "#a5b4fc", fontSize: "0.9rem" }}>
+          🔍 Ces données proviennent en temps réel du module ESP32 connecté au
+          pool ViaBTC.  
+          Elles sont mises à jour automatiquement toutes les 30 secondes.
+        </p>
+      </div>
+
       <p
         style={{
           color: "#6b7280",
-          marginTop: "4px",
+          marginTop: "10px",
           display: "flex",
           alignItems: "center",
           gap: "12px",
@@ -197,23 +200,21 @@ export default function RealtimeESP() {
           fontSize: "14px",
         }}
       >
-        <span>Source : ESP32 local (si disponible) ou Cloud Netlify</span>
-       <span
-        style={{
-          color: "#00ffc8",
-          fontSize: "12px",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          letterSpacing: "1px",
-          opacity: 0.85,
-        }}
-      >
-        {renderSparkline(hashHistory)}
-      </span>
-
+        <span>Source : ESP32 local (si dispo) ou Cloud Netlify</span>
+        <span
+          style={{
+            color: "#00ffc8",
+            fontSize: "12px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            letterSpacing: "1px",
+            opacity: 0.85,
+          }}
+        >
+          {renderSparkline(hashHistory)}
+        </span>
       </p>
 
-      {/* --- GRID DES CARTES --- */}
       <div
         style={{
           display: "grid",
@@ -224,39 +225,17 @@ export default function RealtimeESP() {
       >
         <Card title="Dernier bloc" value={data.lastBlock} icon="🎯" />
         <Card title="Tickets actifs" value={data.ticketsActive} icon="🎫" />
-
-        <Card
-          title="Mining"
-          value={formatMiningStatus(data.isMining)}
-          icon="⚡"
-        />
-
+        <Card title="Mining" value={formatMiningStatus(data.isMining)} icon="⚡" />
         <Card title="Prochain tirage" value={data.nextDrawIn} icon="⏰" />
         <Card title="Pool" value={data.pool} icon="🌐" />
-
-        <Card
-          title="Hashrate"
-          value={formatHashrate(data.hashrate)}
-          icon="📈"
-        />
-
-        <Card
-          title="Shares acceptées"
-          value={data.sharesAccepted}
-          icon="✔️"
-        />
-
-        <Card
-          title="Dernière share"
-          value={formatLastShare(data.lastShareTime)}
-          icon="🕒"
-        />
+        <Card title="Hashrate" value={formatHashrate(data.hashrate)} icon="📈" />
+        <Card title="Shares acceptées" value={data.sharesAccepted} icon="✔️" />
+        <Card title="Dernière share" value={formatLastShare(data.lastShareTime)} icon="🕒" />
       </div>
     </div>
   );
 }
 
-// --- Composant de Carte ---
 function Card({ title, value, icon }) {
   return (
     <div
@@ -269,7 +248,6 @@ function Card({ title, value, icon }) {
       }}
     >
       <div style={{ fontSize: "28px" }}>{icon}</div>
-
       <h3
         style={{
           marginTop: "8px",
@@ -281,7 +259,6 @@ function Card({ title, value, icon }) {
       >
         {title}
       </h3>
-
       <p
         style={{
           marginTop: "6px",
@@ -295,3 +272,4 @@ function Card({ title, value, icon }) {
     </div>
   );
 }
+

@@ -12,6 +12,17 @@ const CONFIG = {
   TOTAL_UNITS: 5000,              // Valeur réaliste et motivante
 
   // -----------------------------------------
+  // 🎁 BONUS TEMPORAIRE
+  // -----------------------------------------
+  BONUS_TEMPORAIRE: {
+    actif: true,                // ⛔ Mettre sur false pour le désactiver
+    pourcentage: 20,            // % de bonus
+    expire: "2026-01-01",       // Date d’expiration
+    label: "Bonus limité jusqu'au 1 janvier 2026",
+    packs: [2, 3, 4, 5],        // Packs concernés : Starter, Boost, Pro, Whale
+  },
+
+  // -----------------------------------------
   // 🧩 Packs disponibles
   // -----------------------------------------
   PACKS: [

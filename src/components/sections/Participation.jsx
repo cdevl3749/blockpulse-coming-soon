@@ -86,6 +86,18 @@ export default function Participation() {
   const isMobile =
     typeof window !== "undefined" && window.innerWidth < 768;
 
+  // 🎁 Bonus temporaire (défini dans CONFIG.BONUS_TEMPORAIRE)
+  const getBonusForPack = (pack) => {
+    const bonus = CONFIG.BONUS_TEMPORAIRE;
+    if (!bonus || !bonus.actif) return null;
+    if (!Array.isArray(bonus.packs)) return null;
+
+    // On suppose que bonus.packs contient les IDs des packs (numbers)
+    if (!bonus.packs.includes(pack.id)) return null;
+
+    return bonus;
+  };
+
   // Ouvrir la popup pour un pack
   const openPaymentModal = (pack, mode = "crypto") => {
     setSelectedPack(pack);
@@ -344,6 +356,8 @@ export default function Participation() {
                 ).toFixed(2)
               : null;
 
+            const bonus = getBonusForPack(pack);
+
             return (
               <div
                 key={pack.id}
@@ -400,6 +414,28 @@ export default function Participation() {
                     }}
                   >
                     ⭐ Plus populaire
+                  </div>
+                )}
+
+                {/* Badge bonus temporaire */}
+                {bonus && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: pack.popular ? "24px" : "-12px",
+                      right: "10px",
+                      background:
+                        "linear-gradient(135deg, #ffd700, #ffae00)",
+                      color: "#111827",
+                      padding: "4px 10px",
+                      borderRadius: "999px",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      boxShadow: "0 8px 18px rgba(0,0,0,0.45)",
+                    }}
+                  >
+                    +{bonus.pourcentage}% bonus
                   </div>
                 )}
 
@@ -516,6 +552,19 @@ export default function Participation() {
                       )}{" "}
                       € / unité
                     </p>
+
+                    {bonus && (
+                      <p
+                        style={{
+                          marginTop: "8px",
+                          fontSize: "0.8rem",
+                          color: "#facc15",
+                          fontWeight: 500,
+                        }}
+                      >
+                        🎁 {bonus.label} : +{bonus.pourcentage}% de parts offertes
+                      </p>
+                    )}
                   </div>
 
                   {potentialGain && (
@@ -606,6 +655,8 @@ export default function Participation() {
               ).toFixed(2)
             : null;
 
+          const bonus = getBonusForPack(pack);
+
           return (
             <div
               key={pack.id}
@@ -644,6 +695,27 @@ export default function Participation() {
               >
                 👑 Pack VIP Whale - Exclusif
               </div>
+
+              {bonus && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "18px",
+                    right: "20px",
+                    background:
+                      "linear-gradient(135deg, #ffd700, #ffae00)",
+                    color: "#111827",
+                    padding: "4px 12px",
+                    borderRadius: "999px",
+                    fontSize: "0.8rem",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    boxShadow: "0 8px 18px rgba(0,0,0,0.45)",
+                  }}
+                >
+                  +{bonus.pourcentage}% bonus
+                </div>
+              )}
 
               <div
                 style={{
@@ -775,6 +847,20 @@ export default function Participation() {
                     )}{" "}
                     € / unité
                   </p>
+
+                  {bonus && (
+                    <p
+                      style={{
+                        marginTop: "10px",
+                        fontSize: "0.9rem",
+                        color: "#facc15",
+                        fontWeight: 600,
+                      }}
+                    >
+                      🎁 Bonus VIP : +{bonus.pourcentage}% de
+                      parts offertes
+                    </p>
+                  )}
                 </div>
 
                 {/* Séparateur */}
@@ -1031,7 +1117,7 @@ export default function Participation() {
 
               <p
                 style={{
-                  margin: "0 0 16px",
+                  margin: "0 0 12px",
                   fontSize: "0.9rem",
                   color: "var(--bp-muted)",
                   textAlign: "center",
@@ -1045,6 +1131,28 @@ export default function Participation() {
                   )}{" "}
                 €
               </p>
+
+              {/* Rappel bonus temporaire dans la modale */}
+              {getBonusForPack(selectedPack) && (
+                <p
+                  style={{
+                    margin: "0 0 16px",
+                    fontSize: "0.85rem",
+                    color: "#facc15",
+                    textAlign: "center",
+                    background:
+                      "rgba(250, 204, 21, 0.08)",
+                    borderRadius: "999px",
+                    padding: "8px 14px",
+                    border:
+                      "1px solid rgba(250, 204, 21, 0.4)",
+                  }}
+                >
+                  🎁 Bonus temporaire : +
+                  {getBonusForPack(selectedPack).pourcentage}
+                  % de parts offertes pour ce pack.
+                </p>
+              )}
 
               {/* Étape 1 : Nom + Email */}
               {!hasUserInfoSaved && (
@@ -1177,300 +1285,326 @@ export default function Participation() {
               {/* Étape 2 : instructions de paiement */}
               {hasUserInfoSaved && (
                 <>
-                 {paymentMode === "crypto" ? (
-  <>
-    <p
-      style={{
-        margin: "0 0 12px",
-        fontSize: "0.8rem",
-        color: "#ffb366",
-        textAlign: "center",
-      }}
-    >
-      ⚠️ Ne jamais envoyer de fonds vers une autre adresse que celles affichées ici sur BlockPulse.be.
-      Vérifiez toujours l'URL du site.
-    </p>
+                  {paymentMode === "crypto" ? (
+                    <>
+                      <p
+                        style={{
+                          margin: "0 0 12px",
+                          fontSize: "0.8rem",
+                          color: "#ffb366",
+                          textAlign: "center",
+                        }}
+                      >
+                        ⚠️ Ne jamais envoyer de fonds vers une autre
+                        adresse que celles affichées ici sur
+                        BlockPulse.be. Vérifiez toujours l&apos;URL
+                        du site.
+                      </p>
 
-    {/* Sélecteur BTC / ETH */}
-    <div
-      style={{
-        display: "flex",
-        gap: "8px",
-        marginBottom: "16px",
-      }}
-    >
-      <button
-        onClick={() => setSelectedCrypto("btc")}
-        style={{
-          flex: 1,
-          padding: "10px 0",
-          borderRadius: "999px",
-          border:
-            selectedCrypto === "btc"
-              ? "1px solid var(--bp-accent)"
-              : "1px solid var(--bp-border)",
-          background:
-            selectedCrypto === "btc"
-              ? "rgba(0,255,200,0.12)"
-              : "transparent",
-          color: "#fff",
-          fontSize: "0.9rem",
-          cursor: "pointer",
-        }}
-      >
-        ₿ Bitcoin
-      </button>
+                      {/* Sélecteur BTC / ETH */}
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "8px",
+                          marginBottom: "16px",
+                        }}
+                      >
+                        <button
+                          onClick={() =>
+                            setSelectedCrypto("btc")
+                          }
+                          style={{
+                            flex: 1,
+                            padding: "10px 0",
+                            borderRadius: "999px",
+                            border:
+                              selectedCrypto === "btc"
+                                ? "1px solid var(--bp-accent)"
+                                : "1px solid var(--bp-border)",
+                            background:
+                              selectedCrypto === "btc"
+                                ? "rgba(0,255,200,0.12)"
+                                : "transparent",
+                            color: "#fff",
+                            fontSize: "0.9rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          ₿ Bitcoin
+                        </button>
 
-      <button
-        onClick={() => setSelectedCrypto("eth")}
-        style={{
-          flex: 1,
-          padding: "10px 0",
-          borderRadius: "999px",
-          border:
-            selectedCrypto === "eth"
-              ? "1px solid var(--bp-accent)"
-              : "1px solid var(--bp-border)",
-          background:
-            selectedCrypto === "eth"
-              ? "rgba(0,255,200,0.12)"
-              : "transparent",
-          color: "#fff",
-          fontSize: "0.9rem",
-          cursor: "pointer",
-        }}
-      >
-        Ξ Ethereum
-      </button>
-    </div>
+                        <button
+                          onClick={() =>
+                            setSelectedCrypto("eth")
+                          }
+                          style={{
+                            flex: 1,
+                            padding: "10px 0",
+                            borderRadius: "999px",
+                            border:
+                              selectedCrypto === "eth"
+                                ? "1px solid var(--bp-accent)"
+                                : "1px solid var(--bp-border)",
+                            background:
+                              selectedCrypto === "eth"
+                                ? "rgba(0,255,200,0.12)"
+                                : "transparent",
+                            color: "#fff",
+                            fontSize: "0.9rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Ξ Ethereum
+                        </button>
+                      </div>
 
-    {/* BTC */}
-    {selectedCrypto === "btc" ? (
-      <div style={{ textAlign: "center" }}>
-        <p
-          style={{
-            fontSize: "0.9rem",
-            color: "var(--bp-muted)",
-            marginBottom: "8px",
-          }}
-        >
-          Envoyez exactement :
-        </p>
+                      {/* BTC */}
+                      {selectedCrypto === "btc" ? (
+                        <div style={{ textAlign: "center" }}>
+                          <p
+                            style={{
+                              fontSize: "0.9rem",
+                              color: "var(--bp-muted)",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            Envoyez exactement :
+                          </p>
 
-        <p
-          style={{
-            fontSize: "1.4rem",
-            fontWeight: "600",
-            margin: "0 0 4px",
-          }}
-        >
-          {packBtcAmount || "..."} BTC
-        </p>
+                          <p
+                            style={{
+                              fontSize: "1.4rem",
+                              fontWeight: "600",
+                              margin: "0 0 4px",
+                            }}
+                          >
+                            {packBtcAmount || "..."} BTC
+                          </p>
 
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--bp-muted)",
-            margin: "0 0 16px",
-          }}
-        >
-          (~ {packPriceEUR || "…"} € au taux actuel)
-        </p>
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              margin: "0 0 16px",
+                            }}
+                          >
+                            (~ {packPriceEUR || "…"} € au taux
+                            actuel)
+                          </p>
 
-        {/* QR BTC */}
-        <img
-          src={btcQrUrl}
-          alt="QR Bitcoin"
-          style={{
-            width: "160px",
-            height: "160px",
-            borderRadius: "12px",
-            margin: "12px auto",
-            display: "block",
-          }}
-        />
+                          {/* QR BTC */}
+                          <img
+                            src={btcQrUrl}
+                            alt="QR Bitcoin"
+                            style={{
+                              width: "160px",
+                              height: "160px",
+                              borderRadius: "12px",
+                              margin: "12px auto",
+                              display: "block",
+                            }}
+                          />
 
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--bp-muted)",
-            marginBottom: "4px",
-          }}
-        >
-          Adresse BTC :
-        </p>
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            Adresse BTC :
+                          </p>
 
-        <p
-          style={{
-            fontSize: "0.9rem",
-            wordBreak: "break-all",
-            marginBottom: "10px",
-          }}
-        >
-          {BTC_ADDRESS}
-        </p>
+                          <p
+                            style={{
+                              fontSize: "0.9rem",
+                              wordBreak: "break-all",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            {BTC_ADDRESS}
+                          </p>
 
-        <button
-          onClick={() => copyToClipboard(BTC_ADDRESS, "btc")}
-          style={{
-            padding: "8px 12px",
-            borderRadius: "999px",
-            border:
-              copiedAddress === "btc"
-                ? "1px solid var(--bp-accent)"
-                : "1px solid var(--bp-border)",
-            background:
-              copiedAddress === "btc"
-                ? "rgba(0, 255, 200, 0.12)"
-                : "transparent",
-            color:
-              copiedAddress === "btc"
-                ? "var(--bp-accent)"
-                : "var(--bp-muted)",
-            fontSize: "0.85rem",
-            cursor: "pointer",
-            width: "100%",
-            marginBottom: "6px",
-          }}
-        >
-          {copiedAddress === "btc" ? "✓ Copié !" : "Copier l'adresse BTC"}
-        </button>
-      </div>
-    ) : (
-      /* ETH */
-      <div style={{ textAlign: "center" }}>
-        <p
-          style={{
-            fontSize: "0.9rem",
-            color: "var(--bp-muted)",
-            marginBottom: "8px",
-          }}
-        >
-          Envoyez exactement :
-        </p>
+                          <button
+                            onClick={() =>
+                              copyToClipboard(
+                                BTC_ADDRESS,
+                                "btc"
+                              )
+                            }
+                            style={{
+                              padding: "8px 12px",
+                              borderRadius: "999px",
+                              border:
+                                copiedAddress === "btc"
+                                  ? "1px solid var(--bp-accent)"
+                                  : "1px solid var(--bp-border)",
+                              background:
+                                copiedAddress === "btc"
+                                  ? "rgba(0, 255, 200, 0.12)"
+                                  : "transparent",
+                              color:
+                                copiedAddress === "btc"
+                                  ? "var(--bp-accent)"
+                                  : "var(--bp-muted)",
+                              fontSize: "0.85rem",
+                              cursor: "pointer",
+                              width: "100%",
+                              marginBottom: "6px",
+                            }}
+                          >
+                            {copiedAddress === "btc"
+                              ? "✓ Copié !"
+                              : "Copier l'adresse BTC"}
+                          </button>
+                        </div>
+                      ) : (
+                        /* ETH */
+                        <div style={{ textAlign: "center" }}>
+                          <p
+                            style={{
+                              fontSize: "0.9rem",
+                              color: "var(--bp-muted)",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            Envoyez exactement :
+                          </p>
 
-        <p
-          style={{
-            fontSize: "1.4rem",
-            fontWeight: "600",
-            margin: "0 0 4px",
-          }}
-        >
-          {packEthAmount || "..."} ETH
-        </p>
+                          <p
+                            style={{
+                              fontSize: "1.4rem",
+                              fontWeight: "600",
+                              margin: "0 0 4px",
+                            }}
+                          >
+                            {packEthAmount || "..."} ETH
+                          </p>
 
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--bp-muted)",
-            margin: "0 0 16px",
-          }}
-        >
-          (~ {packPriceEUR || "…"} € au taux actuel)
-        </p>
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              margin: "0 0 16px",
+                            }}
+                          >
+                            (~ {packPriceEUR || "…"} € au taux
+                            actuel)
+                          </p>
 
-        {/* QR ETH */}
-        <img
-          src={ethQrUrl}
-          alt="QR Ethereum"
-          style={{
-            width: "160px",
-            height: "160px",
-            borderRadius: "12px",
-            margin: "12px auto",
-            display: "block",
-          }}
-        />
+                          {/* QR ETH */}
+                          <img
+                            src={ethQrUrl}
+                            alt="QR Ethereum"
+                            style={{
+                              width: "160px",
+                              height: "160px",
+                              borderRadius: "12px",
+                              margin: "12px auto",
+                              display: "block",
+                            }}
+                          />
 
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--bp-muted)",
-            marginBottom: "4px",
-          }}
-        >
-          Adresse ETH :
-        </p>
+                          <p
+                            style={{
+                              fontSize: "0.8rem",
+                              color: "var(--bp-muted)",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            Adresse ETH :
+                          </p>
 
-        <p
-          style={{
-            fontSize: "0.9rem",
-            wordBreak: "break-all",
-            marginBottom: "10px",
-          }}
-        >
-          {ETH_ADDRESS}
-        </p>
+                          <p
+                            style={{
+                              fontSize: "0.9rem",
+                              wordBreak: "break-all",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            {ETH_ADDRESS}
+                          </p>
 
-        <button
-          onClick={() => copyToClipboard(ETH_ADDRESS, "eth")}
-          style={{
-            padding: "8px 12px",
-            borderRadius: "999px",
-            border:
-              copiedAddress === "eth"
-                ? "1px solid var(--bp-accent)"
-                : "1px solid var(--bp-border)",
-            background:
-              copiedAddress === "eth"
-                ? "rgba(0, 255, 200, 0.12)"
-                : "transparent",
-            color:
-              copiedAddress === "eth"
-                ? "var(--bp-accent)"
-                : "var(--bp-muted)",
-            fontSize: "0.85rem",
-            cursor: "pointer",
-            width: "100%",
-            marginBottom: "6px",
-          }}
-        >
-          {copiedAddress === "eth" ? "✓ Copié !" : "Copier l'adresse ETH"}
-        </button>
-      </div>
-    )}
+                          <button
+                            onClick={() =>
+                              copyToClipboard(
+                                ETH_ADDRESS,
+                                "eth"
+                              )
+                            }
+                            style={{
+                              padding: "8px 12px",
+                              borderRadius: "999px",
+                              border:
+                                copiedAddress === "eth"
+                                  ? "1px solid var(--bp-accent)"
+                                  : "1px solid var(--bp-border)",
+                              background:
+                                copiedAddress === "eth"
+                                  ? "rgba(0, 255, 200, 0.12)"
+                                  : "transparent",
+                              color:
+                                copiedAddress === "eth"
+                                  ? "var(--bp-accent)"
+                                  : "var(--bp-muted)",
+                              fontSize: "0.85rem",
+                              cursor: "pointer",
+                              width: "100%",
+                              marginBottom: "6px",
+                            }}
+                          >
+                            {copiedAddress === "eth"
+                              ? "✓ Copié !"
+                              : "Copier l'adresse ETH"}
+                          </button>
+                        </div>
+                      )}
 
-    {/* ⭐⭐ CONFIRMATION — LE BOUTON QUI MANQUAIT ⭐⭐ */}
-    {!paymentConfirmed && (
-      <button
-        onClick={handleConfirmPayment}
-        style={{
-          width: "100%",
-          marginTop: "16px",
-          padding: "12px",
-          borderRadius: "999px",
-          background: "rgba(0,255,200,0.12)",
-          border: "1px solid var(--bp-accent)",
-          color: "var(--bp-accent)",
-          fontSize: "0.9rem",
-          fontWeight: 600,
-          cursor: "pointer",
-        }}
-      >
-        ✅ J'ai effectué mon paiement
-      </button>
-    )}
+                      {/* Bouton confirmation paiement crypto */}
+                      {!paymentConfirmed && (
+                        <button
+                          onClick={handleConfirmPayment}
+                          style={{
+                            width: "100%",
+                            marginTop: "16px",
+                            padding: "12px",
+                            borderRadius: "999px",
+                            background:
+                              "rgba(0,255,200,0.12)",
+                            border:
+                              "1px solid var(--bp-accent)",
+                            color: "var(--bp-accent)",
+                            fontSize: "0.9rem",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                          }}
+                        >
+                          ✅ J&apos;ai effectué mon paiement
+                        </button>
+                      )}
 
-    {paymentConfirmed && (
-      <div
-        style={{
-          marginTop: "12px",
-          textAlign: "center",
-          background: "rgba(0,255,200,0.12)",
-          borderRadius: "8px",
-          padding: "10px",
-          border: "1px solid var(--bp-accent)",
-          color: "var(--bp-accent)",
-        }}
-      >
-        💚 Paiement enregistré !  
-        Nous confirmerons l’activation de votre pack.
-      </div>
-    )}
-  </>
-) : (
-  <>
-
+                      {paymentConfirmed && (
+                        <div
+                          style={{
+                            marginTop: "12px",
+                            textAlign: "center",
+                            background:
+                              "rgba(0,255,200,0.12)",
+                            borderRadius: "8px",
+                            padding: "10px",
+                            border:
+                              "1px solid var(--bp-accent)",
+                            color: "var(--bp-accent)",
+                          }}
+                        >
+                          💚 Paiement enregistré !  
+                          Nous confirmerons l’activation de
+                          votre pack.
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
                       {/* MODE VIREMENT SEPA */}
                       {!paymentConfirmed && (
                         <>
@@ -1619,7 +1753,7 @@ export default function Participation() {
                             cursor: "pointer",
                           }}
                         >
-                          J'ai effectué mon paiement
+                          J&apos;ai effectué mon paiement
                         </button>
                       )}
 
@@ -1799,4 +1933,5 @@ export default function Participation() {
     </section>
   );
 }
+
 

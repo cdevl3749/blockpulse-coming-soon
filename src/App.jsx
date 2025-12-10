@@ -21,6 +21,7 @@ import MonEspace from "./pages/MonEspace.jsx";
 import AdminClients from "./pages/AdminClients.jsx";
 
 
+
 // Composant interne pour gérer le scroll
 function ScrollToTop() {
   const { pathname } = useLocation();

@@ -33,7 +33,7 @@ export default function ModalAbout({ open, onClose }) {
           en Belgique.
         </p>
 
-        <a href="mailto:cdevl3749@gmail.com" className="bp-modal-btn">
+        <a href="mailto:contact@blockpulse.be" className="bp-modal-btn">
           Me contacter
         </a>
 

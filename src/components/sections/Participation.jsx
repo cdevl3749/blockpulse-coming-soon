@@ -40,14 +40,46 @@ const ETH_ADDRESS = "0x3704c62AB88B9a462f81495Eb75Bf57E504bb167";
 
 // Coordonnées bancaires (virement SEPA)
 const BANK_IBAN = "BE23 0637 6823 5991";
-const BANK_HOLDER = "Christophe Devleeshouwer";
+const BANK_HOLDER = "Christophe Devleeshouwer (BlockPulse)";
+
+// Construit la string EPC QR SEPA (standard européen)
+function buildSepaEpcQrData({ name, iban, amount, remittance }) {
+  const serviceTag = "BCD";
+  const version = "001";
+  const encoding = "1";
+  const sepaType = "SCT";
+  const bic = ""; // optionnel
+  const trimmedName = (name || "").substring(0, 70);
+  const trimmedRemittance = (remittance || "").substring(0, 140);
+
+  const cleanIban = (iban || "").replace(/\s+/g, "");
+  const amt =
+    typeof amount === "number"
+      ? amount.toFixed(2)
+      : Number(amount || 0).toFixed(2);
+
+  const lines = [
+    serviceTag,
+    version,
+    encoding,
+    sepaType,
+    bic,
+    trimmedName,
+    cleanIban,
+    `EUR${amt}`,
+    "",
+    trimmedRemittance,
+  ];
+
+  return lines.join("\n");
+}
 
 export default function Participation() {
   const [btcPrice, setBtcPrice] = useState(null);
   const [ethPrice, setEthPrice] = useState(null);
   const [selectedPack, setSelectedPack] = useState(null); // pack sélectionné
   const [selectedCrypto, setSelectedCrypto] = useState("btc"); // "btc" ou "eth"
-  const [copiedAddress, setCopiedAddress] = useState(null); // "btc" | "eth" | "iban" | null
+  const [copiedAddress, setCopiedAddress] = useState(null); // "btc" | "eth" | "iban" | "sepaRef" | null
   const [paymentMode, setPaymentMode] = useState("crypto"); // "crypto" ou "bank"
 
   // ⚠ Nouveaux états pour Nom / Email / confirmation
@@ -170,6 +202,31 @@ export default function Participation() {
   const ethQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=ethereum:${ETH_ADDRESS}${
     packEthAmount ? `?amount=${packEthAmount}` : ""
   }`;
+
+  // Montant / communication pour le virement SEPA + QR EPC
+  const sepaAmount =
+    selectedPack &&
+    (packPriceEUR ||
+      CONFIG.getPackPrice(selectedPack.units, selectedPack.savings));
+
+  const sepaCommunication =
+    selectedPack && userEmail.trim()
+      ? `BLOCKPULSE ${selectedPack.label.toUpperCase()} ${userEmail.trim()}`
+      : selectedPack
+      ? `BLOCKPULSE ${selectedPack.label.toUpperCase()}`
+      : "BLOCKPULSE";
+
+  const sepaQrUrl =
+    selectedPack && sepaAmount
+      ? `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
+          buildSepaEpcQrData({
+            name: BANK_HOLDER,
+            iban: BANK_IBAN,
+            amount: parseFloat(sepaAmount),
+            remittance: sepaCommunication,
+          })
+        )}`
+      : null;
 
   // ✅ Sauvegarde Nom + Email (étape 1)
   const handleSaveUserInfo = async () => {
@@ -1610,59 +1667,78 @@ export default function Participation() {
                         <>
                           <p
                             style={{
-                              margin: "0 0 12px",
+                              margin: "0 0 10px",
                               fontSize: "0.85rem",
-                              color: "#ffb366",
+                              color: "#e5e7eb",
                               textAlign: "center",
                             }}
                           >
-                            Effectuez un virement SEPA depuis
-                            votre application bancaire. Votre
-                            pack sera activé dès réception.
+                            Scannez le QR SEPA avec votre application bancaire
+                            (ING, Belfius, KBC, BNP, Argenta, etc.).{" "}
+                            <strong>
+                              Ne scannez pas ce QR avec l&apos;appareil photo ou
+                              une app QR générique.
+                            </strong>{" "}
+                            Vous pouvez aussi utiliser les informations
+                            ci-dessous pour effectuer votre virement.
                           </p>
+
+                          {sepaQrUrl && (
+                            <div
+                              style={{
+                                textAlign: "center",
+                                marginBottom: "12px",
+                              }}
+                            >
+                              <img
+                                src={sepaQrUrl}
+                                alt="QR virement SEPA"
+                                style={{
+                                  width: "170px",
+                                  height: "170px",
+                                  borderRadius: "12px",
+                                  margin: "8px auto",
+                                  display: "block",
+                                }}
+                              />
+                              <p
+                                style={{
+                                  fontSize: "0.75rem",
+                                  color: "var(--bp-muted)",
+                                  marginTop: "4px",
+                                }}
+                              >
+                                La plupart des banques belges reconnaissent ce
+                                QR et pré-remplissent automatiquement le
+                                virement.
+                              </p>
+                            </div>
+                          )}
 
                           <div
                             style={{
-                              background:
-                                "rgba(15,23,42,0.9)",
+                              background: "rgba(15,23,42,0.9)",
                               borderRadius: "12px",
                               padding: "12px 14px",
-                              marginBottom: "12px",
-                              border:
-                                "1px solid var(--bp-border)",
+                              marginBottom: "10px",
+                              border: "1px solid var(--bp-border)",
                               fontSize: "0.9rem",
                             }}
                           >
-                            <p
-                              style={{ margin: "0 0 6px" }}
-                            >
-                              <strong>
-                                Bénéficiaire :
-                              </strong>{" "}
+                            <p style={{ margin: "0 0 6px" }}>
+                              <strong>Bénéficiaire :</strong>{" "}
                               {BANK_HOLDER}
                             </p>
 
-                            <p
-                              style={{ margin: "0 0 6px" }}
-                            >
+                            <p style={{ margin: "0 0 6px" }}>
                               <strong>IBAN :</strong>{" "}
-                              <span
-                                style={{
-                                  wordBreak: "break-all",
-                                }}
-                              >
+                              <span style={{ wordBreak: "break-all" }}>
                                 {BANK_IBAN}
                               </span>
                             </p>
 
                             <p style={{ margin: 0 }}>
-                              <strong>Montant :</strong>{" "}
-                              {packPriceEUR ||
-                                CONFIG.getPackPrice(
-                                  selectedPack.units,
-                                  selectedPack.savings
-                                )}{" "}
-                              €
+                              <strong>Montant :</strong> {sepaAmount} €
                             </p>
                           </div>
 
@@ -1670,32 +1746,19 @@ export default function Participation() {
                             style={{
                               fontSize: "0.85rem",
                               color: "var(--bp-muted)",
-                              marginBottom: "10px",
+                              marginBottom: "6px",
                             }}
                           >
-                            <strong>
-                              Communication :
-                            </strong>{" "}
-                            <span
-                              style={{
-                                color: "#e5e7eb",
-                              }}
-                            >
-                              BLOCKPULSE{" "}
-                              {selectedPack.label.toUpperCase()}{" "}
-                              + votre email
+                            <strong>Communication :</strong>{" "}
+                            <span style={{ color: "#e5e7eb" }}>
+                              {sepaCommunication}
                             </span>
                           </p>
 
                           <button
-                            onClick={() =>
-                              copyToClipboard(
-                                BANK_IBAN,
-                                "iban"
-                              )
-                            }
+                            onClick={() => copyToClipboard(BANK_IBAN, "iban")}
                             style={{
-                              padding: "10px 12px",
+                              padding: "9px 12px",
                               borderRadius: "999px",
                               border:
                                 copiedAddress === "iban"
@@ -1712,13 +1775,44 @@ export default function Participation() {
                               fontSize: "0.9rem",
                               cursor: "pointer",
                               width: "100%",
-                              marginBottom: "8px",
+                              marginBottom: "6px",
                               transition: "all 0.2s ease",
                             }}
                           >
                             {copiedAddress === "iban"
                               ? "✓ IBAN copié"
                               : "Copier l'IBAN"}
+                          </button>
+
+                          <button
+                            onClick={() =>
+                              copyToClipboard(sepaCommunication, "sepaRef")
+                            }
+                            style={{
+                              padding: "9px 12px",
+                              borderRadius: "999px",
+                              border:
+                                copiedAddress === "sepaRef"
+                                  ? "1px solid var(--bp-accent)"
+                                  : "1px solid var(--bp-border)",
+                              background:
+                                copiedAddress === "sepaRef"
+                                  ? "rgba(0, 255, 200, 0.12)"
+                                  : "transparent",
+                              color:
+                                copiedAddress === "sepaRef"
+                                  ? "var(--bp-accent)"
+                                  : "var(--bp-muted)",
+                              fontSize: "0.9rem",
+                              cursor: "pointer",
+                              width: "100%",
+                              marginBottom: "8px",
+                              transition: "all 0.2s ease",
+                            }}
+                          >
+                            {copiedAddress === "sepaRef"
+                              ? "✓ Communication copiée"
+                              : "Copier la communication"}
                           </button>
 
                           <p
@@ -1728,9 +1822,8 @@ export default function Participation() {
                               textAlign: "center",
                             }}
                           >
-                            Dès que le virement est reçu, vos
-                            parts seront ajoutées sur BlockPulse
-                            (en général sous 24h ouvrables).
+                            Une fois le virement envoyé, cliquez sur le bouton
+                            ci-dessous pour enregistrer votre participation.
                           </p>
                         </>
                       )}
@@ -1740,13 +1833,11 @@ export default function Participation() {
                           onClick={handleConfirmPayment}
                           style={{
                             width: "100%",
-                            marginTop: "14px",
+                            marginTop: "10px",
                             padding: "10px 12px",
                             borderRadius: "999px",
-                            border:
-                              "1px solid var(--bp-accent)",
-                            background:
-                              "rgba(0,255,200,0.1)",
+                            border: "1px solid var(--bp-accent)",
+                            background: "rgba(0,255,200,0.1)",
                             color: "var(--bp-accent)",
                             fontSize: "0.9rem",
                             fontWeight: 600,
@@ -1761,27 +1852,21 @@ export default function Participation() {
                         <div
                           style={{
                             marginTop: "10px",
-                            background:
-                              "rgba(0, 255, 200, 0.1)",
+                            background: "rgba(0, 255, 200, 0.1)",
                             borderRadius: "8px",
-                            border:
-                              "1px solid rgba(0,255,200,0.4)",
+                            border: "1px solid rgba(0,255,200,0.4)",
                             padding: "10px 12px",
                             fontSize: "0.85rem",
                             color: "#d1fae5",
                             textAlign: "center",
                           }}
                         >
-                          💚{" "}
-                          <strong>
-                            Paiement enregistré !
-                          </strong>
+                          💚 <strong>Paiement enregistré !</strong>
                           <br />
-                          Merci pour votre participation.
-                          Dès que votre paiement sera reçu
-                          (SEPA : généralement sous 24h), votre
-                          pack sera activé et vous recevrez un
-                          message de confirmation.
+                          Merci pour votre participation. Dès que votre paiement
+                          sera reçu (SEPA : généralement sous 24h), votre pack
+                          sera activé et vous recevrez un message de
+                          confirmation.
                         </div>
                       )}
                     </>
@@ -1933,5 +2018,3 @@ export default function Participation() {
     </section>
   );
 }
-
-

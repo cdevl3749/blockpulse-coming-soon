@@ -78,23 +78,33 @@ export default function Hero() {
         </div>
 
         {/* Carte système */}
-        <div className="bp-hero-card">
-          <h3>Statut du module en direct</h3>
-          <ul>
-            <li><span>Connexion pool :</span> ViaBTC</li>
-            <li><span>Protocole :</span> Stratum V1</li>
-            <li><span>Actualisation :</span> toutes les 5 secondes</li>
-            <li>
-              <span>Statut :</span>
-              <span className="bp-status bp-status-on"> ONLINE</span>
-            </li>
-          </ul>
+<div className="bp-hero-card">
+  <h3>Statut du module en direct</h3>
 
-          <p className="bp-hero-note">
-            Le module ESP32 envoie les données techniques utilisées pour les tirages.
-            En cas d'indisponibilité, une source cloud de secours prend le relais.
-          </p>
-        </div>
+  <ul>
+    <li><span>Connexion pool :</span> ViaBTC</li>
+    <li><span>Protocole :</span> Stratum V1</li>
+    <li><span>Actualisation :</span> toutes les 5 secondes</li>
+    <li>
+      <span>Statut :</span>
+      <span className="bp-status bp-status-on"> ONLINE</span>
+    </li>
+  </ul>
+
+ <div className="bp-status-hosting">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="#00d26a" style={{marginRight: "6px"}}>
+    <path d="M20.285 6.709l-11.01 11.01-5.657-5.657 1.414-1.414 4.243 4.243 9.596-9.596z"/>
+  </svg>
+  Hébergé en Belgique
+</div>
+
+
+  <p className="bp-hero-note">
+    Le module ESP32 envoie les données techniques utilisées pour les tirages.
+    En cas d'indisponibilité, une source cloud de secours prend le relais.
+  </p>
+</div>
+
 
       </div>
 

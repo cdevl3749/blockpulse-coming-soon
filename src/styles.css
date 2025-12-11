@@ -59,13 +59,13 @@ a {
 }
 
 .bp-header-inner {
-  max-width: 1120px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 14px 20px;
+  padding: 14px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
 /* ======================= */
@@ -77,6 +77,13 @@ a {
   gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
+}
+
+.bp-logo-round {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
 }
 
 .bp-logo-icon {
@@ -147,6 +154,75 @@ a {
   width: 100%;
 }
 
+/* ======================= */
+/*    HEADER RIGHT SIDE    */
+/* ======================= */
+.bp-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+/* === BADGE BELGIQUE === */
+.bp-badge-belgium {
+  background: #14293d;
+  color: #a8e0ff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  border: 1px solid #1f3b54;
+  white-space: nowrap;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  height: 32px;
+}
+
+/* === VISITEURS === */
+.bp-visitors {
+  background: #112e1a;
+  color: #8affb9;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  border: 1px solid #1d4d2d;
+  white-space: nowrap;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  height: 32px;
+}
+
+/* === TICKER BTC === */
+.bp-ticker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #161616;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  color: #f8d36a;
+  font-weight: 600;
+  white-space: nowrap;
+  height: 32px;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.bp-ticker-label {
+  opacity: 0.8;
+  font-size: 13px;
+}
+
+.bp-ticker-value {
+  font-weight: bold;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
 /* Mobile menu toggle */
 .bp-menu-toggle {
   display: none;
@@ -157,31 +233,255 @@ a {
   cursor: pointer;
   padding: 4px;
   line-height: 1;
-}
-
-/* ======================= */
-/*        BTC TICKER       */
-/* ======================= */
-.bp-ticker {
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 220, 0, 0.6);
-  background: rgba(255, 220, 0, 0.08);
-  font-size: 0.88rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
   flex-shrink: 0;
 }
 
-.bp-ticker-label {
-  font-weight: 600;
-  color: #ffe57f;
+/* ======================= */
+/*      RESPONSIVE         */
+/* ======================= */
+
+/* Tablette grande (1200px - 1024px) */
+@media (max-width: 1200px) {
+  .bp-header-inner {
+    gap: 16px;
+  }
+  
+  .bp-nav {
+    gap: 18px;
+  }
+  
+  .bp-header-right {
+    gap: 10px;
+  }
 }
 
-.bp-ticker-value {
-  font-weight: 500;
+/* Tablette moyenne (1024px - 900px) */
+@media (max-width: 1024px) {
+  .bp-nav {
+    gap: 16px;
+    font-size: 0.9rem;
+  }
+  
+  .bp-header-right {
+    gap: 8px;
+  }
+  
+  .bp-badge-belgium,
+  .bp-visitors,
+  .bp-ticker {
+    padding: 5px 10px;
+    font-size: 12px;
+    height: 30px;
+  }
+  
+  .bp-ticker {
+    min-width: 140px;
+  }
+  
+  .bp-ticker-label,
+  .bp-ticker-value {
+    font-size: 12px;
+  }
+}
+
+/* Tablette petite (900px - 768px) */
+@media (max-width: 900px) {
+  .bp-header-inner {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  
+  .bp-nav {
+    gap: 14px;
+  }
+  
+  .bp-logo-label {
+    font-size: 1.15rem;
+  }
+  
+  .bp-logo-round {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Mobile (768px et moins) */
+@media (max-width: 768px) {
+  .bp-header-inner {
+    flex-wrap: nowrap;
+    position: relative;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  
+  /* Navigation mobile */
+  .bp-nav {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(2, 8, 22, 0.98);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(0, 255, 200, 0.12);
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    z-index: 998;
+  }
+
+  .bp-nav.open {
+    max-height: 500px;
+  }
+
+  .bp-nav a {
+    width: 100%;
+    padding: 16px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .bp-nav a::after {
+    display: none;
+  }
+  
+  /* Header right - HORIZONTAL sur mobile */
+  .bp-header-right {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    margin-right: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  
+  .bp-badge-belgium,
+  .bp-visitors,
+  .bp-ticker {
+    padding: 5px 10px;
+    font-size: 11px;
+    height: 28px;
+  }
+  
+  .bp-ticker {
+    min-width: 130px;
+    padding: 5px 12px;
+  }
+  
+  .bp-ticker-label,
+  .bp-ticker-value {
+    font-size: 11px;
+  }
+  
+  /* Menu toggle visible */
+  .bp-menu-toggle {
+    display: block;
+    order: 3;
+  }
+  
+  /* Réorganisation de l'ordre */
+  .bp-header-logo {
+    order: 1;
+  }
+  
+  .bp-header-right {
+    order: 2;
+  }
+  
+  .bp-logo-label {
+    font-size: 1.1rem;
+  }
+  
+  .bp-logo-round {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Très petit mobile (600px et moins) */
+@media (max-width: 600px) {
+  .bp-header-inner {
+    padding: 10px 12px;
+  }
+  
+  .bp-header-right {
+    gap: 5px;
+    max-width: 50%;
+  }
+  
+  .bp-badge-belgium,
+  .bp-visitors,
+  .bp-ticker {
+    padding: 4px 8px;
+    font-size: 10px;
+    height: 26px;
+  }
+  
+  .bp-ticker {
+    min-width: 110px;
+    padding: 4px 8px;
+  }
+  
+  .bp-ticker-label,
+  .bp-ticker-value {
+    font-size: 10px;
+  }
+  
+  .bp-logo-label {
+    font-size: 1rem;
+  }
+  
+  .bp-logo-round {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .bp-menu-toggle {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mini mobile (400px et moins) */
+@media (max-width: 400px) {
+  .bp-header-inner {
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .bp-header-right {
+    gap: 4px;
+    max-width: 55%;
+  }
+  
+  /* Badges encore plus compacts */
+  .bp-badge-belgium,
+  .bp-visitors {
+    font-size: 9px;
+    padding: 3px 6px;
+    height: 24px;
+  }
+  
+  .bp-ticker {
+    min-width: 100px;
+    padding: 3px 6px;
+    height: 24px;
+  }
+  
+  .bp-ticker-label,
+  .bp-ticker-value {
+    font-size: 9px;
+  }
+  
+  .bp-logo-label {
+    font-size: 0.9rem;
+  }
+  
+  .bp-logo-round {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 /* APP LAYOUT */
@@ -1262,6 +1562,10 @@ a {
   display: block;
 }
 
+  .bp-ticker {
+    max-width: 120px;
+  }
+
 @media (max-width: 600px) {
   .bp-hero {
     padding-top: 48px;
@@ -1298,6 +1602,185 @@ a {
   transform: translateY(-6px);
   border-color: var(--bp-accent) !important;
   box-shadow: 0 16px 40px rgba(0, 255, 200, 0.12);
+}
+
+/* ============================================================
+   HEADER — VERSION OPTIMISÉE, STABLE & RESPONSIVE
+   Remplace tout ancien code lié au header par celui-ci
+   Et place ce bloc tout en bas du fichier CSS.
+============================================================ */
+
+/* Zone droite du header */
+.bp-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Badge Belgique */
+.bp-badge-belgium {
+  display: flex;
+  align-items: center;
+  background: rgba(20, 45, 70, 0.9);
+  color: #a8e0ff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid rgba(80, 140, 200, 0.35);
+  white-space: nowrap;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+/* compteur visiteurs */
+.bp-visitors {
+  display: flex;
+  align-items: center;
+  background: rgba(15, 60, 30, 0.9);
+  color: #8affb9;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid rgba(40, 120, 70, 0.35);
+  white-space: nowrap;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+/* Ticker BTC premium */
+.bp-ticker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(180deg, #1b1b1b, #0d0d0d);
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 230, 120, 0.35);
+  color: #ffda74;
+  font-weight: 600;
+  white-space: nowrap;
+  height: 32px;
+  min-width: 150px;
+  justify-content: center;
+}
+
+.bp-ticker-label {
+  opacity: 0.8;
+  font-size: 12px;
+}
+
+.bp-ticker-value {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ========================== */
+/*   RESPONSIVE HEADER        */
+/* ========================== */
+
+/* 1024px */
+@media (max-width: 1024px) {
+  .bp-badge-belgium,
+  .bp-visitors,
+  .bp-ticker {
+    padding: 5px 10px;
+    height: 30px;
+    font-size: 12px;
+  }
+  .bp-ticker {
+    min-width: 130px;
+  }
+}
+
+/* 768px — version mobile */
+@media (max-width: 768px) {
+  .bp-header-inner {
+    padding: 10px 14px;
+    gap: 12px;
+  }
+
+  .bp-header-right {
+    order: 2;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+    width: 65%;
+  }
+
+  .bp-menu-toggle {
+    display: block;
+    order: 3;
+  }
+
+  .bp-badge-belgium,
+  .bp-visitors,
+  .bp-ticker {
+    padding: 4px 10px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .bp-ticker {
+    min-width: 120px;
+  }
+}
+
+/* 600px */
+@media (max-width: 600px) {
+  .bp-header-right {
+    max-width: 58%;
+    gap: 5px;
+  }
+
+  .bp-badge-belgium,
+  .bp-visitors,
+  .bp-ticker {
+    padding: 4px 8px;
+    height: 26px;
+    font-size: 10px;
+  }
+
+  .bp-ticker {
+    min-width: 110px;
+  }
+}
+
+/* 400px */
+@media (max-width: 400px) {
+  .bp-header-right {
+    max-width: 60%;
+    gap: 4px;
+  }
+
+  .bp-badge-belgium,
+  .bp-visitors {
+    padding: 3px 6px;
+    height: 24px;
+    font-size: 9px;
+  }
+
+  .bp-ticker {
+    padding: 3px 6px;
+    height: 24px;
+    min-width: 95px;
+  }
+
+  .bp-ticker-label,
+  .bp-ticker-value {
+    font-size: 9px;
+  }
+}
+
+.bp-status-hosting {
+  margin-top: 12px;
+  padding: 6px 12px;
+  display: inline-block;
+  border-radius: 6px;
+  background: rgba(0, 255, 0, 0.1);
+  color: #00d26a;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 }

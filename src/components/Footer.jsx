@@ -158,6 +158,39 @@ export default function Footer() {
           </p>
         </div>
 
+        <div style={{ textAlign: "center", marginBottom: "25px" }}>
+  <a
+    href="https://www.linkedin.com/in/christophe-devleeshouwer-882377399/"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "10px",
+      fontSize: "0.95rem",
+      color: "var(--bp-muted)",
+      textDecoration: "none",
+      transition: "0.2s ease",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--bp-accent)")}
+    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--bp-muted)")}
+  >
+    {/* Logo LinkedIn */}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="#ffffff"
+      style={{ opacity: 0.8 }}
+    >
+      <path d="M4.98 3.5C4.98 4.60457 4.08457 5.5 2.98 5.5C1.87543 5.5 0.98 4.60457 0.98 3.5C0.98 2.39543 1.87543 1.5 2.98 1.5C4.08457 1.5 4.98 2.39543 4.98 3.5ZM5 8H1V23H5V8ZM13.5 8C10.95 8 10 9.79 10 11.5V23H14V15C14 13.9 14.9 13 16 13C17.1 13 18 13.9 18 15V23H22V14.5C22 10.36 19.5 8 16.5 8C15.05 8 13.93 8.69 13.5 9.5V8H13.5Z" />
+    </svg>
+
+    <span style={{ opacity: 0.9 }}>Christophe Devleeshouwer</span>
+  </a>
+</div>
+
         {/* Copyright */}
         <div className="bp-footer-bottom" style={{ marginTop: "10px" }}>
           <p>© {year} BlockPulse.be — Tous droits réservés</p>

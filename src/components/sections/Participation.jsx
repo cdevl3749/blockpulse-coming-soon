@@ -610,6 +610,21 @@ export default function Participation() {
                       € / unité
                     </p>
 
+                   <p
+                      style={{
+                        marginTop: "10px",
+                        fontSize: "0.85rem",
+                        color: "#d0d7ef",
+                        opacity: 0.9,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <span style={{ fontSize: "1rem" }}>🔒</span>
+                      Sans abonnement — paiement unique
+                    </p>
+
                     {bonus && (
                       <p
                         style={{
@@ -904,6 +919,21 @@ export default function Participation() {
                     )}{" "}
                     € / unité
                   </p>
+                  
+                  <p
+                      style={{
+                        marginTop: "10px",
+                        fontSize: "0.85rem",
+                        color: "#d0d7ef",
+                        opacity: 0.9,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <span style={{ fontSize: "1rem" }}>🔒</span>
+                      Sans abonnement — paiement unique
+                    </p>
 
                   {bonus && (
                     <p

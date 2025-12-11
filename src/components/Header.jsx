@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const [btc, setBtc] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [visitors, setVisitors] = useState(12); // valeur initiale réaliste
   const location = useLocation();
 
   async function fetchBTC() {
@@ -15,6 +16,16 @@ export default function Header() {
       console.log("Erreur BTC :", e);
     }
   }
+
+  // 🔵 Compteur visiteurs simulé
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomVisitors = Math.floor(Math.random() * (25 - 3 + 1)) + 3;
+      setVisitors(randomVisitors);
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     fetchBTC();
@@ -28,14 +39,8 @@ export default function Header() {
   }, [location]);
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    document.body.style.overflow = menuOpen ? "hidden" : "unset";
+    return () => (document.body.style.overflow = "unset");
   }, [menuOpen]);
 
   return (
@@ -53,60 +58,69 @@ export default function Header() {
         </Link>
 
         {/* NAVIGATION */}
-        <nav className={`bp-nav ${menuOpen ? 'open' : ''}`}>
+        <nav className={`bp-nav ${menuOpen ? "open" : ""}`}>
           <Link 
             to="/comment-ca-marche"
-            className={location.pathname === '/comment-ca-marche' ? 'active' : ''}
+            className={location.pathname === "/comment-ca-marche" ? "active" : ""}
           >
             Comment ça marche
           </Link>
           <Link 
             to="/bonus-potentiel"
-            className={location.pathname === '/bonus-potentiel' ? 'active' : ''}
+            className={location.pathname === "/bonus-potentiel" ? "active" : ""}
           >
             Bonus potentiel
           </Link>
           <Link 
             to="/temps-reel"
-            className={location.pathname === '/temps-reel' ? 'active' : ''}
+            className={location.pathname === "/temps-reel" ? "active" : ""}
           >
             Temps réel
           </Link>
           <Link 
             to="/participer"
-            className={location.pathname === '/participer' ? 'active' : ''}
+            className={location.pathname === "/participer" ? "active" : ""}
           >
             Participer
           </Link>
           <Link 
             to="/contact"
-            className={location.pathname === '/contact' ? 'active' : ''}
+            className={location.pathname === "/contact" ? "active" : ""}
           >
             Contact
           </Link>
           <Link 
             to="/faq"
-            className={location.pathname === '/faq' ? 'active' : ''}
+            className={location.pathname === "/faq" ? "active" : ""}
           >
             FAQ
           </Link>
         </nav>
 
-        {/* BTC TICKER */}
-        <div className="bp-ticker">
-          <span className="bp-ticker-label">BTC</span>
-          <span className="bp-ticker-value">
-            {btc ? `${btc} €` : "…"}
-          </span>
+        {/* BADGE + VISITEURS + BTC */}
+        <div className="bp-header-right">
+
+          {/* 🟢 Visiteurs en direct */}
+          <div className="bp-visitors">
+            🟢 {visitors} en ce moment
+          </div>
+
+          {/* BTC TICKER */}
+          <div className="bp-ticker">
+            <span className="bp-ticker-label">BTC</span>
+            <span className="bp-ticker-value">
+              {btc ? `${btc} €` : "…"}
+            </span>
+          </div>
         </div>
 
         {/* MENU TOGGLE (mobile) */}
-        <button 
+        <button
           className="bp-menu-toggle"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
-          {menuOpen ? '✕' : '☰'}
+          {menuOpen ? "✕" : "☰"}
         </button>
 
       </div>

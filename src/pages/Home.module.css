@@ -227,11 +227,10 @@ h1 span {
   }
 
   .primaryBtn {
-    width: 100%;
-    align-self: stretch;
-    padding: 16px 24px;
-    font-size: 1rem;
-  }
+  width: auto;
+  align-self: flex-start;
+  max-width: 100%;
+}
 
   .note {
     font-size: 0.85rem;

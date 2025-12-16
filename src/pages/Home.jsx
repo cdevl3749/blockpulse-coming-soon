@@ -73,9 +73,13 @@ export default function Home() {
           </p>
 
           <div className={styles.cta}>
-            <a href="#temps-reel" className={styles.primaryBtn} onClick={scrollToESP}>
-              Voir les données en direct
-            </a>
+            <button
+            type="button"
+            className={styles.primaryBtn}
+            onClick={scrollToESP}
+            >
+            Voir les données en direct
+            </button>
 
             <span className={styles.note}>
             <img className={styles.flag} src={beFlag} alt="Belgique" />

@@ -25,7 +25,7 @@ export default function ESPPreview() {
   const prevHashrate = useRef(null);
 
   function formatHashrate(hr) {
-    if (!hr) return "—";
+    if (!hr || Number(hr) <= 0) return "—";
     const kh = (hr / 1000).toFixed(1);
     const arrow =
       prevHashrate.current === null
@@ -84,6 +84,11 @@ export default function ESPPreview() {
     );
   }
 
+  // 🔒 LOGIQUE ROBUSTE (clé du fix)
+  const derivedIsMining =
+    Number(data.hashrate) > 0 ||
+    Number(data.sharesAccepted) > 0;
+
   return (
     <section className={styles.section} id="temps-reel">
       <div className={styles.inner}>
@@ -95,11 +100,15 @@ export default function ESPPreview() {
 
         <div className={styles.grid}>
           <Card icon="📈" label="Hashrate" value={formatHashrate(data.hashrate)} />
-          <Card icon="🌐" label="Pool" value={data.pool} />
-          <Card icon="⚡" label="Mining" value={data.isMining ? "Actif" : "Inactif"} />
+          <Card icon="🌐" label="Pool" value={data.pool || "—"} />
+          <Card
+            icon="⚡"
+            label="Mining"
+            value={derivedIsMining ? "Actif" : "Inactif"}
+          />
           <Card icon="🕒" label="Dernière share" value={data.lastShareTime || "—"} />
-          <Card icon="✔️" label="Shares acceptées" value={data.sharesAccepted} />
-          <Card icon="⏰" label="Prochain tirage" value={data.nextDrawIn} />
+          <Card icon="✔️" label="Shares acceptées" value={data.sharesAccepted ?? "—"} />
+          <Card icon="⏰" label="Prochain tirage" value={data.nextDrawIn || "—"} />
           <Card icon="🔌" label="Module ESP32" value="Connecté" />
           <Card
             icon="🔄"
@@ -129,3 +138,4 @@ function Card({ icon, label, value }) {
     </div>
   );
 }
+

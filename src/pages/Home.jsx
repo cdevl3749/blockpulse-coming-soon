@@ -12,6 +12,8 @@ import PostPricingInfo from "@/components/home/PostPricingInfo";
 import ESPPreview from "@/components/esp/ESPPreview";
 import CTAAfterESP from "@/components/home/CTAAfterESP";
 import MicroFAQ from "@/components/home/MicroFAQ";
+import CookieBanner from "@/components/CookieBanner";
+
 
 export default function Home() {
   const location = useLocation();
@@ -116,6 +118,7 @@ export default function Home() {
       <section id="faq">
         <MicroFAQ />
       </section>
+      <CookieBanner />
     </>
   );
 }

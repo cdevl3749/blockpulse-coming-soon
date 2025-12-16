@@ -1,0 +1,139 @@
+/* =========================
+   CONTAINER GLOBAL
+========================= */
+
+.overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85),
+    rgba(0, 0, 0, 0.6)
+  );
+}
+
+/* =========================
+   BANNER
+========================= */
+
+.banner {
+  width: 100%;
+  max-width: 1100px;
+  background: #0c0f14;
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* =========================
+   TEXTE
+========================= */
+
+.banner p {
+  flex: 1;
+  font-size: 0.78rem;       /* 🔽 très compact */
+  line-height: 1.4;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.primary {
+  background: var(--be-yellow);
+  color: #000;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+}
+
+/* =========================
+   PARAMÈTRES
+========================= */
+
+.settings {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.settings label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .banner p {
+    font-size: 0.8rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* =========================
+   TRÈS PETIT MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .overlay {
+    padding: 6px;
+  }
+
+  .banner {
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+
+  .banner p {
+    font-size: 0.78rem;
+  }
+}

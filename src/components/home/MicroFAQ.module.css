@@ -4,15 +4,26 @@
   border-top: 1px solid var(--border-soft);
 }
 
+/* 🔹 Ancre invisible mais parfaitement alignée */
+.scrollAnchor {
+  display: block;
+  height: 0;
+  scroll-margin-top: 140px; /* ✅ ajusté pour header + sous-header */
+}
+
+/* CONTENU */
 .inner {
   max-width: 900px;
   margin: 0 auto;
 }
 
-h3 {
+.anchorTitle {
   text-align: center;
   font-size: 1.6rem;
   margin-bottom: 40px;
+
+  /* ✅ micro-ajustement visuel */
+  margin-top: -32px;
 }
 
 .faqList {
@@ -39,9 +50,25 @@ h3 {
   color: var(--text-muted);
 }
 
-/* MOBILE */
+/* ======================
+   MOBILE
+====================== */
 @media (max-width: 768px) {
   .faqSection {
     padding: 48px 16px;
   }
+
+  .scrollAnchor {
+    scroll-margin-top: 110px; /* header + sous-header mobile */
+  }
+
+  .anchorTitle {
+    font-size: 1.4rem;
+    margin-bottom: 32px;
+
+    /* ✅ micro-ajustement visuel mobile */
+    margin-top: -24px;
+  }
 }
+
+

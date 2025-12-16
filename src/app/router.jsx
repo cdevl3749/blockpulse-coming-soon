@@ -1,7 +1,7 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import AppLayout from "./App";
 
-// Pages
+// Pages publiques
 import Home from "../pages/Home";
 import BonusPotentiel from "../pages/BonusPotentiel";
 import TempsReel from "../pages/TempsReel";
@@ -16,7 +16,7 @@ import PolitiqueCookies from "../pages/PolitiqueCookies";
 import Success from "../pages/Success";
 import Cancel from "../pages/Cancel";
 
-// Nouveaux retours PayPal propres
+// Nouveaux retours PayPal
 import PaymentSuccess from "../pages/paiement/PaymentSuccess";
 import PaymentCancel from "../pages/paiement/PaymentCancel";
 
@@ -32,11 +32,14 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
 
+      // Pages principales
       { path: "bonus-potentiel", element: <BonusPotentiel /> },
       { path: "temps-reel", element: <TempsReel /> },
       { path: "participer", element: <Participer /> },
       { path: "contact", element: <Contact /> },
       { path: "faq", element: <FAQPage /> },
+
+      // Pages légales (URLs canoniques)
       { path: "mentions-legales", element: <MentionsLegales /> },
       {
         path: "politique-confidentialite",
@@ -44,11 +47,17 @@ export const router = createBrowserRouter([
       },
       { path: "cookies", element: <PolitiqueCookies /> },
 
+      // 🔁 Redirection legacy /confidentialite → bonne URL
+      {
+        path: "confidentialite",
+        element: <Navigate to="/politique-confidentialite" replace />,
+      },
+
       // Anciens callbacks PayPal (toujours valides)
       { path: "success", element: <Success /> },
       { path: "cancel", element: <Cancel /> },
 
-      // Nouveaux callbacks PayPal (config actuelle)
+      // Nouveaux callbacks PayPal
       {
         path: "paiement",
         children: [
@@ -67,4 +76,3 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
-

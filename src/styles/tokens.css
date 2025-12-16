@@ -1,0 +1,15 @@
+:root {
+  /* 🇧🇪 Couleurs principales */
+  --be-black: #0b0f14;
+  --be-dark: #111827;
+  --be-yellow: #facc15;
+
+  /* Texte */
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+
+  /* UI */
+  --border-soft: rgba(255, 255, 255, 0.08);
+  --radius: 16px;
+  --max-width: 1200px;
+}

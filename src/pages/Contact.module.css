@@ -1,0 +1,125 @@
+.page {
+  width: 100%;
+}
+
+/* HERO */
+.hero {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 56px 20px 32px;
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* FORM SECTION */
+.formSection {
+  display: flex;
+  justify-content: center;
+  padding: 0 20px 80px;
+}
+
+.formCard {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(
+    180deg,
+    #070a10 0%,
+    #05070c 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.formTitle {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 24px;
+}
+
+/* FORM ELEMENTS */
+label {
+  display: block;
+  margin-bottom: 6px;
+  margin-top: 14px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #020617;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text);
+  font-size: 1rem;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--be-yellow);
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* BUTTON */
+button {
+  margin-top: 22px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--be-yellow);
+  color: #020617;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* FEEDBACK */
+.error {
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #ff6b6b;
+  text-align: center;
+}
+
+.success {
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #22c55e;
+  text-align: center;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .formCard {
+    padding: 22px;
+  }
+}

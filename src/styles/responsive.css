@@ -1,0 +1,416 @@
+/* ============================================ */
+/*     RESPONSIVE MOBILE COMPLET - BLOCKPULSE  */
+/* ============================================ */
+
+/* ===== CONTENEURS GLOBAUX ===== */
+* {
+  box-sizing: border-box;
+}
+
+/* ===== DESKTOP - BASE ===== */
+.container,
+.bp-container,
+[class*="container"] {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== SECTIONS ===== */
+section {
+  padding: 60px 20px;
+}
+
+/* ===== TITRES ===== */
+h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ===== GRILLES ===== */
+.grid,
+[class*="grid"] {
+  display: grid;
+  gap: 24px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ===== CARTES ===== */
+.card,
+[class*="card"] {
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ===== BOUTONS ===== */
+button,
+.button,
+[class*="btn"] {
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ===== IMAGES ===== */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================ */
+/*     RESPONSIVE TABLETTE (768px - 1024px)    */
+/* ============================================ */
+@media (max-width: 1024px) {
+  .container,
+  .bp-container,
+  [class*="container"] {
+    padding: 0 16px;
+  }
+  
+  section {
+    padding: 50px 16px;
+  }
+  
+  h1 {
+    font-size: 2.2rem;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+  }
+  
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================ */
+/*     RESPONSIVE MOBILE (< 768px)             */
+/* ============================================ */
+@media (max-width: 768px) {
+  /* ===== CONTENEURS ===== */
+  .container,
+  .bp-container,
+  [class*="container"] {
+    padding: 0 16px;
+    max-width: 100%;
+  }
+  
+  /* ===== SECTIONS ===== */
+  section {
+    padding: 40px 16px;
+  }
+  
+  /* ===== TITRES ===== */
+  h1 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  /* ===== GRILLES - TOUT EN 1 COLONNE ===== */
+  .grid,
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  [class*="grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+  
+  /* ===== CARTES ===== */
+  .card,
+  [class*="card"] {
+    padding: 20px;
+  }
+  
+  /* ===== BOUTONS ===== */
+  button,
+  .button,
+  [class*="btn"] {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+  
+  /* ===== FLEX CONTAINERS ===== */
+  .flex,
+  [class*="flex"] {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  /* ===== HERO SECTION ===== */
+  [class*="hero"] {
+    padding: 30px 16px;
+    text-align: center;
+  }
+  
+  [class*="hero"] h1 {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+  }
+  
+  [class*="hero"] p {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+  
+  /* ===== ABONNEMENTS / PRICING ===== */
+  [class*="pricing"],
+  [class*="subscription"],
+  [class*="abonnement"] {
+    padding: 16px;
+  }
+  
+  [class*="price"] {
+    font-size: 2rem;
+  }
+  
+  /* ===== FAQ ===== */
+  [class*="faq"] {
+    padding: 16px;
+  }
+  
+  [class*="faq"] h3,
+  [class*="faq"] button {
+    font-size: 1rem;
+    padding: 14px 16px;
+  }
+  
+  /* ===== FORMULAIRES ===== */
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+  
+  form {
+    padding: 0;
+  }
+  
+  /* ===== ESPACEMENT ===== */
+  .mb-1,
+  [class*="margin"] {
+    margin-bottom: 12px;
+  }
+  
+  .mt-1,
+  [class*="margin-top"] {
+    margin-top: 12px;
+  }
+  
+  .p-1,
+  [class*="padding"] {
+    padding: 12px;
+  }
+  
+  /* ===== TEXTE CENTER ===== */
+  .text-center {
+    text-align: center;
+  }
+}
+
+/* ============================================ */
+/*     RESPONSIVE PETIT MOBILE (< 480px)       */
+/* ============================================ */
+@media (max-width: 480px) {
+  /* ===== CONTENEURS ===== */
+  .container,
+  .bp-container,
+  [class*="container"] {
+    padding: 0 12px;
+  }
+  
+  /* ===== SECTIONS ===== */
+  section {
+    padding: 30px 12px;
+  }
+  
+  /* ===== TITRES ===== */
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  h3 {
+    font-size: 1.1rem;
+  }
+  
+  p {
+    font-size: 0.9rem;
+  }
+  
+  /* ===== CARTES ===== */
+  .card,
+  [class*="card"] {
+    padding: 16px;
+  }
+  
+  /* ===== BOUTONS ===== */
+  button,
+  .button,
+  [class*="btn"] {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+  
+  /* ===== PRIX ===== */
+  [class*="price"] {
+    font-size: 1.8rem;
+  }
+}
+
+/* ============================================ */
+/*     UTILITAIRES RESPONSIVE                  */
+/* ============================================ */
+
+/* Cacher sur mobile */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Cacher sur desktop */
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Afficher uniquement sur mobile */
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .show-mobile {
+    display: block !important;
+  }
+}
+
+/* ============================================ */
+/*     FIXES SPÉCIFIQUES BLOCKPULSE            */
+/* ============================================ */
+
+/* Hero principal */
+@media (max-width: 768px) {
+  [class*="hero"] > div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  [class*="hero"] img {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* Badges / Pills */
+@media (max-width: 768px) {
+  [class*="badge"],
+  [class*="pill"],
+  [class*="tag"] {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
+}
+
+/* Overflow horizontal */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Scroll smooth */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ============================================ */
+/*     ANIMATIONS RESPONSIVE                   */
+/* ============================================ */
+@media (max-width: 768px) {
+  /* Désactiver certaines animations sur mobile pour la performance */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.2s !important;
+  }
+}
+
+/* ============================================ */
+/*     ACCESSIBILITÉ MOBILE                    */
+/* ============================================ */
+@media (max-width: 768px) {
+  /* Agrandir les zones de touch */
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    min-height: 44px;
+  }
+  
+  /* Améliorer la lisibilité */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

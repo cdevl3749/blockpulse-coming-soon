@@ -1,0 +1,129 @@
+/* ============================================ */
+/*     CORRECTION ESPACEMENTS DESKTOP          */
+/*     Réduit les espaces entre sections       */
+/*     N'affecte PAS le mobile (> 769px)       */
+/* ============================================ */
+
+/* DESKTOP UNIQUEMENT (> 768px) */
+@media (min-width: 769px) {
+  
+  /* Réduction générale des paddings verticaux des sections */
+  section:not([class]) {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+  
+  /* Ciblage spécifique des composants qui ont trop d'espace */
+  section#fonctionnement,
+  section#abonnements,
+  section#faq {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+  
+  /* Réduction des espacements entre sections adjacentes */
+  section + section {
+    margin-top: -20px;
+  }
+  
+  /* Hero : réduction du padding bottom */
+  [class*="hero"] {
+    padding-bottom: 40px !important;
+  }
+  
+  /* How it works : réduction */
+  [class*="how"],
+  section#fonctionnement > * {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+  
+  /* Différenciation : réduction */
+  [class*="difference"],
+  [class*="differentiation"] {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+  
+  /* What you get : réduction */
+  [class*="whatyouget"],
+  [class*="what-you-get"] {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+  
+  /* Pricing : réduction */
+  [class*="pricing"],
+  [class*="abonnements"] {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+  
+  /* Post pricing info : réduction */
+  [class*="postpricing"],
+  [class*="post-pricing"] {
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
+  }
+  
+  /* ESP Preview : réduction */
+  [class*="esp"],
+  [class*="preview"] {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+  
+  /* CTA After ESP : réduction */
+  [class*="cta"] {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+  
+  /* FAQ : réduction */
+  [class*="faq"],
+  section#faq > * {
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+  }
+}
+
+/* GRAND DESKTOP (> 1200px) - espacements encore plus serrés */
+@media (min-width: 1200px) {
+  
+  section + section {
+    margin-top: -24px;
+  }
+  
+  /* Composants qui peuvent être encore plus resserrés */
+  [class*="postpricing"],
+  [class*="post-pricing"] {
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+  }
+  
+  [class*="cta"]:not([class*="hero"]) {
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
+  }
+}
+
+/* AJUSTEMENTS FINS POUR ÉVITER LES COLLISIONS */
+@media (min-width: 769px) {
+  
+  /* Marges des titres h2 dans les sections */
+  section h2:first-child,
+  [class*="container"] h2:first-child {
+    margin-top: 0 !important;
+  }
+  
+  section h2:last-child,
+  [class*="container"] h2:last-child {
+    margin-bottom: 0 !important;
+  }
+  
+  /* Éviter les marges doubles sur les conteneurs imbriqués */
+  section > div > section {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}

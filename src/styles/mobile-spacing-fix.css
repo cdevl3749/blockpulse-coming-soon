@@ -1,0 +1,144 @@
+/* ============================================ */
+/*     CORRECTION ESPACEMENTS MOBILE           */
+/*     À ajouter APRÈS tous les autres CSS     */
+/* ============================================ */
+
+/* TABLETTE (768px - 1024px) */
+@media (max-width: 1024px) {
+  main {
+    padding-top: 72px;
+  }
+}
+
+/* MOBILE (max-width: 768px) */
+@media (max-width: 768px) {
+  /* Réduction du padding-top global */
+  main {
+    padding-top: 64px;
+  }
+  
+  /* HERO - réduction des espacements */
+  .hero {
+    padding: 40px 16px 24px !important;
+  }
+  
+  /* HOW IT WORKS - réduction */
+  .how {
+    padding: 32px 16px 32px !important;
+  }
+  
+  /* DIFFÉRENCIATION - réduction */
+  .difference {
+    padding: 32px 16px 48px !important;
+  }
+  
+  /* Sections génériques */
+  section {
+    padding: 32px 16px !important;
+  }
+  
+  /* Réduction des marges des titres */
+  section h2 {
+    margin-bottom: 24px !important;
+  }
+  
+  section h1 {
+    margin-bottom: 20px !important;
+  }
+}
+
+/* PETIT MOBILE (max-width: 600px) */
+@media (max-width: 600px) {
+  main {
+    padding-top: 60px;
+  }
+  
+  .hero {
+    padding: 32px 12px 20px !important;
+  }
+  
+  .how {
+    padding: 28px 12px 28px !important;
+  }
+  
+  .difference {
+    padding: 28px 12px 40px !important;
+  }
+  
+  section {
+    padding: 28px 12px !important;
+  }
+  
+  section h2 {
+    margin-bottom: 20px !important;
+  }
+}
+
+/* TRÈS PETIT MOBILE (max-width: 480px) */
+@media (max-width: 480px) {
+  main {
+    padding-top: 56px;
+  }
+  
+  .hero {
+    padding: 28px 12px 16px !important;
+  }
+  
+  .how {
+    padding: 24px 12px 24px !important;
+  }
+  
+  .difference {
+    padding: 24px 12px 36px !important;
+  }
+  
+  section {
+    padding: 24px 12px !important;
+  }
+}
+
+/* CORRECTIONS SPÉCIFIQUES POUR ÉVITER LES GRANDS ESPACES */
+@media (max-width: 768px) {
+  /* Réduire l'espace entre le hero et la section suivante */
+  .hero + section,
+  .hero + .how {
+    margin-top: -8px;
+  }
+  
+  /* Réduire l'espace entre sections génériques */
+  section + section {
+    margin-top: -8px;
+  }
+  
+  /* Border-bottom du hero moins d'impact visuel */
+  .hero {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    margin-bottom: 0 !important;
+  }
+}
+
+/* RESET DES MARGES QUI PEUVENT CAUSER DES PROBLÈMES */
+@media (max-width: 768px) {
+  .inner {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .steps {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Éviter les marges doubles */
+  .hero h1,
+  .how h2,
+  .difference h2 {
+    margin-top: 0 !important;
+  }
+  
+  .hero p:last-child,
+  .step p:last-child {
+    margin-bottom: 0 !important;
+  }
+}

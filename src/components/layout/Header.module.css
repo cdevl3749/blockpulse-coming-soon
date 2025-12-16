@@ -1,0 +1,347 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 20px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===== Logo ===== */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text-main);
+  z-index: 1002;
+}
+
+.logoImg {
+  width: 36px;
+  height: 36px;
+}
+
+/* ===== Right side ===== */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ===== Navigation Desktop ===== */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav a,
+.nav button {
+  all: unset;
+  cursor: pointer;
+
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.nav a:hover,
+.nav button:hover {
+  color: var(--text-main);
+}
+
+.nav a:focus-visible,
+.nav button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.15);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ===== BTC pill ===== */
+.btcPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 7px 12px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btcLabel {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--be-yellow);
+}
+
+.btcValue {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ===== Burger Button (caché sur desktop) ===== */
+.burgerBtn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1002;
+  transition: all 0.3s ease;
+}
+
+.burgerBtn span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: var(--text-main);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.burgerBtn span.burgerOpen:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.burgerBtn span.burgerOpen:nth-child(2) {
+  opacity: 0;
+}
+
+.burgerBtn span.burgerOpen:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* ===== Overlay Mobile ===== */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}
+
+/* ===== Navigation Mobile (cachée par défaut) ===== */
+.mobileNav {
+  position: fixed;
+  top: 76px;
+  right: -100%;
+  width: 280px;
+  height: calc(100vh - 76px);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  
+  border-left: 1px solid var(--border-soft);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+  
+  transition: right 0.3s ease;
+  z-index: 1001;
+  overflow-y: auto;
+}
+
+.mobileNavOpen {
+  right: 0;
+}
+
+.mobileNav a,
+.mobileNav button {
+  all: unset;
+  cursor: pointer;
+  
+  padding: 20px 24px;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+  
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobileNav a:hover,
+.mobileNav button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  padding-left: 28px;
+}
+
+.mobileNav a:active,
+.mobileNav button:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== Responsive Desktop ===== */
+@media (min-width: 901px) {
+  .burgerBtn {
+    display: none !important;
+  }
+  
+  .mobileNav {
+    display: none !important;
+  }
+  
+  .overlay {
+    display: none !important;
+  }
+}
+
+/* ===== Responsive Tablette ===== */
+@media (max-width: 900px) {
+  .inner {
+    padding: 16px;
+  }
+
+  .right {
+    gap: 14px;
+  }
+
+  .nav {
+    gap: 16px;
+  }
+
+  .nav a,
+  .nav button {
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== Responsive Mobile (burger menu actif) ===== */
+@media (max-width: 768px) {
+  .inner {
+    padding: 14px 16px;
+  }
+  
+  /* Cacher la nav desktop */
+  .nav {
+    display: none !important;
+  }
+  
+  /* Afficher le burger button */
+  .burgerBtn {
+    display: flex !important;
+  }
+  
+  /* Afficher l'overlay quand ouvert */
+  .overlay {
+    display: block;
+  }
+  
+  .right {
+    gap: 12px;
+  }
+  
+  .btcPill {
+    padding: 6px 10px;
+  }
+  
+  .btcLabel {
+    font-size: 0.8rem;
+  }
+  
+  .btcValue {
+    font-size: 0.85rem;
+  }
+  
+  .logo {
+    font-size: 1.05rem;
+  }
+  
+  .logoImg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ===== Petit mobile ===== */
+@media (max-width: 640px) {
+  .inner {
+    padding: 12px 14px;
+  }
+  
+  .btcPill {
+    padding: 5px 8px;
+  }
+  
+  .btcLabel {
+    font-size: 0.75rem;
+  }
+  
+  .btcValue {
+    font-size: 0.8rem;
+  }
+  
+  .logo {
+    font-size: 1rem;
+  }
+  
+  .logoImg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .mobileNav {
+    width: 100%;
+  }
+}
+
+/* ===== Très petit mobile ===== */
+@media (max-width: 400px) {
+  .inner {
+    padding: 10px 12px;
+  }
+  
+  .right {
+    gap: 8px;
+  }
+  
+  .btcPill {
+    padding: 4px 8px;
+  }
+  
+  .btcLabel {
+    font-size: 0.7rem;
+  }
+  
+  .btcValue {
+    font-size: 0.75rem;
+  }
+  
+  .burgerBtn span {
+    width: 22px;
+    height: 2.5px;
+  }
+}
+

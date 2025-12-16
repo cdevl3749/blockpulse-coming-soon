@@ -1,0 +1,163 @@
+.footer {
+  background: linear-gradient(
+    180deg,
+    #070a10 0%,
+    #070a10 70%,
+    #05070c 100%
+  );
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 56px 20px 24px;
+  color: var(--text);
+}
+
+/* ===== LAYOUT ===== */
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 48px;
+}
+
+/* ===== BRAND ===== */
+.brand p {
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.logoLine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.logoLine img {
+  width: 22px;
+  height: auto;
+}
+
+.payment {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* PayPal logo clair */
+.payment img {
+  height: 18px;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
+
+/* ===== NAV ===== */
+.links h4,
+.social h4 {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+/* ===== NAV BUTTONS (scroll SPA) ===== */
+.links button {
+  all: unset; /* reset total du style navigateur */
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+/* Hover identique aux liens */
+.links button:hover {
+  color: var(--be-yellow);
+}
+
+/* Focus clavier propre (accessibilité, sans cadre blanc moche) */
+.links button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.15);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+
+.links a {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.links a:hover {
+  color: var(--be-yellow);
+}
+
+/* ===== SOCIAL ===== */
+.social a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  transition: color 0.15s ease;
+}
+
+/* LinkedIn logo clair */
+.social img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
+
+.social a:hover {
+  color: #0a66c2;
+}
+
+/* ===== BOTTOM ===== */
+.bottom {
+  max-width: var(--max-width);
+  margin: 32px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.legal {
+  display: flex;
+  gap: 16px;
+}
+
+.legal a {
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.legal a:hover {
+  color: var(--be-yellow);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .bottom {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}

@@ -9,9 +9,25 @@ export default function Header() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // ✅ Token client (dashboard)
+  const [bpToken, setBpToken] = useState(() => {
+    try {
+      return localStorage.getItem("bp_token") || "";
+    } catch {
+      return "";
+    }
+  });
+
   // Fermer le menu quand on change de page
   useEffect(() => {
     setMenuOpen(false);
+
+    // Rafraîchir le token à chaque navigation
+    try {
+      setBpToken(localStorage.getItem("bp_token") || "");
+    } catch {
+      setBpToken("");
+    }
   }, [location.pathname, location.hash]);
 
   // Bloquer le scroll quand le menu mobile est ouvert
@@ -68,10 +84,15 @@ export default function Header() {
     };
   }, []);
 
-  // 🔥 Fonction pour gérer le clic sur le logo
+  // 🔥 Scroll top logo
   const handleLogoClick = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
+
+  // ✅ Lien espace client intelligent
+  const espaceClientLink = bpToken
+    ? `/mon-espace?token=${encodeURIComponent(bpToken)}`
+    : "/mon-espace";
 
   return (
     <header className={styles.header}>
@@ -101,6 +122,9 @@ export default function Header() {
             <Link to="/#abonnements">Abonnements</Link>
             <Link to="/#faq">FAQ</Link>
             <Link to="/contact">Contact</Link>
+
+            {/* ✅ Espace client */}
+            <Link to={espaceClientLink}>Espace client</Link>
           </nav>
 
           {/* Burger */}
@@ -132,6 +156,9 @@ export default function Header() {
         <Link to="/#abonnements">💎 Abonnements</Link>
         <Link to="/#faq">❓ FAQ</Link>
         <Link to="/contact">✉️ Contact</Link>
+
+        {/* ✅ Espace client */}
+        <Link to={espaceClientLink}>👤 Espace client</Link>
       </nav>
     </header>
   );

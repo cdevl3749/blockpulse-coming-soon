@@ -8,23 +8,29 @@ export default function Pricing() {
     <section className={styles.section} id="abonnements">
       <div className={styles.inner}>
         <h2>Abonnements</h2>
+
         <p className={styles.subtitle}>
-          Accédez aux données crypto réelles mesurées par matériel physique indépendant.
+          Accédez aux données Bitcoin mesurées par un
+          <strong> module ESP32 physique réel</strong>, sans API tierce,
+          avec un accès sécurisé et continu.
         </p>
 
         <div className={styles.grid}>
-          {/* OFFRE STARTER */}
+          {/* ================= STARTER ================= */}
           <div className={styles.card}>
             <h3>Starter</h3>
+
             <p className={styles.price}>
               €4<span>/mois</span>
             </p>
 
             <ul>
-              <li>Accès aux données crypto en temps réel</li>
-              <li>Source matérielle ESP32</li>
-              <li>Données non modifiées</li>
-              <li>Accès sécurisé</li>
+              <li>🔓 Accès aux données ESP32 en temps réel</li>
+              <li>📈 Hashrate & statut du mining</li>
+              <li>🌐 Pool actif</li>
+              <li>⚡ Données brutes, non modifiées</li>
+              <li>🔄 Mise à jour automatique toutes les 30 secondes</li>
+              <li>🔐 Accès sécurisé via lien privé</li>
             </ul>
 
             <a
@@ -35,24 +41,27 @@ export default function Pricing() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              S’abonner via PayPal
+              S’abonner au plan Starter
             </a>
           </div>
 
-          {/* OFFRE PRO */}
+          {/* ================= PRO ================= */}
           <div className={`${styles.card} ${styles.highlight}`}>
-            <span className={styles.badge}>Recommandé</span>
+            <span className={styles.badge}>Le plus complet</span>
 
             <h3>Pro</h3>
+
             <p className={styles.price}>
               €9<span>/mois</span>
             </p>
 
             <ul>
-              <li>Tout Starter inclus</li>
-              <li>Accès étendu aux données</li>
-              <li>Priorité de consultation</li>
-              <li>Support prioritaire</li>
+              <li>⭐ Tout le plan Starter inclus</li>
+              <li>📊 Accès étendu aux métriques ESP32</li>
+              <li>🕒 Historique et statistiques avancées</li>
+              <li>🧱 Suivi des événements rares (bloc trouvé)</li>
+              <li>🚀 Accès prioritaire aux nouvelles fonctionnalités</li>
+              <li>💬 Support prioritaire</li>
             </ul>
 
             <a
@@ -63,19 +72,33 @@ export default function Pricing() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              S’abonner via PayPal
+              Passer au plan Pro
             </a>
           </div>
         </div>
 
-        {/* RASSURANCE */}
+        {/* ================= INFO RARE ================= */}
+        <div className={styles.infoBox}>
+          <strong>🧱 Événement rare — Bloc trouvé</strong>
+          <p>
+            Le module ESP32 participe au processus de minage Bitcoin.
+            Trouver un bloc est <strong>extrêmement rare</strong> mais
+            techniquement possible.  
+            Les abonnés <strong>Pro</strong> bénéficient d’un suivi
+            dédié de ces événements exceptionnels.
+          </p>
+        </div>
+
+        {/* ================= RASSURANCE ================= */}
         <p className={styles.note}>
-          ✔ Paiement sécurisé via PayPal · ✔ Aucun compte PayPal requis<br />
-          Accès activé automatiquement sous 24h maximum par email.
+          ✔ Paiement sécurisé via PayPal · ✔ Aucun compte PayPal requis
+          <br />
+          🔔 Accès activé manuellement sous 24h maximum après paiement.
         </p>
       </div>
     </section>
   );
 }
+
 
 

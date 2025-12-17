@@ -1,0 +1,80 @@
+.page {
+  padding: 120px 20px;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.card {
+  border: 1px solid var(--border-soft);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 18px;
+  padding: 32px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.text {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  color: var(--text-main);
+}
+
+.small {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+.ctaRow {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryBtn {
+  background: var(--be-yellow);
+  color: #000;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.secondaryBtn {
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  border-radius: 999px;
+  padding: 12px 20px;
+  text-decoration: none;
+}
+
+.note {
+  margin-top: 20px;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 100px 16px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+}

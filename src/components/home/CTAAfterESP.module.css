@@ -62,6 +62,7 @@ h2 span {
   gap: 12px;
 }
 
+/* ✅ BOUTON CTA CORRIGÉ */
 .primaryBtn {
   background: var(--be-yellow);
   color: #000;
@@ -70,6 +71,10 @@ h2 span {
   font-weight: 700;
   font-size: 1.05rem;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  /* FIX LARGEUR DESKTOP */
+  width: auto;
+  max-width: 320px;
 }
 
 .primaryBtn:hover {
@@ -92,3 +97,12 @@ h2 span {
     text-align: left;
   }
 }
+
+/* MOBILE SMALL — bouton plein largeur */
+@media (max-width: 480px) {
+  .primaryBtn {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+

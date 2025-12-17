@@ -1,8 +1,15 @@
 import styles from "./CTAAfterESP.module.css";
-import { Link } from "react-router-dom";
 import beFlag from "@/assets/be-flag.svg";
 
 export default function CTAAfterESP() {
+  const scrollToPricing = (e) => {
+    e.preventDefault();
+    const section = document.getElementById("abonnements");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <section className={styles.ctaSection}>
       <div className={styles.inner}>
@@ -29,9 +36,14 @@ export default function CTAAfterESP() {
         </ul>
 
         <div className={styles.actions}>
-          <Link to="/#abonnements" className={styles.primaryBtn}>
+          <button
+            type="button"
+            onClick={scrollToPricing}
+            className={styles.primaryBtn}
+          >
             Voir les abonnements
-          </Link>
+          </button>
+
           <span className={styles.note}>
             Paiement PayPal · Annulation à tout moment
           </span>
@@ -40,3 +52,4 @@ export default function CTAAfterESP() {
     </section>
   );
 }
+

@@ -1,0 +1,170 @@
+.page {
+  padding: 110px 20px 60px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card {
+  border: 1px solid var(--border-soft);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 18px;
+  padding: 26px;
+}
+
+.title {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.text {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.meta {
+  margin-top: 18px;
+  display: grid;
+  gap: 8px;
+  color: var(--text-muted);
+}
+
+.badgeRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  font-size: 0.85rem;
+  color: var(--text-main);
+}
+
+.badgeOk {
+  border-color: rgba(0, 255, 140, 0.25);
+}
+
+.badgeWarn {
+  border-color: rgba(255, 214, 0, 0.25);
+}
+
+.ctaRow {
+  margin-top: 22px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.primaryBtn {
+  background: var(--be-yellow);
+  color: #000;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.secondaryBtn {
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+  border-radius: 999px;
+  padding: 12px 18px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.small {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.inputRow {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.input {
+  flex: 1;
+  min-width: 240px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--text-main);
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 95px 16px 40px;
+  }
+  .title {
+    font-size: 1.7rem;
+  }
+  .card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+  .ctaRow a {
+    width: 100%;
+  }
+}
+
+.logoutBtn {
+  margin-top: 16px;
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logoutBtn:hover {
+  color: #fff;
+  border-color: var(--be-yellow);
+}
+
+.tokenBox {
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tokenInput {
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.tokenInput::placeholder {
+  color: var(--text-muted);
+}
+
+.logoutBtn {
+  margin: 16px 0 24px;
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}

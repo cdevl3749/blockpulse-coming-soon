@@ -31,6 +31,7 @@ export default function Pricing() {
               <li>⚡ Données brutes, non modifiées</li>
               <li>🔄 Mise à jour automatique toutes les 30 secondes</li>
               <li>🔐 Accès sécurisé via lien privé</li>
+              <li>🔒 Métriques avancées réservées au plan Pro</li>
             </ul>
 
             <a
@@ -60,6 +61,7 @@ export default function Pricing() {
               <li>📊 Accès étendu aux métriques ESP32</li>
               <li>🕒 Historique et statistiques avancées</li>
               <li>🧱 Suivi des événements rares (bloc trouvé)</li>
+              <li>🔓 Déverrouillage de toutes les cartes ESP32</li>
               <li>🚀 Accès prioritaire aux nouvelles fonctionnalités</li>
               <li>💬 Support prioritaire</li>
             </ul>
@@ -82,10 +84,12 @@ export default function Pricing() {
           <strong>🧱 Événement rare — Bloc trouvé</strong>
           <p>
             Le module ESP32 participe au processus de minage Bitcoin.
-            Trouver un bloc est <strong>extrêmement rare</strong> mais
-            techniquement possible.  
+            Trouver un bloc est <strong>extrêmement rare</strong>, mais
+            techniquement possible (un tirage toutes les ~10 minutes
+            sur le réseau).
+            <br />
             Les abonnés <strong>Pro</strong> bénéficient d’un suivi
-            dédié de ces événements exceptionnels.
+            dédié et d’un affichage complet de ces événements exceptionnels.
           </p>
         </div>
 
@@ -99,6 +103,7 @@ export default function Pricing() {
     </section>
   );
 }
+
 
 
 

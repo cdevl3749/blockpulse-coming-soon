@@ -1,0 +1,85 @@
+.who {
+  padding: 28px 20px; /* ↓ réduit */
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.who h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.6rem; /* ↓ plus discret */
+  text-align: center;
+}
+
+.intro {
+  max-width: 680px;
+  margin: 0 auto 20px auto; /* ↓ réduit */
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ===== GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; /* ↓ plus serré */
+}
+
+.card {
+  border-radius: var(--radius);
+  padding: 18px; /* ↓ moins de hauteur */
+  border: 1px solid var(--border-soft);
+  background: transparent;
+}
+
+.card h3 {
+  margin: 0 0 6px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Highlight plus subtil */
+.highlight {
+  border-color: var(--be-yellow);
+  background: rgba(255, 206, 0, 0.04);
+}
+
+.highlight h3 {
+  color: var(--be-yellow);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .who {
+    padding: 22px 16px;
+  }
+
+  .who h2 {
+    font-size: 1.4rem;
+  }
+
+  .intro {
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}

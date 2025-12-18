@@ -13,6 +13,8 @@ import ESPPreview from "@/components/esp/ESPPreview";
 import CTAAfterESP from "@/components/home/CTAAfterESP";
 import MicroFAQ from "@/components/home/MicroFAQ";
 import CookieBanner from "@/components/CookieBanner";
+import WhoItsFor from "@/components/home/WhoItsFor";
+
 
 
 export default function Home() {
@@ -98,6 +100,9 @@ export default function Home() {
 
       {/* DIFFÉRENCIATION */}
       <Differentiation />
+
+      {/* POUR QUI ? */}
+      <WhoItsFor />
 
       {/* CE QUE VOUS RECEVEZ */}
       <WhatYouGet />

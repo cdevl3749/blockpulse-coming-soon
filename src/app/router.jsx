@@ -24,6 +24,8 @@ import PaymentCancel from "../pages/paiement/PaymentCancel";
 import MonEspace from "../pages/MonEspace";
 import AdminClients from "../pages/AdminClients";
 import DashboardSecure from "../pages/DashboardSecure";
+import Abonnements from "../pages/Abonnements";
+
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +38,7 @@ export const router = createBrowserRouter([
       { path: "bonus-potentiel", element: <BonusPotentiel /> },
       { path: "temps-reel", element: <TempsReel /> },
       { path: "participer", element: <Participer /> },
+      { path: "abonnements", element: <Abonnements /> },
       { path: "contact", element: <Contact /> },
       { path: "faq", element: <FAQPage /> },
 

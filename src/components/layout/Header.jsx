@@ -153,7 +153,7 @@ export default function Header() {
         }`}
       >
         <Link to="/#fonctionnement">🔧 Fonctionnement</Link>
-        <Link to="/#abonnements">💎 Abonnements</Link>
+        <Link to="/abonnements">Abonnements</Link>
         <Link to="/#faq">❓ FAQ</Link>
         <Link to="/contact">✉️ Contact</Link>
 

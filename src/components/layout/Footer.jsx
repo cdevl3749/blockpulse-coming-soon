@@ -59,6 +59,7 @@ export default function Footer() {
           </button>
 
           {/* Page dédiée */}
+          <Link to="/a-propos">À propos</Link>
           <Link to="/contact">Contact</Link>
         </div>
 

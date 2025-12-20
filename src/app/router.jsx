@@ -25,6 +25,7 @@ import MonEspace from "../pages/MonEspace";
 import AdminClients from "../pages/AdminClients";
 import DashboardSecure from "../pages/DashboardSecure";
 import Abonnements from "../pages/Abonnements";
+import About from "@/pages/About";
 
 
 export const router = createBrowserRouter([
@@ -41,6 +42,8 @@ export const router = createBrowserRouter([
       { path: "abonnements", element: <Abonnements /> },
       { path: "contact", element: <Contact /> },
       { path: "faq", element: <FAQPage /> },
+      { path: "a-propos", element: <About /> },
+
 
       // Pages légales (URLs canoniques)
       { path: "mentions-legales", element: <MentionsLegales /> },

@@ -26,6 +26,7 @@ import AdminClients from "../pages/AdminClients";
 import DashboardSecure from "../pages/DashboardSecure";
 import Abonnements from "../pages/Abonnements";
 import About from "@/pages/About";
+import DemandeAcces from "@/pages/DemandeAcces";
 
 
 export const router = createBrowserRouter([
@@ -43,6 +44,7 @@ export const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       { path: "faq", element: <FAQPage /> },
       { path: "a-propos", element: <About /> },
+      { path: "demande-acces",element: <DemandeAcces /> },
 
 
       // Pages légales (URLs canoniques)

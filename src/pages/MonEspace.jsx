@@ -6,21 +6,20 @@ import ESPPreview from "../components/esp/ESPPreview.jsx";
 
 function formatDateFR(iso) {
   try {
-    return new Date(iso).toLocaleDateString("fr-BE", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    });
+    return new Date(iso).toLocaleDateString("fr-BE");
   } catch {
     return iso;
   }
+}
+
+function daysBetween(a, b) {
+  return Math.ceil((b - a) / (1000 * 60 * 60 * 24));
 }
 
 export default function MonEspace() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
-
   const [inputToken, setInputToken] = useState("");
 
   const user = useMemo(() => {
@@ -44,7 +43,6 @@ export default function MonEspace() {
               Entrez le code d’accès reçu par email après votre abonnement.
             </p>
 
-            {/* 🔐 CONNEXION PAR TOKEN */}
             <div className={styles.tokenBox}>
               <input
                 type="text"
@@ -79,18 +77,31 @@ export default function MonEspace() {
     );
   }
 
-  /* ⏳ Abonnement expiré */
-  const isExpired = new Date(user.expiresAt) < new Date();
+  const now = new Date();
+  const expiresAt = new Date(user.expiresAt);
+  const daysRemaining = daysBetween(now, expiresAt);
 
-  if (isExpired) {
+  const isTrial = user.trial === true;
+  const isStarter = user.plan === "starter";
+  const isPro = user.plan === "pro";
+
+  const graceEnd = new Date(expiresAt);
+  graceEnd.setDate(graceEnd.getDate() + 7);
+
+  const isExpiredHard = now > graceEnd;
+  const isGracePeriod = isTrial && now > expiresAt && now <= graceEnd;
+  const isTrialEndingSoon = isTrial && daysRemaining <= 2 && daysRemaining > 0;
+
+  /* ❌ Coupure totale après période de grâce */
+  if (isExpiredHard) {
     return (
       <main className={styles.page}>
         <div className={styles.container}>
           <div className={styles.card}>
-            <h1 className={styles.title}>Abonnement expiré</h1>
+            <h1 className={styles.title}>Accès expiré</h1>
 
             <p className={styles.text}>
-              Votre accès a expiré le {formatDateFR(user.expiresAt)}.
+              Votre accès a expiré le {formatDateFR(expiresAt)}.
             </p>
 
             <div className={styles.meta}>
@@ -98,13 +109,14 @@ export default function MonEspace() {
                 <strong>Email :</strong> {user.email}
               </div>
               <div>
-                <strong>Plan :</strong> {user.plan}
+                <strong>Plan :</strong>{" "}
+                {isTrial ? "ESSAI PRO" : user.plan.toUpperCase()}
               </div>
             </div>
 
             <div className={styles.ctaRow}>
               <Link className={styles.primaryBtn} to="/#abonnements">
-                Renouveler mon abonnement
+                Choisir un abonnement
               </Link>
               <Link className={styles.secondaryBtn} to="/contact">
                 Contacter le support
@@ -116,66 +128,86 @@ export default function MonEspace() {
     );
   }
 
-  /* ✅ Abonnement actif */
-  const isStarter = user.plan === "starter";
-  const isPro = user.plan === "pro";
-
+  /* ✅ Accès actif ou période de grâce */
   return (
     <main className={styles.page}>
       <div className={styles.container}>
         <div className={styles.card}>
-          {/* HEADER */}
           <h1 className={styles.title}>
             Bienvenue sur votre espace BlockPulse
           </h1>
 
           <p className={styles.text}>
-            <strong>{user.email}</strong> · Plan{" "}
-            <strong>{user.plan.toUpperCase()}</strong> · Accès valide jusqu’au{" "}
-            {formatDateFR(user.expiresAt)}
+            <strong>{user.email}</strong> ·{" "}
+            <strong>
+              {isTrial ? "Accès Pro d’essai" : `Plan ${user.plan.toUpperCase()}`}
+            </strong>{" "}
+            · Accès valide jusqu’au {formatDateFR(expiresAt)}
           </p>
 
-          {/* 🔓 BOUTON DÉCONNEXION */}
-          <button
-            className={styles.logoutBtn}
-            onClick={() => navigate("/")}
-          >
+          {/* 🔔 Alerte J-2 */}
+          {isTrialEndingSoon && (
+            <div className={styles.upgradeBox}>
+              <h3>⚠️ Fin de l’essai imminente</h3>
+              <p>
+                Votre accès Pro d’essai se termine dans{" "}
+                <strong>{daysRemaining} jour(s)</strong>. Pour conserver l’accès
+                aux données, choisissez un abonnement.
+              </p>
+              <Link className={styles.primaryBtn} to="/#abonnements">
+                Choisir un abonnement
+              </Link>
+            </div>
+          )}
+
+          {/* 🔒 Mode grâce */}
+          {isGracePeriod && (
+            <div className={styles.upgradeBox}>
+              <h3>⏳ Essai terminé — accès limité</h3>
+              <p>
+                Votre essai gratuit est terminé. Certaines fonctionnalités sont
+                désormais limitées. Choisissez un abonnement pour conserver
+                l’accès complet.
+              </p>
+              <Link className={styles.primaryBtn} to="/#abonnements">
+                Choisir un abonnement
+              </Link>
+            </div>
+          )}
+
+          <button className={styles.logoutBtn} onClick={() => navigate("/")}>
             Se déconnecter
           </button>
 
-          {/* DONNÉES ESP32 */}
           <div className={styles.section}>
             <h2>Données ESP32</h2>
-            <ESPPreview plan={user.plan} />
+            <ESPPreview plan={user.plan} limited={isGracePeriod} />
           </div>
 
-          {/* UPSELL STARTER → PRO */}
-          {isStarter && (
+          {/* Upsell Starter */}
+          {isStarter && !isTrial && (
             <div className={styles.upgradeBox}>
               <h3>Débloquez le plan Pro 🚀</h3>
               <p>
                 Accédez aux statistiques avancées, à l’historique complet et aux
                 futures fonctionnalités BlockPulse.
               </p>
-
               <Link className={styles.primaryBtn} to="/#abonnements">
                 Passer au plan Pro
               </Link>
             </div>
           )}
 
-          {/* MESSAGE PRO */}
-          {isPro && (
+          {/* Pro payant */}
+          {isPro && !isTrial && (
             <div className={styles.proBox}>
               <h3>Accès Pro activé ⭐</h3>
               <p>
-                Vous bénéficiez de l’accès le plus complet aux données
-                BlockPulse.
+                Vous bénéficiez de l’accès le plus complet aux données BlockPulse.
               </p>
             </div>
           )}
 
-          {/* FOOTER INFOS */}
           <div className={styles.meta}>
             <div>
               <strong>Token :</strong> {user.token}

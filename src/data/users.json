@@ -19,11 +19,26 @@
 },
 
 {
+  "email": "testpro@gmail.com",
+  "plan": "pro",
+  "token": "BP-S7JT96NY",
+  "expiresAt": "2026-02-10"
+},
+
+{
   "email": "test@gmail.com",
   "token": "BP-TEST-PRO",
   "plan": "pro",
   "expiresAt": "2026-01-10",
   "active": true
+},
+
+{
+  "email": "test.trial@blockpulse.be",
+  "token": "BP-TEST-TRIAL",
+  "plan": "pro",
+  "trial": true,
+  "expiresAt": "2025-12-29"
 }
 
 ]

@@ -18,13 +18,13 @@
   color: var(--color-accent);
 }
 
+/* ===== CARTES ===== */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
 }
 
-/* Desktop */
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
@@ -63,29 +63,29 @@
   margin: 0;
 }
 
-/* ===== MOBILE - RÉDUCTION DE L'ESPACEMENT ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .section {
     padding: 48px 16px;
   }
-  
+
   .title {
     font-size: 1.6rem;
     margin-bottom: 32px;
   }
-  
+
   .grid {
     gap: 20px;
   }
-  
+
   .card {
     padding: 24px;
   }
-  
+
   .card h3 {
     font-size: 1.05rem;
   }
-  
+
   .card p {
     font-size: 0.9rem;
   }
@@ -95,20 +95,20 @@
   .section {
     padding: 40px 16px;
   }
-  
+
   .title {
     font-size: 1.5rem;
     margin-bottom: 28px;
   }
-  
+
   .card {
     padding: 20px;
   }
-  
+
   .card h3 {
     font-size: 1rem;
   }
-  
+
   .card p {
     font-size: 0.85rem;
   }

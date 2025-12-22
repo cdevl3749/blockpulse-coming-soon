@@ -1,0 +1,142 @@
+.page {
+  padding: 40px 16px;
+}
+
+.section {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.h1 {
+  font-size: 2rem;
+  margin-bottom: 18px;
+}
+
+.statusCard {
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 16px;
+}
+
+.statusTop {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.statusTitle {
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.statusSubtitle {
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.ok {
+  box-shadow: 0 0 0 1px rgba(0, 255, 0, 0.18) inset;
+}
+
+.partial {
+  box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.18) inset;
+}
+
+.down {
+  box-shadow: 0 0 0 1px rgba(255, 0, 0, 0.18) inset;
+}
+
+.indicators {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.indicator {
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.95rem;
+}
+
+.explain {
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  margin-bottom: 18px;
+}
+
+.ctaBox {
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255, 215, 0, 0.20);
+  background: rgba(255, 215, 0, 0.06);
+}
+
+.ctaTitle {
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.ctaText {
+  margin: 0 0 12px;
+  opacity: 0.95;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ctaBtn,
+.ctaBtnAlt {
+  display: inline-block;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.ctaBtn {
+  background: #ffd700;
+  color: #000;
+}
+
+.ctaBtnAlt {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+  .h1 {
+    font-size: 1.6rem;
+  }
+
+  .indicators {
+    grid-template-columns: 1fr;
+  }
+}

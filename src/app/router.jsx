@@ -11,6 +11,7 @@ import FAQPage from "../pages/FAQPage";
 import MentionsLegales from "../pages/MentionsLegales";
 import PolitiqueConfidentialite from "../pages/PolitiqueConfidentialite";
 import PolitiqueCookies from "../pages/PolitiqueCookies";
+import BitcoinActif from "@/pages/tools/BitcoinActif";
 
 // Anciens callbacks (conservés)
 import Success from "../pages/Success";
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
       { path: "faq", element: <FAQPage /> },
       { path: "a-propos", element: <About /> },
       { path: "demande-acces",element: <DemandeAcces /> },
+      { path: "tools/bitcoin-actif", element: <BitcoinActif /> },
 
 
       // Pages légales (URLs canoniques)

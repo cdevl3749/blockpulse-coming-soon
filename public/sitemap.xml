@@ -31,4 +31,9 @@
     <priority>0.3</priority>
   </url>
 
+  <url>
+    <loc>https://blockpulse.be/tools/bitcoin-actif</loc>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>

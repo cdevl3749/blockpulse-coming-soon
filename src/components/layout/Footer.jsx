@@ -9,21 +9,27 @@ export default function Footer() {
   const location = useLocation();
 
   const goToSection = (id) => {
-    // Si on n'est pas sur la home, on navigue vers la home avec un hash
+    const tryScroll = (attempt = 0) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      if (attempt < 10) setTimeout(() => tryScroll(attempt + 1), 50);
+    };
+
     if (location.pathname !== "/") {
       navigate(`/#${id}`);
+      setTimeout(() => tryScroll(0), 0);
       return;
     }
 
-    // Sinon scroll direct
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    tryScroll(0);
   };
 
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
-        {/* COL 1 — BRAND */}
         <div className={styles.brand}>
           <div className={styles.logoLine}>
             <img src={beFlag} alt="Belgique" />
@@ -41,11 +47,9 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* COL 2 — NAV */}
         <div className={styles.links}>
           <h4>Navigation</h4>
 
-          {/* Sections sur Home */}
           <button type="button" onClick={() => goToSection("fonctionnement")}>
             Fonctionnement
           </button>
@@ -58,12 +62,23 @@ export default function Footer() {
             FAQ
           </button>
 
-          {/* Page dédiée */}
+          <Link
+            to="/tools/bitcoin-actif"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            🟢 État du réseau Bitcoin
+          </Link>
+
+          {/* ⚠️ Si ça va encore à la mauvaise section, l'ID n'est pas "temps-reel"
+              Remplace "temps-reel" par l'ID exact de ta section ESP32 sur la home. */}
+          <button type="button" onClick={() => goToSection("temps-reel")}>
+            📡 Données Bitcoin en direct
+          </button>
+
           <Link to="/a-propos">À propos</Link>
           <Link to="/contact">Contact</Link>
         </div>
 
-        {/* COL 3 — SOCIAL */}
         <div className={styles.social}>
           <h4>Réseaux</h4>
           <a
@@ -77,7 +92,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* BOTTOM */}
       <div className={styles.bottom}>
         <span>© 2025 BlockPulse.be</span>
 
@@ -90,5 +104,4 @@ export default function Footer() {
     </footer>
   );
 }
-
 

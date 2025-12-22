@@ -23,7 +23,7 @@ export default function Pricing() {
             <p>Idéal pour tester le flux et explorer les données en continu</p>
 
             <p className={styles.price}>
-              €4<span>/mois</span>
+              €4 <span>TTC / mois</span>
             </p>
 
             <ul>
@@ -55,7 +55,7 @@ export default function Pricing() {
             <h3>Pro</h3>
             <p>Pour les usages avancés, l’analyse approfondie et le suivi long terme</p>
             <p className={styles.price}>
-              €9<span>/mois</span>
+              €9 <span>TTC / mois</span>
             </p>
 
             <ul>

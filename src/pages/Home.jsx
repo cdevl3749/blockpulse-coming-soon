@@ -113,6 +113,41 @@ export default function Home() {
             stable, sans coupures ni limitations.
           </p>
 
+          {/* 🔎 Badge outil V3 – preuve concrète sans surcharger */}
+            <div
+            style={{
+                marginTop: "18px",
+                marginBottom: "22px",
+                padding: "12px 16px",
+                borderRadius: "10px",
+                background: "rgba(0, 255, 136, 0.08)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                fontSize: "14px",
+                color: "#caffea",
+            }}
+            >
+            <span>
+                🟢 <strong>Outil temps réel V3</strong> — stabilité du réseau Bitcoin
+                mesurée par module physique (sans API)
+            </span>
+
+            <a
+                href="/tools/bitcoin-actif"
+                style={{
+                marginLeft: "8px",
+                fontWeight: 600,
+                color: "#00ff88",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                }}
+            >
+                → Voir en direct
+            </a>
+            </div>
+
+
           <div className={styles.cta}>
             <button
               type="button"

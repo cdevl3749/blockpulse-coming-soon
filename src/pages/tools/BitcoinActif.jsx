@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./BitcoinActif.module.css";
 
-/* ================== ENDPOINTS (IDENTIQUES À ESPPreview) ================== */
+/* ================== ENDPOINTS ================== */
 const CLOUD_ENDPOINT = "https://blockpulse.be/.netlify/functions/status";
 const LOCAL_ENDPOINT = import.meta.env.VITE_ESP32_LOCAL_STATUS || null;
 
@@ -23,13 +23,15 @@ function secondsSince(date) {
   return Math.floor((Date.now() - date.getTime()) / 1000);
 }
 
-function getStatusFromData({ data, lastUpdate, error }) {
+/* ================== STABILITÉ RÉSEAU ================== */
+function getStabilityFromData({ data, lastUpdate, error }) {
   if (error || !data || !lastUpdate) {
     return {
       level: "down",
+      score: 30,
       emoji: "🔴",
-      title: "Données indisponibles",
-      subtitle: "Impossible de vérifier l’activité du réseau pour le moment.",
+      title: "Réseau Bitcoin instable",
+      subtitle: "Les données ne permettent pas d’évaluer la stabilité pour le moment.",
     };
   }
 
@@ -39,26 +41,29 @@ function getStatusFromData({ data, lastUpdate, error }) {
   if (ageSec !== null && ageSec > 90) {
     return {
       level: "partial",
+      score: 55,
       emoji: "🟡",
-      title: "Bitcoin partiellement actif",
-      subtitle: "Le flux répond, mais la mise à jour semble irrégulière.",
+      title: "Réseau Bitcoin variable",
+      subtitle: "Le réseau fonctionne, mais les conditions peuvent changer.",
     };
   }
 
   if (hashrate > 0) {
     return {
       level: "ok",
+      score: 82,
       emoji: "🟢",
-      title: "Oui — Bitcoin est actif en ce moment",
-      subtitle: "Le réseau répond et l’activité est détectée.",
+      title: "Réseau Bitcoin stable",
+      subtitle: "Transactions fluides, frais et délais prévisibles.",
     };
   }
 
   return {
     level: "partial",
+    score: 60,
     emoji: "🟡",
-    title: "Bitcoin partiellement actif",
-    subtitle: "Le flux répond, mais l’activité détectée est faible ou nulle.",
+    title: "Réseau Bitcoin variable",
+    subtitle: "Activité détectée faible ou irrégulière.",
   };
 }
 
@@ -68,9 +73,12 @@ export default function BitcoinActif() {
   const [error, setError] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
 
+  // Compteur de stabilité (contexte temporel)
+  const [stableTicks, setStableTicks] = useState(0);
+
   /* ================== SEO ================== */
   useEffect(() => {
-    document.title = "Bitcoin est-il actif en ce moment ? | BlockPulse";
+    document.title = "Stabilité du réseau Bitcoin en temps réel | BlockPulse";
 
     let meta = document.querySelector("meta[name='description']");
     if (!meta) {
@@ -80,7 +88,7 @@ export default function BitcoinActif() {
     }
 
     meta.content =
-      "Vérifiez instantanément si le réseau Bitcoin est actif en ce moment. Indicateur simple, données en temps réel, sans API publique.";
+      "Quand envoyer du Bitcoin ? Vérifiez la stabilité du réseau en temps réel : frais, délais et congestion, via un module ESP32.";
   }, []);
 
   /* ================== DATA LOAD ================== */
@@ -112,49 +120,84 @@ export default function BitcoinActif() {
     return () => clearInterval(interval);
   }, []);
 
-  const status = useMemo(
-    () => getStatusFromData({ data, lastUpdate, error }),
+  /* ================== STABILITY ================== */
+  const stability = useMemo(
+    () => getStabilityFromData({ data, lastUpdate, error }),
     [data, lastUpdate, error]
   );
 
+  /* ================== CONSEIL DU MOMENT ================== */
+  const advice = useMemo(() => {
+    if (stability.level === "ok" && stability.score >= 75) {
+      return {
+        emoji: "🟢",
+        text: "Bon moment pour envoyer une transaction Bitcoin.",
+      };
+    }
+
+    if (stability.level === "partial") {
+      return {
+        emoji: "🟡",
+        text: "Conditions variables. Envoi possible, mais frais ou délais peuvent varier.",
+      };
+    }
+
+    return {
+      emoji: "🔴",
+      text: "Mieux vaut attendre si possible avant d’envoyer une transaction.",
+    };
+  }, [stability]);
+
+  /* ================== CONTEXTE TEMPOREL ================== */
+  useEffect(() => {
+    if (stability.level === "ok") {
+      setStableTicks((v) => v + 1);
+    } else {
+      setStableTicks(0);
+    }
+  }, [stability.level]);
+
   /* ================== INDICATEURS ================== */
   const indicators = useMemo(() => {
-    if (status.level === "ok") {
+    if (stability.level === "ok") {
       return [
-        { label: "Réseau accessible", state: "ok" },
-        { label: "Données continues", state: "ok" },
-        { label: "Source physique (ESP32)", state: "ok" },
+        { label: "Congestion du réseau", state: "ok" },
+        { label: "Frais prévisibles", state: "ok" },
+        { label: "Délais normaux", state: "ok" },
       ];
     }
 
-    if (status.level === "partial") {
+    if (stability.level === "partial") {
       return [
-        { label: "Réseau accessible", state: "ok" },
-        { label: "Données continues", state: "warn" },
-        { label: "Source physique (ESP32)", state: "ok" },
+        { label: "Congestion du réseau", state: "warn" },
+        { label: "Frais variables", state: "warn" },
+        { label: "Délais variables", state: "warn" },
       ];
     }
 
     return [
-      { label: "Réseau accessible", state: "down" },
-      { label: "Données continues", state: "down" },
-      { label: "Source physique (ESP32)", state: "warn" },
+      { label: "Congestion élevée", state: "down" },
+      { label: "Frais imprévisibles", state: "down" },
+      { label: "Délais allongés", state: "down" },
     ];
-  }, [status.level]);
+  }, [stability.level]);
 
   const age = secondsSince(lastUpdate);
 
   return (
     <div className={styles.page}>
       <section className={styles.section}>
-        <h1 className={styles.h1}>Bitcoin est-il actif en ce moment ?</h1>
+        <h1 className={styles.h1}>Stabilité du réseau Bitcoin en temps réel</h1>
 
-        <div className={`${styles.statusCard} ${styles[status.level]}`}>
+        {/* ===== STATUS CARD ===== */}
+        <div className={`${styles.statusCard} ${styles[stability.level]}`}>
           <div className={styles.statusTop}>
-            <span className={styles.emoji}>{status.emoji}</span>
+            <span className={styles.emoji}>{stability.emoji}</span>
             <div>
-              <div className={styles.statusTitle}>{status.title}</div>
-              <div className={styles.statusSubtitle}>{status.subtitle}</div>
+              <div className={styles.statusTitle}>
+                {stability.title} — {stability.score}/100
+              </div>
+              <div className={styles.statusSubtitle}>{stability.subtitle}</div>
             </div>
           </div>
 
@@ -163,12 +206,29 @@ export default function BitcoinActif() {
               Source : <strong>module physique ESP32</strong> (sans API publique)
             </span>
             <span>
-              Dernière vérification :{" "}
+              Dernière mise à jour :{" "}
               <strong>{age === null ? "—" : `il y a ${age}s`}</strong>
             </span>
           </div>
         </div>
 
+        {/* ===== CONSEIL DU MOMENT ===== */}
+        <div className={styles.explain}>
+          <p>
+            <strong>{advice.emoji} Conseil du moment</strong>
+            <br />
+            {advice.text}
+          </p>
+        </div>
+
+        {/* ===== CONTEXTE TEMPOREL ===== */}
+        {stableTicks >= 3 && (
+          <div className={styles.explain}>
+            <p>⏱️ Conditions stables observées depuis plusieurs minutes.</p>
+          </div>
+        )}
+
+        {/* ===== INDICATORS ===== */}
         <div className={styles.indicators}>
           {indicators.map((item, idx) => {
             let icon = "✔";
@@ -183,53 +243,28 @@ export default function BitcoinActif() {
           })}
         </div>
 
+        {/* ===== EXPLICATION ===== */}
         <div className={styles.explain}>
           <p>
-            Cet outil donne un indicateur <strong>simple</strong> pour savoir si
-            Bitcoin est actif, sans jargon et sans dépendre de services tiers.
+            La <strong>stabilité du réseau Bitcoin</strong> permet de savoir
+            s’il est préférable d’envoyer une transaction maintenant ou d’attendre.
           </p>
           <p>
-            Les données proviennent d’un <strong>module ESP32</strong> connecté
-            en continu au réseau, afin d’observer l’activité en temps réel.
-          </p>
-          <p>
-            Cet indicateur permet aussi de vérifier si le réseau Bitcoin fonctionne
-            normalement, s’il répond correctement et s’il est utilisable à l’instant présent.
+            Cet indicateur repose sur une observation directe du réseau via
+            un <strong>module ESP32</strong>, sans dépendre de services tiers.
           </p>
         </div>
 
-        {/* ===== MINI FAQ ===== */}
-        <div className={styles.explain}>
-          <p>
-            <strong>Que signifie “Bitcoin est actif” ?</strong>
-            <br />
-            Cela signifie que le réseau Bitcoin répond normalement et que de
-            l’activité est détectée en temps réel.
-            </p>
-
-            <p>
-            Nous proposons aussi un outil gratuit pour savoir si{" "}
-            <a href="/tools/bitcoin-actif">
-                Bitcoin est actif en ce moment
-            </a>.
-          </p>
-          <p>
-            <strong>Est-ce fiable ?</strong>
-            <br />
-            Oui. L’indicateur est basé sur une observation directe du réseau via
-            un module physique ESP32, sans dépendre d’APIs publiques.
-          </p>
-        </div>
-
+        {/* ===== CTA ===== */}
         <div className={styles.ctaBox}>
           <div className={styles.ctaTitle}>🔓 Aller plus loin</div>
           <p className={styles.ctaText}>
-           Voir les données en temps réel et comprendre plus en détail
-           comment le réseau Bitcoin se comporte.
+            Consultez les données ESP32 en direct pour comprendre
+            pourquoi le réseau est actuellement dans cet état.
           </p>
           <div className={styles.ctaRow}>
             <a className={styles.ctaBtn} href="/#temps-reel">
-              Voir les données en direct
+              Voir pourquoi le réseau est stable
             </a>
             <a className={styles.ctaBtnAlt} href="/demande-acces">
               Essai Pro 7 jours
@@ -240,3 +275,4 @@ export default function BitcoinActif() {
     </div>
   );
 }
+

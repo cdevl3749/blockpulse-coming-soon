@@ -93,7 +93,7 @@ export default function ESPPreview({ plan = "public" }) {
     };
 
     load();
-    const interval = setInterval(load, 30000);
+    const interval = setInterval(load, 60000);
     return () => clearInterval(interval);
   }, []);
 
@@ -125,7 +125,7 @@ export default function ESPPreview({ plan = "public" }) {
           <Card label="Pool" value={data.pool || "—"} />
           <Card label="Module ESP32" value="Connecté" />
           <Card label="Source" value="ESP32 physique réel" />
-          <Card label="Mise à jour" value="Toutes les 30 secondes" />
+          <Card label="Mise à jour" value="Toutes les 60 secondes" />
 
           {/* BLOQUÉS SI PAS PRO */}
           <LockedCard

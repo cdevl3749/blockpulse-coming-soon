@@ -24,7 +24,17 @@ function secondsSince(date) {
 }
 
 /* ================== STABILITÉ RÉSEAU ================== */
-function getStabilityFromData({ data, lastUpdate, error }) {
+function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
+  if (isLoading) {
+    return {
+      level: "loading",
+      score: "—",
+      emoji: "⏳",
+      title: "Synchronisation du réseau Bitcoin",
+      subtitle: "Données en cours de récupération depuis le module physique.",
+    };
+  }
+
   if (error || !data || !lastUpdate) {
     return {
       level: "down",
@@ -72,6 +82,7 @@ export default function BitcoinActif() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Compteur de stabilité (contexte temporel)
   const [stableTicks, setStableTicks] = useState(0);
@@ -110,8 +121,10 @@ export default function BitcoinActif() {
         setData(json);
         setLastUpdate(new Date());
         setError(false);
+        setIsLoading(false);
       } catch {
         setError(true);
+        setIsLoading(false);
       }
     };
 
@@ -123,8 +136,8 @@ export default function BitcoinActif() {
 
   /* ================== STABILITY ================== */
   const stability = useMemo(
-    () => getStabilityFromData({ data, lastUpdate, error }),
-    [data, lastUpdate, error]
+    () => getStabilityFromData({ data, lastUpdate, error, isLoading }),
+    [data, lastUpdate, error, isLoading]
   );
 
   /* ================== CONSEIL DU MOMENT ================== */
@@ -140,6 +153,13 @@ export default function BitcoinActif() {
       return {
         emoji: "🟡",
         text: "Conditions variables. Envoi possible, mais frais ou délais peuvent varier.",
+      };
+    }
+
+    if (stability.level === "loading") {
+      return {
+        emoji: "⏳",
+        text: "Synchronisation des données réseau en cours.",
       };
     }
 
@@ -176,6 +196,14 @@ export default function BitcoinActif() {
       ];
     }
 
+    if (stability.level === "loading") {
+      return [
+        { label: "Synchronisation en cours", state: "warn" },
+        { label: "Mesure réseau", state: "warn" },
+        { label: "Module ESP32 actif", state: "warn" },
+      ];
+    }
+
     return [
       { label: "Congestion élevée", state: "down" },
       { label: "Frais imprévisibles", state: "down" },
@@ -196,7 +224,7 @@ export default function BitcoinActif() {
             <span className={styles.emoji}>{stability.emoji}</span>
             <div>
               <div className={styles.statusTitle}>
-                {stability.title} — {stability.score}/100
+                {stability.title} {stability.score !== "—" && `— ${stability.score}/100`}
               </div>
               <div className={styles.statusSubtitle}>{stability.subtitle}</div>
             </div>

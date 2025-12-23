@@ -134,19 +134,18 @@ export default function Home() {
             </span>
 
             <a
-                href="/tools/bitcoin-actif"
-                style={{
+            href="/tools/bitcoin-actif?utm_source=home&utm_medium=badge&utm_campaign=v3"
+            style={{
                 marginLeft: "8px",
                 fontWeight: 600,
                 color: "#00ff88",
                 textDecoration: "none",
                 whiteSpace: "nowrap",
-                }}
+            }}
             >
-                → Voir en direct
+            → Voir en direct
             </a>
             </div>
-
 
           <div className={styles.cta}>
             <button

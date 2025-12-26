@@ -373,9 +373,13 @@ export default function BitcoinActif() {
           </div>
 
           <div className={styles.meta}>
-            <span>
-              Source : <strong>module physique ESP32</strong> (sans API publique)
+            <span
+            title="Données observées directement par un module ESP32 analysant le trafic du réseau Bitcoin. Aucune API ni service tiers n’est utilisé."
+            style={{ cursor: "help" }}
+            >
+            Source : <strong>module physique ESP32</strong> (sans API publique) ℹ️
             </span>
+
             <span>
               Dernière mise à jour :{" "}
               <strong>{age === null ? "—" : `il y a ${age}s`}</strong>

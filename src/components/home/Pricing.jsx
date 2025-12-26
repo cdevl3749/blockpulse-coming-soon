@@ -33,7 +33,7 @@ export default function Pricing() {
               <li>⚡ Données brutes, non filtrées, prêtes à être exploitées</li>
               <li>🔄 Rafraîchissement automatique toutes les 30 secondes</li>
               <li>🔐 Accès sécurisé via lien privé personnel</li>
-              <li>🔒 Métriques avancées réservées au plan Pro</li>
+              <li>🔒 Certaines cartes ESP32 avancées réservées au plan Pro</li>
             </ul>
 
             <a

@@ -1,9 +1,23 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./BitcoinActif.module.css";
+import Esp32InsightCard from "./Esp32InsightCard";
+import users from "../../data/users.json";
 
 /* ================== ENDPOINTS ================== */
 const CLOUD_ENDPOINT = "https://blockpulse.be/.netlify/functions/status";
 const LOCAL_ENDPOINT = import.meta.env.VITE_ESP32_LOCAL_STATUS || null;
+
+/* ================== AUTH SESSION ================== */
+const AUTH_TOKEN_KEY = "bp_auth_token";
+
+/* ================== STARTER ================== */
+const STARTER_DAILY_LIMIT = 10;
+
+function getTodayKey(token) {
+  const d = new Date().toISOString().slice(0, 10);
+  return `bp_insight_${token}_${d}`;
+}
 
 /* ================== UTILS ================== */
 async function fetchWithTimeout(url, timeoutMs) {
@@ -21,6 +35,15 @@ async function fetchWithTimeout(url, timeoutMs) {
 function secondsSince(date) {
   if (!date) return null;
   return Math.floor((Date.now() - date.getTime()) / 1000);
+}
+
+/* ================== SESSION TOKEN (SAFE) ================== */
+function getSessionToken() {
+  try {
+    return sessionStorage.getItem(AUTH_TOKEN_KEY);
+  } catch {
+    return null;
+  }
 }
 
 /* ================== STABILITÉ RÉSEAU ================== */
@@ -41,7 +64,8 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
       score: 30,
       emoji: "🔴",
       title: "Réseau Bitcoin instable",
-      subtitle: "Les données ne permettent pas d’évaluer la stabilité pour le moment.",
+      subtitle:
+        "Les données ne permettent pas d’évaluer la stabilité pour le moment.",
     };
   }
 
@@ -79,13 +103,68 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
 
 /* ================== PAGE ================== */
 export default function BitcoinActif() {
+  const navigate = useNavigate();
+
   const [data, setData] = useState(null);
   const [error, setError] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Compteur de stabilité (contexte temporel)
   const [stableTicks, setStableTicks] = useState(0);
+
+  /* ================== USER SESSION ================== */
+  const sessionToken = useMemo(() => getSessionToken(), []);
+  const sessionUser = useMemo(() => {
+    if (!sessionToken) return null;
+    return users.find((u) => u.token === sessionToken) || null;
+  }, [sessionToken]);
+
+  const plan = sessionUser?.plan || "free";
+  const isTrial = sessionUser?.trial === true;
+
+  const sessionUserProp = useMemo(
+    () => (sessionToken ? { token: sessionToken } : null),
+    [sessionToken]
+  );
+
+  /* ================== 🔖 MICRO BADGE (CONNECTÉ) ================== */
+  const badgeLabel = useMemo(() => {
+    if (!sessionToken || !sessionUser) return null;
+
+    if (plan === "pro" && isTrial) return "Connecté : Essai Pro";
+    if (plan === "pro") return "Connecté : Pro";
+    if (plan === "starter") return "Connecté : Starter";
+    return "Connecté : Free";
+  }, [sessionToken, sessionUser, plan, isTrial]);
+
+  /* ================== ✅ CONSOMMATION STARTER (1x/jour) ==================
+     - Objectif: dès que le Starter "accède" à l'outil, on consomme 1 crédit.
+     - Protection: on ne consomme qu'une seule fois par jour (sinon refresh = catastrophe).
+  */
+  useEffect(() => {
+    if (!sessionUser || !sessionToken) return;
+    if (plan !== "starter") return;
+
+    const key = getTodayKey(sessionToken);
+    const usedRaw = localStorage.getItem(key);
+    const used = Number(usedRaw || "0");
+
+    // Si déjà consommé aujourd'hui (>=1), on ne touche à rien.
+    // Si jamais used est déjà élevé (tests), on ne sur-consomme pas ici.
+    if (Number.isNaN(used)) {
+      localStorage.setItem(key, "1");
+      return;
+    }
+
+    if (used <= 0) {
+      localStorage.setItem(key, "1");
+      return;
+    }
+
+    // Optionnel: sécurité si dépassement
+    if (used > STARTER_DAILY_LIMIT) {
+      localStorage.setItem(key, String(STARTER_DAILY_LIMIT));
+    }
+  }, [sessionUser, sessionToken, plan]);
 
   /* ================== SEO ================== */
   useEffect(() => {
@@ -130,7 +209,6 @@ export default function BitcoinActif() {
 
     load();
     const interval = setInterval(load, 60000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -148,21 +226,16 @@ export default function BitcoinActif() {
         text: "Bon moment pour envoyer une transaction Bitcoin.",
       };
     }
-
     if (stability.level === "partial") {
       return {
         emoji: "🟡",
-        text: "Conditions variables. Envoi possible, mais frais ou délais peuvent varier.",
+        text:
+          "Conditions variables. Envoi possible, mais frais ou délais peuvent varier.",
       };
     }
-
     if (stability.level === "loading") {
-      return {
-        emoji: "⏳",
-        text: "Synchronisation des données réseau en cours.",
-      };
+      return { emoji: "⏳", text: "Synchronisation des données réseau en cours." };
     }
-
     return {
       emoji: "🔴",
       text: "Mieux vaut attendre si possible avant d’envoyer une transaction.",
@@ -216,6 +289,74 @@ export default function BitcoinActif() {
   return (
     <div className={styles.page}>
       <section className={styles.section}>
+        {/* ===== TOP BAR (badge + retour + logout) ===== */}
+        {sessionToken && sessionUser && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "12px",
+              marginBottom: "16px",
+              flexWrap: "wrap",
+            }}
+          >
+            {/* Micro-badge */}
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "8px 12px",
+                borderRadius: "999px",
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.10)",
+                fontSize: "14px",
+              }}
+              title={sessionUser?.email || ""}
+            >
+              <span>🟢</span>
+              <span>{badgeLabel}</span>
+            </div>
+
+            {/* Actions */}
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <button
+                type="button"
+                onClick={() => navigate(`/mon-espace?token=${sessionToken}`)}
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: "12px",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "white",
+                  cursor: "pointer",
+                }}
+              >
+                ← Retour à mon espace
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  sessionStorage.removeItem(AUTH_TOKEN_KEY);
+                  navigate("/mon-espace");
+                }}
+                style={{
+                  padding: "10px 14px",
+                  borderRadius: "12px",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "white",
+                  cursor: "pointer",
+                }}
+              >
+                Se déconnecter
+              </button>
+            </div>
+          </div>
+        )}
+
         <h1 className={styles.h1}>Stabilité du réseau Bitcoin en temps réel</h1>
 
         {/* ===== STATUS CARD ===== */}
@@ -224,7 +365,8 @@ export default function BitcoinActif() {
             <span className={styles.emoji}>{stability.emoji}</span>
             <div>
               <div className={styles.statusTitle}>
-                {stability.title} {stability.score !== "—" && `— ${stability.score}/100`}
+                {stability.title}{" "}
+                {stability.score !== "—" && `— ${stability.score}/100`}
               </div>
               <div className={styles.statusSubtitle}>{stability.subtitle}</div>
             </div>
@@ -241,7 +383,7 @@ export default function BitcoinActif() {
           </div>
         </div>
 
-        {/* ===== CONSEIL DU MOMENT ===== */}
+        {/* ===== CONSEIL ===== */}
         <div className={styles.explain}>
           <p>
             <strong>{advice.emoji} Conseil du moment</strong>
@@ -250,58 +392,61 @@ export default function BitcoinActif() {
           </p>
         </div>
 
-        {/* ===== CONTEXTE TEMPOREL ===== */}
         {stableTicks >= 3 && (
           <div className={styles.explain}>
             <p>⏱️ Conditions stables observées depuis plusieurs minutes.</p>
           </div>
         )}
 
-        {/* ===== INDICATORS ===== */}
         <div className={styles.indicators}>
-          {indicators.map((item, idx) => {
-            let icon = "✔";
-            if (item.state === "warn") icon = "⚠";
-            if (item.state === "down") icon = "✖";
-
-            return (
-              <div key={idx} className={styles.indicator}>
-                {icon} {item.label}
-              </div>
-            );
-          })}
+          {indicators.map((item, idx) => (
+            <div key={idx} className={styles.indicator}>
+              {(item.state === "ok" && "✔") ||
+                (item.state === "warn" && "⚠") ||
+                "✖"}{" "}
+              {item.label}
+            </div>
+          ))}
         </div>
 
-        {/* ===== EXPLICATION ===== */}
         <div className={styles.explain}>
           <p>
-            La <strong>stabilité du réseau Bitcoin</strong> permet de savoir
-            s’il est préférable d’envoyer une transaction maintenant ou d’attendre.
-          </p>
-          <p>
-            Cet indicateur repose sur une observation directe du réseau via
-            un <strong>module ESP32</strong>, sans dépendre de services tiers.
+            Cet indicateur repose sur une observation directe du réseau via un{" "}
+            <strong>module ESP32</strong>, sans dépendre de services tiers.
           </p>
         </div>
 
-        {/* ===== CTA ===== */}
+        {/* ===== ESP32 INSIGHT CARD ===== */}
+        <Esp32InsightCard user={sessionUserProp} />
+
+        {/* ===== CTA (COHÉRENT SELON PLAN) ===== */}
         <div className={styles.ctaBox}>
           <div className={styles.ctaTitle}>🔓 Aller plus loin</div>
           <p className={styles.ctaText}>
-            Consultez les données ESP32 en direct pour comprendre
-            pourquoi le réseau est actuellement dans cet état.
+            Consultez les données ESP32 en direct pour comprendre pourquoi le
+            réseau est actuellement dans cet état.
           </p>
+
           <div className={styles.ctaRow}>
             <a className={styles.ctaBtn} href="/#temps-reel">
               Voir pourquoi le réseau est stable
             </a>
-            <a className={styles.ctaBtnAlt} href="/demande-acces">
-              Essai Pro 7 jours
-            </a>
+
+            {plan === "free" && (
+              <a className={styles.ctaBtnAlt} href="/demande-acces">
+                Essai Pro 7 jours
+              </a>
+            )}
+
+            {plan === "starter" && (
+              <a className={styles.ctaBtnAlt} href="/abonnements">
+                Passer au plan Pro
+              </a>
+            )}
+            {/* plan === "pro" → aucun CTA */}
           </div>
         </div>
       </section>
     </div>
   );
 }
-

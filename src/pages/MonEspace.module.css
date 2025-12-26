@@ -168,3 +168,10 @@
   border-radius: var(--radius);
   cursor: pointer;
 }
+
+.blurred {
+  filter: blur(6px);
+  pointer-events: none;
+  opacity: 0.6;
+  user-select: none;
+}

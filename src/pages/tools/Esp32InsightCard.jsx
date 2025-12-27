@@ -116,12 +116,13 @@ export default function Esp32InsightCard({ user }) {
     const start = getPreviewStart();
     const now = Date.now();
 
-    if (!start) {
-      setPreviewStart(now);
-      setPreviewExpired(false);
+    if (start === null) {
+    setPreviewStart(now);
+    setPreviewExpired(false);
     } else {
-      setPreviewExpired(now - start > PREVIEW_DURATION_MS);
+    setPreviewExpired(now - start > PREVIEW_DURATION_MS);
     }
+
   }, [isFree]);
 
   /* ================== CREDITS STARTER ================== */

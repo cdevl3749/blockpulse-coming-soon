@@ -81,7 +81,7 @@ export default function Pricing() {
           </div>
         </div>
 
-        {/* ================= INFO RARE ================= */}
+        {/* ================= INFO RARE =================
         <div className={styles.infoBox}>
           <strong>🧱 Événement rare — Bloc trouvé</strong>
           <p>
@@ -93,7 +93,8 @@ export default function Pricing() {
             d’un historique complet et d’un affichage détaillé de ces événements exceptionnels.
           </p>
         </div>
-
+        */}
+        
         {/* ================= RASSURANCE ================= */}
         <p className={styles.note}>
           ✔ Paiement sécurisé via PayPal · ✔ Aucun compte PayPal requis

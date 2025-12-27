@@ -113,3 +113,29 @@
     font-size: 0.85rem;
   }
 }
+
+/* ===== VARIANTS BELGIQUE (DISCRETS) ===== */
+
+.neutral {
+  --accent: rgba(255, 255, 255, 0.35);
+}
+
+.signal {
+  --accent: rgba(255, 200, 0, 0.6);
+}
+
+.secure {
+  --accent: rgba(220, 60, 60, 0.55);
+}
+
+.card {
+  border-left: 3px solid var(--accent);
+}
+
+.step {
+  color: var(--accent);
+}
+
+.card:hover {
+  box-shadow: 0 0 0 1px var(--accent);
+}

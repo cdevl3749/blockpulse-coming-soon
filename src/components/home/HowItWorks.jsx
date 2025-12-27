@@ -4,17 +4,20 @@ const STEPS = [
   {
     step: "01",
     title: "Dispositif physique ESP32",
-    text: "Un module ESP32 dédié fonctionne 24/7 et mesure des données crypto depuis une source matérielle indépendante, sans API externe."
+    text: "Un module ESP32 dédié fonctionne 24/7 et mesure des données crypto depuis une source matérielle indépendante, sans API externe.",
+    variant: "neutral"
   },
   {
     step: "02",
     title: "Données en temps réel",
-    text: "Les données sont transmises automatiquement vers nos serveurs. Aucune intervention humaine, aucune modification manuelle."
+    text: "Les données sont transmises automatiquement vers nos serveurs. Aucune intervention humaine, aucune modification manuelle.",
+    variant: "signal"
   },
   {
     step: "03",
     title: "Accès sécurisé",
-    text: "Les abonnés accèdent aux données via une interface sécurisée. Paiement simple et fiable via PayPal."
+    text: "Les abonnés accèdent aux données via une interface sécurisée. Paiement simple et fiable via PayPal.",
+    variant: "secure"
   }
 ];
 
@@ -28,7 +31,10 @@ export default function HowItWorks() {
 
         <div className={styles.grid}>
           {STEPS.map((item) => (
-            <div key={item.step} className={styles.card}>
+            <div
+              key={item.step}
+              className={`${styles.card} ${styles[item.variant]}`}
+            >
               <div className={styles.step}>{item.step}</div>
               <h3>{item.title}</h3>
               <p>{item.text}</p>

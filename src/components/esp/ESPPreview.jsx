@@ -171,8 +171,7 @@ export default function ESPPreview({ plan = "public" }) {
           <div className={styles.upgradeBox}>
             <h3>🔓 Débloquez toutes les métriques ESP32</h3>
             <p>
-              Accédez aux données avancées, à l’historique complet et au suivi
-              des blocs trouvés avec l’abonnement <strong>Pro</strong>.
+              Accédez à une analyse avancée du réseau Bitcoin et à l’historique complet pour savoir quand envoyer une transaction en toute confiance avec l’abonnement <strong>Pro</strong>.
             </p>
             <a href="/#abonnements" className={styles.upgradeBtn}>
               Passer à Pro

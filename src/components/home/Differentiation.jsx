@@ -4,33 +4,34 @@ export default function Differentiation() {
   return (
     <section className={styles.diff}>
       <div className={styles.inner}>
-        <h2>Pourquoi BlockPulse est différent</h2>
+        <h2>Pourquoi BlockPulse Insight est différent</h2>
         <p className={styles.intro}>
-          Contrairement aux services classiques basés sur des API, BlockPulse
-          repose sur une source matérielle indépendante, garantissant des données
-          plus fiables et non manipulées.
+        Contrairement aux services classiques basés sur des API ou des estimations
+        indirectes, BlockPulse Insight repose sur une observation physique et
+        indépendante du réseau Bitcoin. L’objectif : savoir si le réseau est stable
+        avant d’envoyer une transaction.
         </p>
 
         <div className={styles.grid}>
           <div className={styles.card}>
             <h3>❌ API classiques</h3>
             <ul>
-              <li>Données issues de tiers</li>
-              <li>Risque de manipulation ou filtrage</li>
-              <li>Dépendance à des plateformes externes</li>
-              <li>Sources souvent opaques</li>
+            <li>Données issues de services tiers</li>
+            <li>Dépendance à des estimations logicielles</li>
+            <li>Risque de filtrage, de retard ou de coupure</li>
+            <li>Peu adaptées à une décision immédiate avant transaction</li>
             </ul>
-          </div>
+        </div>
 
           <div className={styles.cardHighlight}>
-            <h3>✅ BlockPulse</h3>
+            <h3>✅ BlockPulse Insight</h3>
             <ul>
-              <li>Données mesurées physiquement</li>
-              <li>Source indépendante (ESP32)</li>
-              <li>Aucune modification humaine</li>
-              <li>Traçabilité et transparence</li>
+            <li>Observation physique du réseau via ESP32</li>
+            <li>Aucune API publique, aucune donnée tierce</li>
+            <li>Analyse en temps réel de la stabilité réseau</li>
+            <li>Consultation simple avant d’envoyer une transaction Bitcoin</li>
             </ul>
-          </div>
+        </div>
         </div>
       </div>
     </section>

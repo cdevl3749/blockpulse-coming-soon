@@ -3,20 +3,20 @@ import styles from "./HowItWorks.module.css";
 const STEPS = [
   {
     step: "01",
-    title: "Dispositif physique ESP32",
-    text: "Un module ESP32 dédié fonctionne 24/7 et mesure des données crypto depuis une source matérielle indépendante, sans API externe.",
+    title: "Observation physique du réseau Bitcoin",
+    text: "Un module ESP32 dédié fonctionne 24/7 et observe le comportement du réseau Bitcoin depuis l’extérieur. Aucune API, aucun service tiers, uniquement une mesure physique indépendante.",
     variant: "neutral"
   },
   {
     step: "02",
-    title: "Données en temps réel",
-    text: "Les données sont transmises automatiquement vers nos serveurs. Aucune intervention humaine, aucune modification manuelle.",
+    title: "Stabilité du réseau en temps réel",
+    text: "BlockPulse Insight analyse en continu la stabilité du réseau Bitcoin. Vous savez si le réseau est fluide, congestionné ou sous tension avant d’envoyer une transaction.",
     variant: "signal"
   },
   {
     step: "03",
-    title: "Accès sécurisé",
-    text: "Les abonnés accèdent aux données via une interface sécurisée. Paiement simple et fiable via PayPal.",
+    title: "Accès direct à l’indicateur BlockPulse Insight",
+    text: "Les abonnés accèdent à l’indicateur BlockPulse Insight via une interface sécurisée. Consultation immédiate avant toute transaction ou décision opérationnelle.",
     variant: "secure"
   }
 ];

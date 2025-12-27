@@ -10,30 +10,36 @@ export default function Pricing() {
         <h2>Abonnements</h2>
 
        <p className={styles.subtitle}>
-          Accédez à un flux Bitcoin <strong>fiable, continu et exploitable</strong>,
-          mesuré par un module ESP32 physique indépendant.
-          Conçu pour le monitoring, l’analyse et les projets longue durée,
-          sans dépendre d’APIs centralisées.
+          Accédez à <strong>BlockPulse Insight</strong>, un indicateur simple et fiable
+          pour <strong>savoir si le réseau Bitcoin est dans de bonnes conditions
+          avant d’envoyer une transaction</strong>.
+          <br />
+          Données mesurées en temps réel par un <strong>module ESP32 physique indépendant</strong>,
+          sans API ni estimation logicielle.
        </p>
 
         <div className={styles.grid}>
           {/* ================= STARTER ================= */}
           <div className={styles.card}>
             <h3>Starter</h3>
-            <p>Idéal pour tester le flux et explorer les données en continu</p>
+            <p>
+              Idéal pour <strong>vérifier si le réseau Bitcoin est stable</strong>
+              avant d’envoyer une transaction et comprendre son état en temps réel.
+            </p>
 
             <p className={styles.price}>
               €4 <span>TTC / mois</span>
             </p>
 
             <ul>
-              <li>🔓 Accès au flux Bitcoin en temps réel (ESP32 physique)</li>
-              <li>📈 Suivi du hashrate et de l’état du réseau</li>
+              <li>🟢 Indicateur BlockPulse Insight : stabilité du réseau en temps réel</li>
+              <li>🔓 Données observées via module ESP32 physique (sans API)</li>
+              <li>📈 État global du réseau et hashrate</li>
               <li>🌐 Pool de minage actuellement actif</li>
               <li>⚡ Données brutes, non filtrées, prêtes à être exploitées</li>
-              <li>🔄 Rafraîchissement automatique toutes les 30 secondes</li>
+              <li>🔄 Rafraîchissement automatique toutes les 60 secondes</li>
               <li>🔐 Accès sécurisé via lien privé personnel</li>
-              <li>🔒 Certaines cartes ESP32 avancées réservées au plan Pro</li>
+              <li>🔒 Certaines vues avancées réservées au plan Pro</li>
             </ul>
 
             <a
@@ -53,17 +59,22 @@ export default function Pricing() {
             <span className={styles.badge}>Le plus complet</span>
 
             <h3>Pro</h3>
-            <p>Pour les usages avancés, l’analyse approfondie et le suivi long terme</p>
+            <p>
+              Un <strong>outil de décision avancé</strong> pour analyser la stabilité
+              du réseau Bitcoin avant toute transaction, avec historique et analyses
+              approfondies.
+            </p>
+
             <p className={styles.price}>
               €9 <span>TTC / mois</span>
             </p>
 
             <ul>
               <li>⭐ Tout le plan Starter inclus</li>
-              <li>📊 Accès complet aux métriques avancées du module ESP32</li>
-              <li>🕒 Historique étendu et statistiques détaillées</li>
-              <li>🧱 Suivi complet des événements rares (bloc trouvé)</li>
-              <li>🔓 Déverrouillage de toutes les cartes et vues ESP32</li>
+              <li>📊 Analyse avancée de la stabilité réseau (ESP32)</li>
+              <li>🕒 Historique étendu pour comparer les périodes favorables</li>
+              <li>🧱 Suivi détaillé des événements rares (bloc trouvé)</li>
+              <li>🔓 Accès à toutes les cartes et vues BlockPulse Insight</li>
               <li>🚀 Accès prioritaire aux nouvelles fonctionnalités</li>
               <li>💬 Support prioritaire pour les abonnés Pro</li>
             </ul>
@@ -94,7 +105,7 @@ export default function Pricing() {
           </p>
         </div>
         */}
-        
+
         {/* ================= RASSURANCE ================= */}
         <p className={styles.note}>
           ✔ Paiement sécurisé via PayPal · ✔ Aucun compte PayPal requis

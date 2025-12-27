@@ -102,15 +102,14 @@ export default function Home() {
           </div>
 
           <h1>
-            Des données Bitcoin <span>fiables et continues</span> pour vos outils,
-            bots et dashboards
+            Savoir si c’est <span>le bon moment</span> pour envoyer une transaction Bitcoin
           </h1>
 
           <p className={styles.subtitle}>
-            BlockPulse fournit un flux Bitcoin mesuré par un module physique
-            indépendant, conçu pour les usages sérieux : bots, monitoring et
-            analyse continue. Contrairement aux APIs classiques, le flux reste
-            stable, sans coupures ni limitations.
+            BlockPulse Insight analyse en temps réel la stabilité du réseau Bitcoin à partir
+            d’un module ESP32 physique indépendant.  
+            Avant d’envoyer une transaction, vous savez si le réseau est fluide, congestionné
+            ou sous tension.
           </p>
 
           {/* 🔎 Badge outil V3 – preuve concrète sans surcharger */}
@@ -129,8 +128,9 @@ export default function Home() {
             }}
             >
             <span>
-                🟢 <strong>Outil temps réel V3</strong> — stabilité du réseau Bitcoin
-                mesurée par module physique (sans API)
+            🟢 <strong>BlockPulse Insight — Analyse ESP32 en direct</strong> : 
+            savoir si le réseau Bitcoin est stable avant d’envoyer une transaction 
+            (mesure physique, sans API)
             </span>
 
             <a

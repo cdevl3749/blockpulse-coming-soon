@@ -12,6 +12,7 @@ import MentionsLegales from "../pages/MentionsLegales";
 import PolitiqueConfidentialite from "../pages/PolitiqueConfidentialite";
 import PolitiqueCookies from "../pages/PolitiqueCookies";
 import BitcoinActif from "@/pages/tools/BitcoinActif";
+import BitcoinNetworkStatus from "@/pages/tools/BitcoinNetworkStatus";
 
 // Anciens callbacks (conservés)
 import Success from "../pages/Success";
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
       { path: "a-propos", element: <About /> },
       { path: "demande-acces",element: <DemandeAcces /> },
       { path: "tools/bitcoin-actif", element: <BitcoinActif /> },
+      { path: "tools/bitcoin-network-status", element: <BitcoinNetworkStatus /> },
 
 
       // Pages légales (URLs canoniques)

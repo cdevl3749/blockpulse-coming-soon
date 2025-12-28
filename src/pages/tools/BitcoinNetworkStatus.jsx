@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./BitcoinActif.module.css";
 import Esp32InsightCard from "./Esp32InsightCard";
+import Esp32InsightCardEN from "./Esp32InsightCardEN";
 import users from "../../data/users.json";
 
 /* ================== ENDPOINTS ================== */
@@ -53,8 +54,8 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
       level: "loading",
       score: "—",
       emoji: "⏳",
-      title: "Synchronisation du réseau Bitcoin",
-      subtitle: "Données en cours de récupération depuis le module physique.",
+      title: "Synchronizing the Bitcoin network",
+      subtitle: "Fetching live measurements from the physical module.",
     };
   }
 
@@ -63,9 +64,9 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
       level: "down",
       score: 30,
       emoji: "🔴",
-      title: "Réseau Bitcoin instable",
+      title: "Bitcoin network unstable",
       subtitle:
-        "Les données ne permettent pas d'évaluer la stabilité pour le moment.",
+        "Network stability cannot be evaluated right now.",
     };
   }
 
@@ -77,8 +78,8 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
       level: "partial",
       score: 55,
       emoji: "🟡",
-      title: "Réseau Bitcoin variable",
-      subtitle: "Le réseau fonctionne, mais les conditions peuvent changer.",
+      title: "Bitcoin network fluctuating",
+      subtitle: "Network is running, but conditions may change.",
     };
   }
 
@@ -87,8 +88,8 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
       level: "ok",
       score: 82,
       emoji: "🟢",
-      title: "Réseau Bitcoin stable",
-      subtitle: "Transactions fluides, frais et délais prévisibles.",
+      title: "Bitcoin network stable",
+      subtitle: "Smooth broadcasting, more predictable fees and confirmation times.",
     };
   }
 
@@ -96,13 +97,14 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
     level: "partial",
     score: 60,
     emoji: "🟡",
-    title: "Réseau Bitcoin variable",
-    subtitle: "Activité détectée faible ou irrégulière.",
+    title: "Bitcoin network fluctuating",
+    subtitle: "Low or irregular activity detected.",
   };
 }
 
 /* ================== PAGE ================== */
-export default function BitcoinActif() {
+export default function BitcoinNetworkStatus() {
+ 
   const navigate = useNavigate();
 
   const [data, setData] = useState(null);
@@ -130,10 +132,10 @@ export default function BitcoinActif() {
   const badgeLabel = useMemo(() => {
     if (!sessionToken || !sessionUser) return null;
 
-    if (plan === "pro" && isTrial) return "Connecté : Essai Pro";
-    if (plan === "pro") return "Connecté : Pro";
-    if (plan === "starter") return "Connecté : Starter";
-    return "Connecté : Free";
+    if (plan === "pro" && isTrial) return "Connected: Pro Trial";
+    if (plan === "pro") return "Connected: Pro";
+    if (plan === "starter") return "Connected: Starter";
+    return "Connected: Free";
   }, [sessionToken, sessionUser, plan, isTrial]);
 
   /* ================== ✅ CONSOMMATION STARTER (1x/jour) ================== */
@@ -162,7 +164,7 @@ export default function BitcoinActif() {
 
   /* ================== SEO ================== */
   useEffect(() => {
-    document.title = "Stabilité du réseau Bitcoin en temps réel | BlockPulse";
+    document.title = "Bitcoin network status in real time | BlockPulse";
 
     let meta = document.querySelector("meta[name='description']");
     if (!meta) {
@@ -172,7 +174,7 @@ export default function BitcoinActif() {
     }
 
     meta.content =
-      "Quand envoyer du Bitcoin ? Vérifiez la stabilité du réseau en temps réel : frais, délais et congestion, via un module ESP32.";
+      "Check the current Bitcoin network status before sending a transaction. Real-time stability measured via independent ESP32 hardware (no third-party APIs).";
   }, []);
 
   /* ================== DATA LOAD ================== */
@@ -217,22 +219,22 @@ export default function BitcoinActif() {
     if (stability.level === "ok" && stability.score >= 75) {
       return {
         emoji: "🟢",
-        text: "Bon moment pour envoyer une transaction Bitcoin.",
+        text: "Good time to broadcast a Bitcoin transaction.",
       };
     }
     if (stability.level === "partial") {
       return {
         emoji: "🟡",
         text:
-          "Conditions variables. Envoi possible, mais frais ou délais peuvent varier.",
+          "Conditions are variable. Transaction is possible, but fees or confirmation time may vary.",
       };
     }
     if (stability.level === "loading") {
-      return { emoji: "⏳", text: "Synchronisation des données réseau en cours." };
+      return { emoji: "⏳", text: "Synchronizing network data." };
     }
     return {
       emoji: "🔴",
-      text: "Mieux vaut attendre si possible avant d'envoyer une transaction.",
+      text: "Better to wait if possible before sending a transaction.",
     };
   }, [stability]);
 
@@ -249,32 +251,32 @@ export default function BitcoinActif() {
   const indicators = useMemo(() => {
     if (stability.level === "ok") {
       return [
-        { label: "Congestion du réseau", state: "ok" },
-        { label: "Frais prévisibles", state: "ok" },
-        { label: "Délais normaux", state: "ok" },
+        { label: "Network congestion", state: "ok" },
+        { label: "Predictable fees", state: "ok" },
+        { label: "Normal confirmation times", state: "ok" },
       ];
     }
 
     if (stability.level === "partial") {
       return [
-        { label: "Congestion du réseau", state: "warn" },
-        { label: "Frais variables", state: "warn" },
-        { label: "Délais variables", state: "warn" },
+        { label: "Network congestion", state: "warn" },
+        { label: "Variable fees", state: "warn" },
+        { label: "Variable confirmation times", state: "warn" },
       ];
     }
 
     if (stability.level === "loading") {
       return [
-        { label: "Synchronisation en cours", state: "warn" },
-        { label: "Mesure réseau", state: "warn" },
-        { label: "Module ESP32 actif", state: "warn" },
+        { label: "Synchronizing", state: "warn" },
+        { label: "Network measurement", state: "warn" },
+        { label: "ESP32 module active", state: "warn" },
       ];
     }
 
     return [
-      { label: "Congestion élevée", state: "down" },
-      { label: "Frais imprévisibles", state: "down" },
-      { label: "Délais allongés", state: "down" },
+      { label: "High congestion", state: "down" },
+      { label: "Unpredictable fees", state: "down" },
+      { label: "Extended confirmation times", state: "down" },
     ];
   }, [stability.level]);
 
@@ -327,7 +329,7 @@ export default function BitcoinActif() {
                   cursor: "pointer",
                 }}
               >
-                ← Retour à mon espace
+                ← Back to my space
               </button>
 
               <button
@@ -345,13 +347,13 @@ export default function BitcoinActif() {
                   cursor: "pointer",
                 }}
               >
-                Se déconnecter
+                Disconnect
               </button>
             </div>
           </div>
         )}
 
-        <h1 className={styles.h1}>Stabilité du réseau Bitcoin en temps réel</h1>
+        <h1 className={styles.h1}>Bitcoin network status in real time</h1>
 
         {/* Language switch - Repositionné sous le titre */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px", marginTop: "16px" }}>
@@ -375,12 +377,14 @@ export default function BitcoinActif() {
               style={{ 
                 color: "white", 
                 textDecoration: "none", 
-                opacity: 1,
-                fontWeight: "600",
+                opacity: 0.6,
                 display: "flex",
                 alignItems: "center",
-                gap: "6px"
+                gap: "6px",
+                transition: "opacity 0.2s"
               }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
             >
               <img 
                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Cpath fill='%230055a4' d='M0 0h1v2H0z'/%3E%3Cpath fill='%23fff' d='M1 0h1v2H1z'/%3E%3Cpath fill='%23ef4135' d='M2 0h1v2H2z'/%3E%3C/svg%3E" 
@@ -397,14 +401,12 @@ export default function BitcoinActif() {
               style={{ 
                 color: "white", 
                 textDecoration: "none", 
-                opacity: 0.6,
+                opacity: 1,
+                fontWeight: "600",
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
-                transition: "opacity 0.2s"
+                gap: "6px"
               }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
             >
               <img 
                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Cpath fill='%23012169' d='M0 0h60v30H0z'/%3E%3Cpath stroke='%23fff' stroke-width='6' d='M0 0l60 30m0-30L0 30'/%3E%3Cpath stroke='%23c8102e' stroke-width='4' d='M0 0l60 30m0-30L0 30'/%3E%3Cpath stroke='%23fff' stroke-width='10' d='M30 0v30M0 15h60'/%3E%3Cpath stroke='%23c8102e' stroke-width='6' d='M30 0v30M0 15h60'/%3E%3C/svg%3E" 
@@ -433,15 +435,15 @@ export default function BitcoinActif() {
 
           <div className={styles.meta}>
             <span
-            title="Données observées directement par un module ESP32 analysant le trafic du réseau Bitcoin. Aucune API ni service tiers n'est utilisé."
+            title="Data observed directly by a physical ESP32 module analyzing Bitcoin network traffic. No third-party APIs or services are used."
             style={{ cursor: "help" }}
             >
-            Source : <strong>module physique ESP32</strong> (sans API publique) ℹ️
+            Source: <strong>physical ESP32 module</strong> (no public API) ℹ️
             </span>
 
             <span>
-              Dernière mise à jour :{" "}
-              <strong>{age === null ? "—" : `il y a ${age}s`}</strong>
+              Last update:{" "}
+              <strong>{age === null ? "—" : `${age}s ago`}</strong>
             </span>
           </div>
         </div>
@@ -449,7 +451,7 @@ export default function BitcoinActif() {
         {/* ===== CONSEIL ===== */}
         <div className={styles.explain}>
           <p>
-            <strong>{advice.emoji} Conseil du moment</strong>
+            <strong>{advice.emoji} Recommendation</strong>
             <br />
             {advice.text}
           </p>
@@ -457,7 +459,7 @@ export default function BitcoinActif() {
 
         {stableTicks >= 3 && (
           <div className={styles.explain}>
-            <p>⏱️ Conditions stables observées depuis plusieurs minutes.</p>
+            <p>⏱️ Stable conditions observed for several minutes.</p>
           </div>
         )}
 
@@ -474,36 +476,34 @@ export default function BitcoinActif() {
 
         <div className={styles.explain}>
           <p>
-            Cet indicateur repose sur une observation directe du réseau via un{" "}
-            <strong>module ESP32</strong>, sans dépendre de services tiers.
+            This indicator is based on direct observation of the Bitcoin network via a <strong>physical ESP32 module</strong>, without relying on third-party services.
           </p>
         </div>
 
         {/* ===== ESP32 INSIGHT CARD ===== */}
-        <Esp32InsightCard user={sessionUserProp} />
+        <Esp32InsightCardEN user={sessionUserProp} />
 
         {/* ===== CTA (COHÉRENT SELON PLAN) ===== */}
         <div className={styles.ctaBox}>
-          <div className={styles.ctaTitle}>🔍 Aller plus loin</div>
+          <div className={styles.ctaTitle}>🔍 Go further</div>
           <p className={styles.ctaText}>
-            Consultez les données ESP32 en direct pour comprendre pourquoi le
-            réseau est actuellement dans cet état.
+            View live ESP32 data to understand why the network is currently in this state.
           </p>
 
           <div className={styles.ctaRow}>
             <a className={styles.ctaBtn} href="/#temps-reel">
-              Voir pourquoi le réseau est stable
+              See why the network is stable
             </a>
 
             {plan === "free" && (
               <a className={styles.ctaBtnAlt} href="/demande-acces">
-                Essai Pro 7 jours
+                Try Pro for 7 days
               </a>
             )}
 
             {plan === "starter" && (
               <a className={styles.ctaBtnAlt} href="/abonnements">
-                Passer au plan Pro
+                Upgrade to Pro
               </a>
             )}
           </div>

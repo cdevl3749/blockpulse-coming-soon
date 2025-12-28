@@ -17,10 +17,21 @@
   status = 200
   force = true
 
+# Redirections anciennes URLs (SEO)
+[[redirects]]
+  from = "/temps-reel"
+  to = "/tools/bitcoin-actif"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/comment-ca-marche"
+  to = "/"
+  status = 301
+  force = true
+
 # Règle SPA (à laisser en dernier !)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-

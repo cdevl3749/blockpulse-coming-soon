@@ -175,6 +175,33 @@ export default function BitcoinNetworkStatus() {
 
     meta.content =
       "Check the current Bitcoin network status before sending a transaction. Real-time stability measured via independent ESP32 hardware (no third-party APIs).";
+
+        // ===== hreflang (EN / FR) =====
+  const hreflangEN = document.createElement("link");
+  hreflangEN.rel = "alternate";
+  hreflangEN.hreflang = "en";
+  hreflangEN.href = "https://blockpulse.be/tools/bitcoin-network-status";
+
+  const hreflangFR = document.createElement("link");
+  hreflangFR.rel = "alternate";
+  hreflangFR.hreflang = "fr";
+  hreflangFR.href = "https://blockpulse.be/tools/bitcoin-actif";
+
+  const hreflangX = document.createElement("link");
+  hreflangX.rel = "alternate";
+  hreflangX.hreflang = "x-default";
+  hreflangX.href = "https://blockpulse.be/tools/bitcoin-network-status";
+
+  document.head.appendChild(hreflangEN);
+  document.head.appendChild(hreflangFR);
+  document.head.appendChild(hreflangX);
+
+  return () => {
+    document.head.removeChild(hreflangEN);
+    document.head.removeChild(hreflangFR);
+    document.head.removeChild(hreflangX);
+  };
+
   }, []);
 
   /* ================== DATA LOAD ================== */
@@ -418,6 +445,16 @@ export default function BitcoinNetworkStatus() {
               <span>EN</span>
             </a>
           </div>
+        </div>
+
+        {/* ===== INTRO TEXT ===== */}
+        <div className={styles.explain} style={{ marginBottom: "28px" }}>
+        <p style={{ fontSize: "16px", lineHeight: 1.6 }}>
+            This tool tells you{" "}
+            <strong>when the Bitcoin network is favorable for broadcasting a transaction</strong>,
+            based on{" "}
+            <strong>real-time physical observation</strong>, not on public APIs.
+        </p>
         </div>
 
         {/* ===== STATUS CARD ===== */}

@@ -192,7 +192,7 @@ export default function Esp32InsightCardEN({ user }) {
   return (
     <div className={styles.card}>
       <div className={styles.header}>
-        🧠 🧠 BlockPulse Insight — Live ESP32 analysis
+        🧠 BlockPulse Insight — Live ESP32 analysis
       </div>
 
       {isStarter && (

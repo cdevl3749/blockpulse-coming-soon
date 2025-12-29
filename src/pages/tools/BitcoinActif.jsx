@@ -173,6 +173,33 @@ export default function BitcoinActif() {
 
     meta.content =
       "Quand envoyer du Bitcoin ? Vérifiez la stabilité du réseau en temps réel : frais, délais et congestion, via un module ESP32.";
+
+        // ===== hreflang (FR / EN) =====
+  const hreflangFR = document.createElement("link");
+  hreflangFR.rel = "alternate";
+  hreflangFR.hreflang = "fr";
+  hreflangFR.href = "https://blockpulse.be/tools/bitcoin-actif";
+
+  const hreflangEN = document.createElement("link");
+  hreflangEN.rel = "alternate";
+  hreflangEN.hreflang = "en";
+  hreflangEN.href = "https://blockpulse.be/tools/bitcoin-network-status";
+
+  const hreflangX = document.createElement("link");
+  hreflangX.rel = "alternate";
+  hreflangX.hreflang = "x-default";
+  hreflangX.href = "https://blockpulse.be/tools/bitcoin-actif";
+
+  document.head.appendChild(hreflangFR);
+  document.head.appendChild(hreflangEN);
+  document.head.appendChild(hreflangX);
+
+  return () => {
+    document.head.removeChild(hreflangFR);
+    document.head.removeChild(hreflangEN);
+    document.head.removeChild(hreflangX);
+  };
+
   }, []);
 
   /* ================== DATA LOAD ================== */
@@ -416,6 +443,14 @@ export default function BitcoinActif() {
               <span>EN</span>
             </a>
           </div>
+        </div>
+
+        <div className={styles.explain}>
+        <p>
+            Cet outil vous indique <strong>quand le réseau Bitcoin est favorable</strong> 
+            pour envoyer une transaction — basé sur une{" "}
+            <strong>observation physique en temps réel</strong>, et non sur des API publiques.
+        </p>
         </div>
 
         {/* ===== STATUS CARD ===== */}

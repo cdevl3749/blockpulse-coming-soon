@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./BitcoinActif.module.css";
-import Esp32InsightCard from "./Esp32InsightCard";
+import Esp32InsightCardPhysical from "./Esp32InsightCardPhysical";
 import users from "../../data/users.json";
 
 /* ================== ENDPOINTS ================== */
@@ -514,8 +514,9 @@ export default function BitcoinActif() {
           </p>
         </div>
 
-        {/* ===== ESP32 INSIGHT CARD ===== */}
-        <Esp32InsightCard user={sessionUserProp} />
+        {/* ===== ESP32 INSIGHT CARD — PHYSICAL (TEST) ===== */}
+        <Esp32InsightCardPhysical user={sessionUserProp} />
+
 
         {/* ===== CTA (COHÉRENT SELON PLAN) ===== */}
         <div className={styles.ctaBox}>

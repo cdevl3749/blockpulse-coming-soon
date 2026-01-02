@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./Esp32InsightCard.module.css";
 import users from "../../data/users.json";
+import proofImg from "./assets/blockpulse-oracle.png";
 
 const STATUS_ENDPOINT = "https://blockpulse.be/.netlify/functions/status";
 
-// ⏱️ Free preview (48h) — EN ONLY
+// ⏱️ Preview gratuite
 const PREVIEW_DURATION_MS = 48 * 60 * 60 * 1000;
-const PREVIEW_COOKIE = "bp_preview_start_en"; // ✅ IMPORTANT
+const PREVIEW_COOKIE = "bp_preview_start";
 
 // 🔢 Starter
 const STARTER_DAILY_LIMIT = 10;
@@ -40,7 +41,7 @@ function getSessionToken() {
   }
 }
 
-/* ================== FEE ESTIMATION ================== */
+/* ================== ESTIMATION FRAIS (SANS API) ================== */
 function estimateFees({ hashrate, age }) {
   if (!hashrate || age === null) {
     return {
@@ -51,6 +52,7 @@ function estimateFees({ hashrate, age }) {
     };
   }
 
+  // règles simples & lisibles
   if (hashrate > 5000 && age < 30) {
     return {
       level: "low",
@@ -74,11 +76,12 @@ function estimateFees({ hashrate, age }) {
     label: "High",
     emoji: "🔴",
     advice: "Better to wait if possible.",
-  };
+    };
 }
 
-export default function Esp32InsightCardEN({ user }) {
+export default function Esp32InsightCardPhysicalEN({ user }) {
   /* ================== USER ================== */
+  const [showProof, setShowProof] = useState(false);
   const effectiveUser = useMemo(() => {
     if (user?.token) {
       return users.find((u) => u.token === user.token) || null;
@@ -108,7 +111,7 @@ export default function Esp32InsightCardEN({ user }) {
   const [previewExpired, setPreviewExpired] = useState(false);
   const [usedToday, setUsedToday] = useState(0);
 
-  /* ================== FREE PREVIEW ================== */
+  /* ================== PREVIEW FREE ================== */
   useEffect(() => {
     if (!isFree) return;
 
@@ -116,14 +119,15 @@ export default function Esp32InsightCardEN({ user }) {
     const now = Date.now();
 
     if (start === null) {
-      setPreviewStart(now);
-      setPreviewExpired(false);
+    setPreviewStart(now);
+    setPreviewExpired(false);
     } else {
-      setPreviewExpired(now - start > PREVIEW_DURATION_MS);
+    setPreviewExpired(now - start > PREVIEW_DURATION_MS);
     }
+
   }, [isFree]);
 
-  /* ================== STARTER ================== */
+  /* ================== CREDITS STARTER ================== */
   useEffect(() => {
     if (!isStarter) {
       setUsedToday(0);
@@ -137,6 +141,9 @@ export default function Esp32InsightCardEN({ user }) {
 
   /* ================== FETCH ESP32 ================== */
   useEffect(() => {
+    if (isFree && previewExpired) return;
+    if (isStarter && usedToday >= STARTER_DAILY_LIMIT) return;
+
     const load = async () => {
       try {
         const res = await fetch(STATUS_ENDPOINT, { cache: "no-cache" });
@@ -154,12 +161,24 @@ export default function Esp32InsightCardEN({ user }) {
     load();
     const interval = setInterval(load, 60000);
     return () => clearInterval(interval);
-  }, []);
+  }, [previewExpired, isFree, isStarter, isPro, usedToday]);
+
+  function consumeStarterCredit() {
+    if (!isStarter) return;
+
+    const key = getTodayKey(safeUser.token);
+    const used = Number(localStorage.getItem(key) || "0");
+
+    if (used >= STARTER_DAILY_LIMIT) return;
+
+    const next = used + 1;
+    localStorage.setItem(key, String(next));
+    setUsedToday(next);
+  }
 
   const age =
     lastUpdate ? Math.floor((Date.now() - lastUpdate.getTime()) / 1000) : null;
 
-  /* 🔒 Lock ONLY CTA */
   const isLocked =
     (isFree && previewExpired) ||
     (isStarter && usedToday >= STARTER_DAILY_LIMIT);
@@ -178,11 +197,34 @@ export default function Esp32InsightCardEN({ user }) {
         🧠 BlockPulse Insight — Live ESP32 analysis
       </div>
 
+      <div className={styles.badgeInfo}>
+        ✅ Independent physical source — active hardware module (no public API)
+      </div>
+
+      <div className={styles.proofRow}>
+        <span className={styles.proofText}>
+            Data verified by an independent hardware sensor.
+        </span>
+        <button
+        type="button"
+        className={styles.proofBtn}
+        onClick={() => setShowProof(true)}
+        >
+        View the sensor
+        </button>
+
+      </div>
+
+
       {isStarter && (
         <div className={styles.badgeInfo}>
-          🔢 Remaining accesses today:{" "}
+          🔢 Remaining accesses today :{" "}
           <strong>{STARTER_DAILY_LIMIT - usedToday}</strong>
         </div>
+      )}
+
+      {isLocked && (
+        <div className={styles.badgeLock}>🔒 Reserved for Starter / Pro</div>
       )}
 
       {error && (
@@ -191,7 +233,7 @@ export default function Esp32InsightCardEN({ user }) {
         </div>
       )}
 
-      {data && (
+      {!error && data && !isLocked && (
         <div className={styles.content}>
           <div className={styles.row}>
             <span>Source</span>
@@ -213,6 +255,7 @@ export default function Esp32InsightCardEN({ user }) {
             <strong>{plan.toUpperCase()}</strong>
           </div>
 
+          {/* 💸 NOUVELLE SECTION FRAIS */}
           <div className={styles.row}>
             <span>Transaction fees (estimate)</span>
             <strong>
@@ -225,9 +268,15 @@ export default function Esp32InsightCardEN({ user }) {
             <strong>{feeEstimate.advice}</strong>
           </div>
 
-          {!isLocked && (isStarter || isPro) && !isOnInsightPage && (
+          {(isStarter || isPro) && !isOnInsightPage && (
             <div className={styles.upgrade}>
-              <a href="/tools/bitcoin-network-status" className={styles.upgradeBtn}>
+              <a
+                href="/tools/bitcoin-network-status"
+                className={styles.upgradeBtn}
+                onClick={() => {
+                  if (isStarter) consumeStarterCredit();
+                }}
+              >
                 🚀 Open ESP32 analysis
               </a>
             </div>
@@ -247,6 +296,30 @@ export default function Esp32InsightCardEN({ user }) {
         Estimate based on direct network observation via an ESP32 module
         (no third-party API).
       </div>
+      {showProof && (
+  <div className={styles.proofOverlay} onClick={() => setShowProof(false)}>
+    <div className={styles.proofModal} onClick={(e) => e.stopPropagation()}>
+      <button
+        type="button"
+        className={styles.proofClose}
+        onClick={() => setShowProof(false)}
+      >
+        ✕
+      </button>
+
+      <img
+        src={proofImg}
+        alt="BlockPulse sensor (physical proof)"
+        className={styles.proofImg}
+        />
+
+      <div className={styles.proofCaption}>
+        BlockPulse sensor — physical proof (real-time status).
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

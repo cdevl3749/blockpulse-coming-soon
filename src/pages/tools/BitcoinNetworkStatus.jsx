@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./BitcoinActif.module.css";
-import Esp32InsightCard from "./Esp32InsightCard";
-import Esp32InsightCardEN from "./Esp32InsightCardEN";
+import Esp32InsightCardPhysicalEN from "./Esp32InsightCardPhysicalEN";
 import users from "../../data/users.json";
+
 
 /* ================== ENDPOINTS ================== */
 const CLOUD_ENDPOINT = "https://blockpulse.be/.netlify/functions/status";
@@ -128,7 +128,7 @@ export default function BitcoinNetworkStatus() {
     [sessionToken]
   );
 
-  /* ================== 🔖 MICRO BADGE (CONNECTÉ) ================== */
+  /* ================== 📖 MICRO BADGE (CONNECTÉ) ================== */
   const badgeLabel = useMemo(() => {
     if (!sessionToken || !sessionUser) return null;
 
@@ -518,7 +518,8 @@ export default function BitcoinNetworkStatus() {
         </div>
 
         {/* ===== ESP32 INSIGHT CARD ===== */}
-        <Esp32InsightCardEN user={sessionUserProp} />
+        <Esp32InsightCardPhysicalEN user={sessionUserProp} />
+
 
         {/* ===== CTA (COHÉRENT SELON PLAN) ===== */}
         <div className={styles.ctaBox}>

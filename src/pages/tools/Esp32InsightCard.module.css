@@ -36,6 +36,9 @@
   border-radius: 8px;
   background: rgba(255, 193, 7, 0.15);
   color: #ffc107;
+
+  /* ✅ ESPACEMENT PROPRE */
+  margin-top: 14px;
   margin-bottom: 18px;
 }
 
@@ -100,4 +103,77 @@
   margin-top: 22px;
   font-size: 0.8rem;
   color: #8b949e;
+}
+
+.proofRow{
+  margin-top: 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.proofText{
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.proofBtn {
+  border: 1px solid rgba(93, 220, 255, 0.35);
+  background: rgba(93, 220, 255, 0.08);
+  color: #5ddcff;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.proofBtn:hover {
+  background: rgba(93, 220, 255, 0.15);
+  border-color: rgba(93, 220, 255, 0.6);
+  color: #9be8ff;
+}
+
+.proofOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+.proofModal{
+  width: min(720px, 100%);
+  background: rgba(15,15,15,0.98);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.proofClose{
+  float:right;
+  border:none;
+  background: transparent;
+  color: white;
+  font-size: 18px;
+  cursor:pointer;
+}
+
+.proofImg{
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display:block;
+  margin-top: 8px;
+}
+
+.proofCaption{
+  margin-top: 8px;
+  font-size: 0.9rem;
+  opacity: 0.85;
 }

@@ -14,42 +14,43 @@ export default function CTAAfterESP() {
     <section className={styles.ctaSection}>
       <div className={styles.inner}>
         <h2>
-          Accédez aux <span>données complètes</span> en continu
+          Passez de l’aperçu à la <span>décision éclairée</span>
         </h2>
 
         <p className={styles.subtitle}>
-          Vous venez de voir un aperçu des données mesurées par notre module
-          ESP32 physique.
+          Vous venez de voir comment BlockPulse observe l’état réel du réseau
+          Bitcoin.
           <br />
-          Avec un abonnement, vous accédez à l'interface complète et à
-          l'historique des données.
+          Avec un abonnement, vous disposez d’un accès continu pour savoir
+          rapidement s’il vaut mieux envoyer une transaction… ou attendre.
         </p>
 
         <ul className={styles.bullets}>
-          <li>📡 Données ESP32 en temps réel (24/7)</li>
-          <li>🕒 Historique et suivi continu</li>
-          <li>🔒 Accès sécurisé, sans API externe</li>
+          <li>🚦 Signal clair pour évaluer le bon moment avant une transaction</li>
+          <li>📡 Observation indépendante du réseau Bitcoin (24/7)</li>
+          <li>🕒 Historique et suivi continu pour comparer les périodes</li>
+          <li>🔒 Accès sécurisé, sans dépendance à des API externes</li>
           <li className={styles.beLine}>
             <img src={beFlag} alt="Belgique" />
-            Projet belge, infrastructure transparente
+            Service belge, infrastructure transparente
           </li>
         </ul>
 
         <div className={styles.actions}>
-          <button
-            type="button"
-            onClick={scrollToPricing}
+          <a
+            href="/demande-acces"
             className={styles.primaryBtn}
           >
-            Voir les abonnements
-          </button>
+            Essayer gratuitement pendant 7 jours
+          </a>
 
           <span className={styles.note}>
-            Paiement PayPal · Annulation à tout moment
+            Paiement sécurisé via PayPal · Annulation à tout moment
           </span>
         </div>
       </div>
     </section>
   );
 }
+
 

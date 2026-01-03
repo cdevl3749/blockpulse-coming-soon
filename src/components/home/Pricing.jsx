@@ -9,22 +9,21 @@ export default function Pricing() {
       <div className={styles.inner}>
         <h2>Abonnements</h2>
 
-       <p className={styles.subtitle}>
-          Accédez à <strong>BlockPulse Insight</strong>, un indicateur simple et fiable
-          pour <strong>savoir si le réseau Bitcoin est dans de bonnes conditions
-          avant d’envoyer une transaction</strong>.
+        <p className={styles.subtitle}>
+          Accédez à <strong>BlockPulse Insight</strong>, un outil simple pour
+          <strong> savoir s’il vaut mieux envoyer une transaction Bitcoin maintenant… ou attendre</strong>.
           <br />
-          Données mesurées en temps réel par un <strong>module ESP32 physique indépendant</strong>,
-          sans API ni estimation logicielle.
-       </p>
+          Un signal basé sur l’état réel du réseau, mesuré en temps réel de façon
+          <strong> indépendante</strong>.
+        </p>
 
         <div className={styles.grid}>
           {/* ================= STARTER ================= */}
           <div className={styles.card}>
             <h3>Starter</h3>
             <p>
-              Idéal pour <strong>vérifier si le réseau Bitcoin est stable</strong>
-              avant d’envoyer une transaction et comprendre son état en temps réel.
+              Idéal pour <strong>vérifier rapidement l’état du réseau Bitcoin</strong>
+              avant d’envoyer une transaction, sans se perdre dans des données complexes.
             </p>
 
             <p className={styles.price}>
@@ -32,14 +31,14 @@ export default function Pricing() {
             </p>
 
             <ul>
-              <li>🟢 Indicateur BlockPulse Insight : stabilité du réseau en temps réel</li>
-              <li>🔓 Données observées via module ESP32 physique (sans API)</li>
-              <li>📈 État global du réseau et hashrate</li>
-              <li>🌐 Pool de minage actuellement actif</li>
-              <li>⚡ Données brutes, non filtrées, prêtes à être exploitées</li>
-              <li>🔄 Rafraîchissement automatique toutes les 60 secondes</li>
-              <li>🔐 Accès sécurisé via lien privé personnel</li>
-              <li>🔒 Certaines vues avancées réservées au plan Pro</li>
+              <li>🟢 Signal BlockPulse Insight : état du réseau en temps réel</li>
+              <li>🔓 Données issues d’une observation indépendante (sans API publique)</li>
+              <li>📈 Vue globale de l’activité du réseau Bitcoin</li>
+              <li>🌐 Informations sur le pool de minage actuellement actif</li>
+              <li>⚡ Données brutes accessibles, sans filtrage artificiel</li>
+              <li>🔄 Mise à jour automatique toutes les 60 secondes</li>
+              <li>🔐 Accès sécurisé via lien personnel</li>
+              <li>🔒 Certaines analyses avancées réservées au plan Pro</li>
             </ul>
 
             <a
@@ -60,9 +59,9 @@ export default function Pricing() {
 
             <h3>Pro</h3>
             <p>
-              Un <strong>outil de décision avancé</strong> pour analyser la stabilité
-              du réseau Bitcoin avant toute transaction, avec historique et analyses
-              approfondies.
+              Un <strong>véritable outil de décision</strong> pour celles et ceux
+              qui veulent comprendre les tendances du réseau Bitcoin et
+              <strong> choisir le meilleur moment pour envoyer leurs transactions</strong>.
             </p>
 
             <p className={styles.price}>
@@ -70,11 +69,11 @@ export default function Pricing() {
             </p>
 
             <ul>
-              <li>⭐ Tout le plan Starter inclus</li>
-              <li>📊 Analyse avancée de la stabilité réseau (ESP32)</li>
-              <li>🕒 Historique étendu pour comparer les périodes favorables</li>
-              <li>🧱 Suivi détaillé des événements rares (bloc trouvé)</li>
-              <li>🔓 Accès à toutes les cartes et vues BlockPulse Insight</li>
+              <li>⭐ Tout le contenu du plan Starter inclus</li>
+              <li>📊 Analyse approfondie de la stabilité du réseau</li>
+              <li>🕒 Historique étendu pour repérer les périodes favorables</li>
+              <li>🧱 Suivi détaillé des événements réseau rares</li>
+              <li>🔓 Accès complet à toutes les vues BlockPulse Insight</li>
               <li>🚀 Accès prioritaire aux nouvelles fonctionnalités</li>
               <li>💬 Support prioritaire pour les abonnés Pro</li>
             </ul>
@@ -91,20 +90,6 @@ export default function Pricing() {
             </a>
           </div>
         </div>
-
-        {/* ================= INFO RARE =================
-        <div className={styles.infoBox}>
-          <strong>🧱 Événement rare — Bloc trouvé</strong>
-          <p>
-            Le module ESP32 interagit directement avec le réseau Bitcoin.
-            Trouver un bloc est <strong>extrêmement rare</strong>, mais
-            techniquement possible (probabilité globale toutes les ~10 minutes).
-            <br />
-            Les abonnés <strong>Pro</strong> bénéficient d’un suivi dédié,
-            d’un historique complet et d’un affichage détaillé de ces événements exceptionnels.
-          </p>
-        </div>
-        */}
 
         {/* ================= RASSURANCE ================= */}
         <p className={styles.note}>

@@ -64,8 +64,7 @@ export default function Home() {
       {/* HERO */}
       <section className={styles.hero}>
         <div className={styles.inner}>
-
-          {/* 🎯 ENcart essai Pro 7 jours (discret, sans CSS externe) */}
+          {/* 🎯 ENcart essai Pro 7 jours */}
           <div
             style={{
               marginBottom: "20px",
@@ -80,8 +79,8 @@ export default function Home() {
             }}
           >
             <span>
-              🎯 <strong>Accès Pro offert pendant 7 jours</strong> — testez le flux
-              Bitcoin réel, sans API, sans engagement.
+              🎯 <strong>Accès Pro offert pendant 7 jours</strong> — testez sans
+              engagement
             </span>
 
             <a
@@ -97,64 +96,70 @@ export default function Home() {
                 fontSize: "13px",
               }}
             >
-              Demander un accès Pro
+              Essayer gratuitement
             </a>
           </div>
 
           <h1>
-            Savoir si c’est <span>le bon moment</span> pour envoyer une transaction Bitcoin
+            BlockPulse vous dit simplement{" "}
+            <span>si c’est un bon moment</span> pour envoyer une transaction
+            Bitcoin
           </h1>
 
           <p className={styles.subtitle}>
-            BlockPulse Insight analyse en temps réel la stabilité du réseau Bitcoin à partir
-            d’un module ESP32 physique indépendant.  
-            Avant d’envoyer une transaction, vous savez si le réseau est fluide, congestionné
-            ou sous tension.
+            Un signal clair — bon, neutre ou mauvais moment — pour décider en
+            quelques secondes, sans analyser des graphiques ou des données
+            techniques.
           </p>
 
-          {/* 🔎 Badge outil V3 – preuve concrète sans surcharger */}
-            <div
+          {/* Badge crédibilité */}
+          <div
             style={{
-                marginTop: "18px",
-                marginBottom: "22px",
-                padding: "12px 16px",
-                borderRadius: "10px",
-                background: "rgba(0, 255, 136, 0.08)",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                fontSize: "14px",
-                color: "#caffea",
+              marginTop: "18px",
+              marginBottom: "22px",
+              padding: "12px 16px",
+              borderRadius: "10px",
+              background: "rgba(0, 255, 136, 0.08)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "10px",
+              fontSize: "14px",
+              color: "#caffea",
             }}
-            >
+          >
             <span>
-            🟢 <strong>BlockPulse Insight — Analyse ESP32 en direct</strong> : 
-            savoir si le réseau Bitcoin est stable avant d’envoyer une transaction 
-            (mesure physique, sans API)
+              🟢 <strong>Source indépendante</strong> : observation directe du
+              réseau Bitcoin
             </span>
 
             <a
-            href="/tools/bitcoin-actif?utm_source=home&utm_medium=badge&utm_campaign=v3"
-            style={{
+              href="/tools/bitcoin-actif?utm_source=home&utm_medium=badge&utm_campaign=v3"
+              style={{
                 marginLeft: "8px",
                 fontWeight: 600,
                 color: "#00ff88",
                 textDecoration: "none",
                 whiteSpace: "nowrap",
-            }}
+              }}
             >
-            → Voir en direct
+              → Voir en direct
             </a>
-            </div>
+          </div>
 
           <div className={styles.cta}>
-            <button
-              type="button"
-              className={styles.primaryBtn}
+            {/* CTA PRINCIPAL */}
+            <a href="/demande-acces" className={styles.primaryBtn}>
+              Essayer gratuitement pendant 7 jours
+            </a>
+
+            {/* CTA SECONDAIRE */}
+            <a
+              href="#temps-reel"
               onClick={scrollToESP}
+              style={{ marginTop: "10px", fontSize: "14px", opacity: 0.7 }}
             >
-              Voir les données en direct
-            </button>
+              Voir les données en direct →
+            </a>
 
             <span className={styles.note}>
               <img className={styles.flag} src={beFlag} alt="Belgique" />

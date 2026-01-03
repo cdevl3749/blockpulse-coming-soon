@@ -17,7 +17,7 @@ export default function DemandeAcces() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  // --- Envoi EmailJS (même config que Contact.jsx) ---
+  // --- Envoi EmailJS ---
   const sendEmail = async () => {
     if (!name || !email) {
       setError("Merci de renseigner votre prénom et votre email.");
@@ -55,11 +55,12 @@ export default function DemandeAcces() {
       {/* HERO */}
       <section style={{ marginBottom: "40px" }}>
         <h1 style={{ fontSize: "2rem", marginBottom: "12px" }}>
-          Demande d’accès Pro — 7 jours offerts
+          Essai gratuit BlockPulse — 7 jours
         </h1>
         <p style={{ opacity: 0.85 }}>
           Testez l’accès Pro à BlockPulse pendant 7 jours, sans engagement.
-          Les accès sont activés manuellement après validation.
+          <br />
+          L’accès est activé sous 24h maximum.
         </p>
       </section>
 
@@ -91,11 +92,11 @@ export default function DemandeAcces() {
 
         <label>
           Pourquoi souhaitez-vous tester BlockPulse ?{" "}
-          <span style={{ opacity: 0.6 }}>(optionnel)</span>
+          <span style={{ opacity: 0.6 }}>(facultatif)</span>
         </label>
         <textarea
           rows="4"
-          placeholder="Monitoring, bot, analyse, curiosité technique..."
+          placeholder="Curiosité, usage personnel, monitoring, projet technique…"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           style={{ width: "100%", marginBottom: "20px" }}
@@ -115,7 +116,7 @@ export default function DemandeAcces() {
             cursor: "pointer",
           }}
         >
-          {loading ? "Envoi en cours..." : "Envoyer la demande"}
+          {loading ? "Envoi en cours..." : "Activer mon essai gratuit"}
         </button>
 
         {error && (
@@ -124,7 +125,13 @@ export default function DemandeAcces() {
 
         {success && (
           <p style={{ color: "#6bff95", marginTop: "12px" }}>
-            Demande envoyée avec succès. Vous recevrez un email sous 24h maximum.
+            ✅ Demande envoyée. Vous recevrez un email sous 24h maximum.
+          </p>
+        )}
+
+        {!success && (
+          <p style={{ opacity: 0.6, marginTop: "12px", fontSize: "14px" }}>
+            Aucun paiement requis · Aucun engagement · Annulation libre
           </p>
         )}
       </section>

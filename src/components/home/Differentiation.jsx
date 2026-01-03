@@ -4,34 +4,34 @@ export default function Differentiation() {
   return (
     <section className={styles.diff}>
       <div className={styles.inner}>
-        <h2>Pourquoi BlockPulse Insight est différent</h2>
+        <h2>Pourquoi BlockPulse est différent</h2>
+
         <p className={styles.intro}>
-        Contrairement aux services classiques basés sur des API ou des estimations
-        indirectes, BlockPulse Insight repose sur une observation physique et
-        indépendante du réseau Bitcoin. L’objectif : savoir si le réseau est stable
-        avant d’envoyer une transaction.
+          La plupart des outils Bitcoin montrent des chiffres à interpréter.
+          BlockPulse fait l’inverse&nbsp;: il vous aide à savoir rapidement
+          s’il vaut mieux envoyer maintenant… ou attendre.
         </p>
 
         <div className={styles.grid}>
           <div className={styles.card}>
-            <h3>❌ API classiques</h3>
+            <h3>❌ Outils classiques</h3>
             <ul>
-            <li>Données issues de services tiers</li>
-            <li>Dépendance à des estimations logicielles</li>
-            <li>Risque de filtrage, de retard ou de coupure</li>
-            <li>Peu adaptées à une décision immédiate avant transaction</li>
+              <li>Données issues de services tiers ou d’API publiques</li>
+              <li>Estimations basées sur des modèles logiciels</li>
+              <li>Résultats parfois en décalage avec la réalité du réseau</li>
+              <li>Nécessitent de comprendre et d’interpréter les chiffres</li>
             </ul>
-        </div>
+          </div>
 
           <div className={styles.cardHighlight}>
-            <h3>✅ BlockPulse Insight</h3>
+            <h3>✅ BlockPulse</h3>
             <ul>
-            <li>Observation physique du réseau via ESP32</li>
-            <li>Aucune API publique, aucune donnée tierce</li>
-            <li>Analyse en temps réel de la stabilité réseau</li>
-            <li>Consultation simple avant d’envoyer une transaction Bitcoin</li>
+              <li>Observation directe et indépendante du réseau Bitcoin</li>
+              <li>Aucune dépendance à des API ou données externes</li>
+              <li>Signal simple basé sur l’état réel du réseau</li>
+              <li>Décision claire avant d’envoyer une transaction</li>
             </ul>
-        </div>
+          </div>
         </div>
       </div>
     </section>

@@ -391,6 +391,20 @@ export default function BitcoinNetworkStatus() {
           </div>
         </div>
 
+                {/* ===== TRAFFIC LIGHT — DECISION GUIDE ===== */}
+        <div className={styles.explain} style={{ marginTop: "12px" }}>
+          <p>
+            <strong>Think of BlockPulse like a traffic light:</strong>
+            <br />
+            🟢 <strong>Stable</strong> → favorable moment to send
+            <br />
+            🟡 <strong>Unstable</strong> → proceed with caution
+            <br />
+            🔴 <strong>Congested</strong> → better to wait
+          </p>
+        </div>
+
+
         {/* ===== CONSEIL ===== */}
         <div className={styles.explain}>
           <p>

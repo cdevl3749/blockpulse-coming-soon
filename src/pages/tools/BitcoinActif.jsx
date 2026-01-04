@@ -393,6 +393,19 @@ export default function BitcoinActif() {
           </div>
         </div>
 
+        {/* ===== FEU TRICOLORE — AIDE À LA DÉCISION ===== */}
+        <div className={styles.explain} style={{ marginTop: "12px" }}>
+          <p>
+            <strong>Pensez à BlockPulse comme à un feu tricolore :</strong>
+            <br />
+            🟢 <strong>Stable</strong> → moment favorable pour envoyer
+            <br />
+            🟡 <strong>Instable</strong> → prudence
+            <br />
+            🔴 <strong>Congestionné</strong> → mieux vaut attendre
+          </p>
+        </div>
+
         {/* ===== CONSEIL ===== */}
         <div className={styles.explain}>
           <p>

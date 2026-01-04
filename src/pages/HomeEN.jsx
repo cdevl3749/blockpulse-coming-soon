@@ -4,21 +4,21 @@ import { useLocation } from "react-router-dom";
 import styles from "./Home.module.css";
 import beFlag from "../assets/be-flag.svg";
 
-import HowItWorks from "@/components/home/HowItWorks";
-import Differentiation from "@/components/home/Differentiation";
-import WhatYouGet from "@/components/home/WhatYouGet";
-import Pricing from "@/components/home/Pricing";
-import PostPricingInfo from "@/components/home/PostPricingInfo";
-import ESPPreview from "@/components/esp/ESPPreview";
-import CTAAfterESP from "@/components/home/CTAAfterESP";
-import MicroFAQ from "@/components/home/MicroFAQ";
+import HowItWorksEN from "@/components/home/HowItWorksEN";
+import DifferentiationEN from "@/components/home/DifferentiationEN";
+import WhatYouGetEN from "@/components/home/WhatYouGetEN";
+import PricingEN from "@/components/home/PricingEN";
+import PostPricingInfoEN from "@/components/home/PostPricingInfoEN";
+import ESPPreviewEN from "@/components/esp/ESPPreviewEN";
+import CTAAfterESPEN from "@/components/home/CTAAfterESPEN";
+import MicroFAQEN from "@/components/home/MicroFAQEN";
 import CookieBanner from "@/components/CookieBanner";
-import WhoItsFor from "@/components/home/WhoItsFor";
+import WhoItsForEN from "@/components/home/WhoItsForEN";
 
-export default function Home() {
+export default function HomeEN() {
   const location = useLocation();
 
-  // 🔢 Alternance dynamique du nombre d'utilisateurs actifs
+  // 🔢 Dynamic active users (same logic)
   const [activeUsers, setActiveUsers] = useState(12);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // 📽 Gestion du scroll vers les sections
+  // 📽 Scroll handling
   useEffect(() => {
     if (!location.hash) {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -50,7 +50,7 @@ export default function Home() {
     }
   }, [location.hash, location.pathname]);
 
-  // 🔥 Scroll vers ESP32
+  // 🔥 Scroll to ESP32 section
   const scrollToESP = (e) => {
     e.preventDefault();
     const espSection = document.getElementById("temps-reel");
@@ -64,7 +64,7 @@ export default function Home() {
       {/* HERO */}
       <section className={styles.hero}>
         <div className={styles.inner}>
-          {/* 🎯 ENcart essai Pro 7 jours */}
+          {/* 🎯 7-day Pro trial */}
           <div
             style={{
               marginBottom: "20px",
@@ -79,12 +79,12 @@ export default function Home() {
             }}
           >
             <span>
-              🎯 <strong>Accès Pro offert pendant 7 jours</strong> — testez sans
-              engagement
+              🎯 <strong>7-day Pro access included</strong> — try it with no
+              commitment
             </span>
 
             <a
-              href="/demande-acces"
+              href="/en/demande-acces"
               style={{
                 whiteSpace: "nowrap",
                 padding: "6px 12px",
@@ -96,23 +96,21 @@ export default function Home() {
                 fontSize: "13px",
               }}
             >
-              Essayer gratuitement
+              Try it for free
             </a>
           </div>
 
           <h1>
-            BlockPulse vous dit simplement{" "}
-            <span>si c’est un bon moment</span> pour envoyer une transaction
-            Bitcoin
+            BlockPulse simply tells you{" "}
+            <span>if it’s a good time</span> to send a Bitcoin transaction
           </h1>
 
           <p className={styles.subtitle}>
-            Un signal clair — bon, neutre ou mauvais moment — pour décider en
-            quelques secondes, sans analyser des graphiques ou des données
-            techniques.
+            A clear signal — good, neutral or bad timing — to decide in seconds,
+            without analyzing charts or technical data.
           </p>
 
-          {/* Badge crédibilité */}
+          {/* Credibility badge */}
           <div
             style={{
               marginTop: "18px",
@@ -128,12 +126,12 @@ export default function Home() {
             }}
           >
             <span>
-              🟢 <strong>Source indépendante</strong> : observation directe du
-              réseau Bitcoin
+              🟢 <strong>Independent source</strong> : direct observation of the
+              Bitcoin network
             </span>
 
             <a
-              href="/tools/bitcoin-actif?utm_source=home&utm_medium=badge&utm_campaign=v3"
+              href="/en/tools/bitcoin-actif?utm_source=home&utm_medium=badge&utm_campaign=v3"
               style={{
                 marginLeft: "8px",
                 fontWeight: 600,
@@ -142,65 +140,65 @@ export default function Home() {
                 whiteSpace: "nowrap",
               }}
             >
-              → Voir en direct
+              → View live
             </a>
           </div>
 
           <div className={styles.cta}>
-            {/* CTA PRINCIPAL */}
-            <a href="/demande-acces" className={styles.primaryBtn}>
-              Essayer gratuitement pendant 7 jours
+            {/* PRIMARY CTA */}
+            <a href="/en/demande-acces" className={styles.primaryBtn}>
+              Try free for 7 days
             </a>
 
-            {/* CTA SECONDAIRE */}
+            {/* SECONDARY CTA */}
             <a
               href="#temps-reel"
               onClick={scrollToESP}
               style={{ marginTop: "10px", fontSize: "14px", opacity: 0.7 }}
             >
-              Voir les données en direct →
+              View live data →
             </a>
 
             <span className={styles.note}>
-              <img className={styles.flag} src={beFlag} alt="Belgique" />
-              Projet belge · Données en temps réel · Accès par abonnement ·
-              Annulable à tout moment
+              <img className={styles.flag} src={beFlag} alt="Belgium" />
+              Belgian project · Real-time data · Subscription access · Cancel
+              anytime
             </span>
           </div>
         </div>
       </section>
 
-      {/* FONCTIONNEMENT */}
+      {/* HOW IT WORKS */}
       <section id="fonctionnement">
-        <HowItWorks />
+        <HowItWorksEN />
       </section>
 
-      {/* DIFFÉRENCIATION */}
-      <Differentiation />
+      {/* DIFFERENTIATION */}
+      <DifferentiationEN />
 
-      {/* POUR QUI ? */}
-      <WhoItsFor />
+      {/* WHO IT'S FOR */}
+      <WhoItsForEN />
 
-      {/* CE QUE VOUS RECEVEZ */}
-      <WhatYouGet />
+      {/* WHAT YOU GET */}
+      <WhatYouGetEN />
 
-      {/* ABONNEMENTS */}
+      {/* PRICING */}
       <section id="abonnements">
-        <Pricing />
-        <PostPricingInfo />
+        <PricingEN />
+        <PostPricingInfoEN />
       </section>
 
       {/* ESP32 LIVE */}
       <section id="temps-reel">
-        <ESPPreview />
+        <ESPPreviewEN />
       </section>
 
       {/* CTA */}
-      <CTAAfterESP />
+      <CTAAfterESPEN />
 
       {/* FAQ */}
       <section id="faq">
-        <MicroFAQ />
+        <MicroFAQEN />
       </section>
 
       <CookieBanner />

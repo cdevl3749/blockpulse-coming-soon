@@ -4,7 +4,6 @@ import styles from "./BitcoinActif.module.css";
 import Esp32InsightCardPhysicalEN from "./Esp32InsightCardPhysicalEN";
 import users from "../../data/users.json";
 
-
 /* ================== ENDPOINTS ================== */
 const CLOUD_ENDPOINT = "https://blockpulse.be/.netlify/functions/status";
 const LOCAL_ENDPOINT = import.meta.env.VITE_ESP32_LOCAL_STATUS || null;
@@ -18,6 +17,23 @@ const STARTER_DAILY_LIMIT = 10;
 function getTodayKey(token) {
   const d = new Date().toISOString().slice(0, 10);
   return `bp_insight_${token}_${d}`;
+}
+
+function consumeStarterCreditOnce(token) {
+  if (!token) return;
+
+  const key = getTodayKey(token);
+  const usedRaw = localStorage.getItem(key);
+  const used = Number(usedRaw || "0");
+
+  if (Number.isNaN(used)) {
+    localStorage.setItem(key, "1");
+    return;
+  }
+
+  if (used >= STARTER_DAILY_LIMIT) return;
+
+  localStorage.setItem(key, String(used + 1));
 }
 
 /* ================== UTILS ================== */
@@ -65,8 +81,7 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
       score: 30,
       emoji: "🔴",
       title: "Bitcoin network unstable",
-      subtitle:
-        "Network stability cannot be evaluated right now.",
+      subtitle: "Network stability cannot be evaluated right now.",
     };
   }
 
@@ -104,7 +119,6 @@ function getStabilityFromData({ data, lastUpdate, error, isLoading }) {
 
 /* ================== PAGE ================== */
 export default function BitcoinNetworkStatus() {
- 
   const navigate = useNavigate();
 
   const [data, setData] = useState(null);
@@ -138,29 +152,13 @@ export default function BitcoinNetworkStatus() {
     return "Connected: Free";
   }, [sessionToken, sessionUser, plan, isTrial]);
 
-  /* ================== ✅ CONSOMMATION STARTER (1x/jour) ================== */
-  useEffect(() => {
+ /* ================== ✅ STARTER : consommer 1 accès à l’entrée de l’outil ================== */
+    useEffect(() => {
     if (!sessionUser || !sessionToken) return;
     if (plan !== "starter") return;
 
-    const key = getTodayKey(sessionToken);
-    const usedRaw = localStorage.getItem(key);
-    const used = Number(usedRaw || "0");
-
-    if (Number.isNaN(used)) {
-      localStorage.setItem(key, "1");
-      return;
-    }
-
-    if (used <= 0) {
-      localStorage.setItem(key, "1");
-      return;
-    }
-
-    if (used > STARTER_DAILY_LIMIT) {
-      localStorage.setItem(key, String(STARTER_DAILY_LIMIT));
-    }
-  }, [sessionUser, sessionToken, plan]);
+    consumeStarterCreditOnce(sessionToken);
+    }, [sessionUser, sessionToken, plan]);
 
   /* ================== SEO ================== */
   useEffect(() => {
@@ -175,33 +173,6 @@ export default function BitcoinNetworkStatus() {
 
     meta.content =
       "Check the current Bitcoin network status before sending a transaction. Real-time stability measured via independent ESP32 hardware (no third-party APIs).";
-
-        // ===== hreflang (EN / FR) =====
-  const hreflangEN = document.createElement("link");
-  hreflangEN.rel = "alternate";
-  hreflangEN.hreflang = "en";
-  hreflangEN.href = "https://blockpulse.be/tools/bitcoin-network-status";
-
-  const hreflangFR = document.createElement("link");
-  hreflangFR.rel = "alternate";
-  hreflangFR.hreflang = "fr";
-  hreflangFR.href = "https://blockpulse.be/tools/bitcoin-actif";
-
-  const hreflangX = document.createElement("link");
-  hreflangX.rel = "alternate";
-  hreflangX.hreflang = "x-default";
-  hreflangX.href = "https://blockpulse.be/tools/bitcoin-network-status";
-
-  document.head.appendChild(hreflangEN);
-  document.head.appendChild(hreflangFR);
-  document.head.appendChild(hreflangX);
-
-  return () => {
-    document.head.removeChild(hreflangEN);
-    document.head.removeChild(hreflangFR);
-    document.head.removeChild(hreflangX);
-  };
-
   }, []);
 
   /* ================== DATA LOAD ================== */
@@ -346,7 +317,7 @@ export default function BitcoinNetworkStatus() {
             <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
               <button
                 type="button"
-                onClick={() => navigate(`/mon-espace?token=${sessionToken}`)}
+                onClick={() => navigate(`/en/mon-espace?token=${sessionToken}`)}
                 style={{
                   padding: "10px 14px",
                   borderRadius: "12px",
@@ -363,7 +334,7 @@ export default function BitcoinNetworkStatus() {
                 type="button"
                 onClick={() => {
                   sessionStorage.removeItem(AUTH_TOKEN_KEY);
-                  navigate("/mon-espace");
+                  navigate("/en/mon-espace");
                 }}
                 style={{
                   padding: "10px 14px",
@@ -382,79 +353,14 @@ export default function BitcoinNetworkStatus() {
 
         <h1 className={styles.h1}>Bitcoin network status in real time</h1>
 
-        {/* Language switch - Repositionné sous le titre */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px", marginTop: "16px" }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "10px 18px",
-              borderRadius: "999px",
-              background: "rgba(0,0,0,0.4)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              fontSize: "15px",
-              lineHeight: 1,
-            }}
-          >
-            <a 
-              href="/tools/bitcoin-actif" 
-              style={{ 
-                color: "white", 
-                textDecoration: "none", 
-                opacity: 0.6,
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                transition: "opacity 0.2s"
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
-            >
-              <img 
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Cpath fill='%230055a4' d='M0 0h1v2H0z'/%3E%3Cpath fill='%23fff' d='M1 0h1v2H1z'/%3E%3Cpath fill='%23ef4135' d='M2 0h1v2H2z'/%3E%3C/svg%3E" 
-                alt="FR" 
-                width="20" 
-                height="14"
-                style={{ borderRadius: "2px" }}
-              />
-              <span>FR</span>
-            </a>
-            <span style={{ opacity: 0.3, fontSize: "18px" }}>|</span>
-            <a
-              href="/tools/bitcoin-network-status"
-              style={{ 
-                color: "white", 
-                textDecoration: "none", 
-                opacity: 1,
-                fontWeight: "600",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px"
-              }}
-            >
-              <img 
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Cpath fill='%23012169' d='M0 0h60v30H0z'/%3E%3Cpath stroke='%23fff' stroke-width='6' d='M0 0l60 30m0-30L0 30'/%3E%3Cpath stroke='%23c8102e' stroke-width='4' d='M0 0l60 30m0-30L0 30'/%3E%3Cpath stroke='%23fff' stroke-width='10' d='M30 0v30M0 15h60'/%3E%3Cpath stroke='%23c8102e' stroke-width='6' d='M30 0v30M0 15h60'/%3E%3C/svg%3E" 
-                alt="EN" 
-                width="20" 
-                height="14"
-                style={{ borderRadius: "2px" }}
-              />
-              <span>EN</span>
-            </a>
-          </div>
-        </div>
-
         {/* ===== INTRO TEXT ===== */}
         <div className={styles.explain} style={{ marginBottom: "28px" }}>
-        <p style={{ fontSize: "16px", lineHeight: 1.6 }}>
+          <p style={{ fontSize: "16px", lineHeight: 1.6 }}>
             This tool tells you{" "}
             <strong>when the Bitcoin network is favorable for broadcasting a transaction</strong>,
             based on{" "}
             <strong>real-time physical observation</strong>, not on public APIs.
-        </p>
+          </p>
         </div>
 
         {/* ===== STATUS CARD ===== */}
@@ -472,10 +378,10 @@ export default function BitcoinNetworkStatus() {
 
           <div className={styles.meta}>
             <span
-            title="Data observed directly by a physical ESP32 module analyzing Bitcoin network traffic. No third-party APIs or services are used."
-            style={{ cursor: "help" }}
+              title="Data observed directly by a physical ESP32 module analyzing Bitcoin network traffic. No third-party APIs or services are used."
+              style={{ cursor: "help" }}
             >
-            Source: <strong>physical ESP32 module</strong> (no public API) ℹ️
+              Source: <strong>physical ESP32 module</strong> (no public API) ℹ️
             </span>
 
             <span>
@@ -513,39 +419,84 @@ export default function BitcoinNetworkStatus() {
 
         <div className={styles.explain}>
           <p>
-            This indicator is based on direct observation of the Bitcoin network via a <strong>physical ESP32 module</strong>, without relying on third-party services.
+            This indicator is based on direct observation of the Bitcoin network via a{" "}
+            <strong>physical ESP32 module</strong>, without relying on third-party services.
           </p>
         </div>
 
         {/* ===== ESP32 INSIGHT CARD ===== */}
         <Esp32InsightCardPhysicalEN user={sessionUserProp} />
 
-
         {/* ===== CTA (COHÉRENT SELON PLAN) ===== */}
-        <div className={styles.ctaBox}>
-          <div className={styles.ctaTitle}>🔍 Go further</div>
-          <p className={styles.ctaText}>
-            View live ESP32 data to understand why the network is currently in this state.
-          </p>
+<div
+  className={styles.ctaBox}
+  style={{
+    paddingTop: "24px",
+    paddingBottom: "24px",
+  }}
+>
+  <div
+    className={styles.ctaTitle}
+    style={{ marginBottom: "12px !important" }}
+  >
+    🔍 Go further
+  </div>
 
-          <div className={styles.ctaRow}>
-            <a className={styles.ctaBtn} href="/#temps-reel">
-              See why the network is stable
-            </a>
+  <p
+    style={{
+      margin: "0 !important",
+      marginBottom: "8px !important",
+      lineHeight: "1.5",
+    }}
+  >
+    The indicators shown above are calculated from{" "}
+    <strong>real-time physical data observations</strong>, not from theoretical
+    estimates or third-party services.
+  </p>
 
-            {plan === "free" && (
-              <a className={styles.ctaBtnAlt} href="/demande-acces">
-                Try Pro for 7 days
-              </a>
-            )}
+  <p
+    style={{
+      margin: "0 !important",
+      marginBottom: "8px !important",
+      lineHeight: "1.5",
+    }}
+  >
+    By accessing the ESP32 analysis, you can view{" "}
+    <strong>raw Bitcoin network signals</strong> (activity, stability, global
+    conditions) and understand{" "}
+    <strong>why the network is currently in this state</strong>.
+  </p>
 
-            {plan === "starter" && (
-              <a className={styles.ctaBtnAlt} href="/abonnements">
-                Upgrade to Pro
-              </a>
-            )}
-          </div>
-        </div>
+  <p
+    style={{
+      margin: "0 !important",
+      marginBottom: "16px !important",
+      opacity: 0.85,
+      lineHeight: "1.5",
+    }}
+  >
+    This access is reserved for users with a BlockPulse account.
+  </p>
+
+  <div className={styles.ctaRow}>
+    <a className={styles.ctaBtn} href="/#temps-reel">
+      See why the network is stable
+    </a>
+
+    {plan === "free" && (
+      <a className={styles.ctaBtnAlt} href="/demande-acces">
+        Try Pro for 7 days
+      </a>
+    )}
+
+    {plan === "starter" && (
+      <a className={styles.ctaBtnAlt} href="/abonnements">
+        Upgrade to Pro
+      </a>
+    )}
+  </div>
+</div>
+
       </section>
     </div>
   );

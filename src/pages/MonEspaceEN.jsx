@@ -15,9 +15,9 @@ function getTodayKey(token) {
   return `bp_insight_${token}_${d}`;
 }
 
-function formatDateFR(iso) {
+function formatDateEN(iso) {
   try {
-    return new Date(iso).toLocaleDateString("fr-BE");
+    return new Date(iso).toLocaleDateString("en-GB");
   } catch {
     return iso;
   }
@@ -27,7 +27,7 @@ function daysBetween(a, b) {
   return Math.ceil((b - a) / (1000 * 60 * 60 * 24));
 }
 
-export default function MonEspace() {
+export default function MonEspaceEN() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const token = searchParams.get("token");
@@ -41,7 +41,7 @@ export default function MonEspace() {
     return users.find((u) => u.token === token) || null;
   }, [token]);
 
-  /* 🧠 Plan & dates (SAFE même si user null) */
+  /* 🧠 Plan & dates */
   const plan = user?.plan ?? "free";
   const isTrial = user?.trial === true;
 
@@ -62,7 +62,7 @@ export default function MonEspace() {
     trialActive && expiresAt ? daysBetween(now, expiresAt) : 0;
 
   const trialEndingSoon =
-  trialActive && daysRemaining <= 7 && daysRemaining > 0;
+    trialActive && daysRemaining <= 7 && daysRemaining > 0;
 
   const isStarter = plan === "starter";
   const isPro = plan === "pro" && !isTrial;
@@ -74,7 +74,7 @@ export default function MonEspace() {
     sessionStorage.setItem(AUTH_PLAN_KEY, user.plan || "free");
   }, [user]);
 
-  /* 🔁 Si le plan change → reconnexion */
+  /* 🔁 Plan change protection */
   useEffect(() => {
     if (!user?.token) return;
 
@@ -84,14 +84,14 @@ export default function MonEspace() {
     if (storedPlan && storedPlan !== currentPlan) {
       sessionStorage.removeItem(AUTH_TOKEN_KEY);
       sessionStorage.removeItem(AUTH_PLAN_KEY);
-      navigate("/mon-espace");
+      navigate("/en/mon-espace");
       return;
     }
 
     sessionStorage.setItem(AUTH_PLAN_KEY, currentPlan);
   }, [user, navigate]);
 
-  /* 🔢 Compteur Starter */
+  /* 🔢 Starter counter */
   useEffect(() => {
     if (!user || !isStarter) {
       setUsedToday(0);
@@ -102,18 +102,18 @@ export default function MonEspace() {
     setUsedToday(used);
   }, [isStarter, user]);
 
-  /* ❌ PAS DE TOKEN */
+  /* ❌ NO TOKEN */
   if (!token || !user) {
     return (
       <main className={styles.page}>
         <div className={styles.container}>
           <div className={styles.card}>
-            <h1>Accès à votre espace client</h1>
+            <h1>Client area access</h1>
 
             <input
               value={inputToken}
               onChange={(e) => setInputToken(e.target.value)}
-              placeholder="Ex : BP-XXXX-XXXX"
+              placeholder="e.g. BP-XXXX-XXXX"
               className={styles.tokenInput}
             />
 
@@ -121,14 +121,14 @@ export default function MonEspace() {
               className={styles.primaryBtn}
               onClick={() =>
                 inputToken.trim() &&
-                navigate(`/mon-espace?token=${inputToken.trim()}`)
+                navigate(`/en/mon-espace?token=${inputToken.trim()}`)
               }
             >
-              Accéder
+              Access
             </button>
 
-            <Link className={styles.secondaryBtn} to="/#abonnements">
-              Voir les abonnements
+            <Link className={styles.secondaryBtn} to="/en/#abonnements">
+              View plans
             </Link>
           </div>
         </div>
@@ -136,20 +136,20 @@ export default function MonEspace() {
     );
   }
 
-  /* ❌ ACCÈS COUPÉ APRÈS ESSAI + GRÂCE */
+  /* ❌ EXPIRED */
   if (expiredHard) {
     return (
       <main className={styles.page}>
         <div className={styles.container}>
           <div className={styles.card}>
-            <h1>Accès expiré</h1>
+            <h1>Access expired</h1>
             <p>
-              Votre essai s’est terminé le{" "}
-              <strong>{formatDateFR(user.expiresAt)}</strong>.
+              Your trial ended on{" "}
+              <strong>{formatDateEN(user.expiresAt)}</strong>.
             </p>
 
-            <Link className={styles.primaryBtn} to="/#abonnements">
-              Choisir un abonnement
+            <Link className={styles.primaryBtn} to="/en/#abonnements">
+              Choose a plan
             </Link>
           </div>
         </div>
@@ -168,10 +168,10 @@ export default function MonEspace() {
             onClick={() => {
               sessionStorage.removeItem(AUTH_TOKEN_KEY);
               sessionStorage.removeItem(AUTH_PLAN_KEY);
-              navigate("/");
+              navigate("/en");
             }}
           >
-            Se déconnecter
+            Log out
           </button>
 
           <h1>BlockPulse Insight</h1>
@@ -179,43 +179,44 @@ export default function MonEspace() {
           <p className={styles.text}>
             <strong>{user.email}</strong> ·{" "}
             <strong>
-              {trialActive ? "ESSAI PRO (7 jours)" : `PLAN ${plan.toUpperCase()}`}
+              {trialActive
+                ? "PRO TRIAL (7 days)"
+                : `PLAN ${plan.toUpperCase()}`}
             </strong>
           </p>
 
-          {/* ⚠️ MESSAGE UX ESSAI — COPYWRITING VALIDÉ */}
           {trialEndingSoon && (
             <div className={styles.alertBox}>
               {daysRemaining === 1 ? (
                 <>
-                  ⏰ <strong>Dernier jour d’essai Pro</strong>
+                  ⏰ <strong>Last day of Pro trial</strong>
                   <br />
-                  Passez au plan Pro pour conserver l’accès complet.
+                  Upgrade to Pro to keep full access.
                 </>
               ) : (
                 <>
-                  ⚠️ Votre essai Pro se termine dans{" "}
-                  <strong>{daysRemaining} jours</strong>
+                  ⚠️ Your Pro trial ends in{" "}
+                  <strong>{daysRemaining} days</strong>
                   <br />
-                  Continuez à accéder aux données ESP32 sans interruption.
+                  Keep uninterrupted access to ESP32 data.
                 </>
               )}
               <br />
-              <Link to="/#abonnements">Passer au plan Pro</Link>
+              <Link to="/en/#abonnements">Upgrade to Pro</Link>
             </div>
           )}
 
           {inGracePeriod && (
             <div className={styles.alertBox}>
-              ⏳ Essai terminé — aperçu limité.
+              ⏳ Trial ended — limited preview.
               <br />
-              <Link to="/#abonnements">Passer à Starter ou Pro</Link>
+              <Link to="/en/#abonnements">Upgrade to Starter or Pro</Link>
             </div>
           )}
 
           {isStarter && (
             <p className={styles.text}>
-              🔢 Accès aujourd’hui :{" "}
+              🔢 Today’s access:{" "}
               <strong>
                 {STARTER_DAILY_LIMIT - usedToday} / {STARTER_DAILY_LIMIT}
               </strong>
@@ -223,15 +224,15 @@ export default function MonEspace() {
           )}
 
           {isPro && (
-            <p className={styles.text}>⭐ Accès illimité à BlockPulse Insight</p>
+            <p className={styles.text}>⭐ Unlimited access to BlockPulse Insight</p>
           )}
 
           <Link
-            to="/tools/bitcoin-actif"
+            to="/en/tools/bitcoin-network-status"
             className={styles.primaryBtn}
             style={{ marginTop: "1rem" }}
-          >
-            🚀 Accéder à l’analyse ESP32
+            >
+            🚀 Access ESP32 analysis
           </Link>
 
           <div
@@ -242,15 +243,15 @@ export default function MonEspace() {
             plan={plan}
             token={user.token}
             limited={blurCards}
-            lang="fr"
+            lang="en"
             />
           </div>
 
           {blurCards && (
             <div className={styles.upgradeBox}>
-              <h3>Débloquez l’accès complet 🚀</h3>
-              <Link className={styles.primaryBtn} to="/#abonnements">
-                Voir les plans Starter & Pro
+              <h3>Unlock full access 🚀</h3>
+              <Link className={styles.primaryBtn} to="/en/#abonnements">
+                View Starter & Pro plans
               </Link>
             </div>
           )}
@@ -259,9 +260,3 @@ export default function MonEspace() {
     </main>
   );
 }
-
-
-
-
-
-

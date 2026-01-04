@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import styles from "./ESPPreview.module.css";
 
 const CLOUD_ENDPOINT = "https://blockpulse.be/.netlify/functions/status";
@@ -22,6 +22,87 @@ export default function ESPPreview({ plan = "public" }) {
   const isPro = plan === "pro";
   const isStarter = plan === "starter";
 
+  // ✅ Detect EN (works for /en/* AND your EN tool slug)
+  const isEN = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    const p = window.location.pathname || "";
+    return p.startsWith("/en") || p.startsWith("/tools/bitcoin-network-status");
+  }, []);
+
+  const t = useMemo(() => {
+    return isEN
+      ? {
+          titlePro: "ESP32 data — Pro access",
+          titleStarter: "ESP32 data — Starter access",
+          titlePublic: "Live ESP32 data preview",
+          unavailable: "❌ ESP32 data unavailable",
+          loading: "⏳ Loading ESP32…",
+          viewers: (n) => `🟢 ${n} people are viewing ESP32 data right now`,
+          miningActive: "Active",
+          miningInactive: "Inactive",
+          connected: "Connected",
+          sourcePhysical: "Real physical ESP32",
+          updateEvery: "Every 60 seconds",
+          lastShare: "Last share",
+          sharesAccepted: "Accepted shares",
+          nextDraw: "Next draw",
+          blocksFound: "Blocks found",
+          fullHistory: "0 (full history)",
+          moduleStability: "Module stability",
+          lastUpdate: (s) => `${s}s ago`,
+          blockProb: "Block probability",
+          blockProbValue: "Very rare — tracking included",
+          upgradeTitle: "🔓 Unlock all ESP32 metrics",
+          upgradeText:
+            "Get advanced Bitcoin network analysis and full history to decide when to send a transaction with confidence with the ",
+          upgradeStrong: "Pro",
+          upgradeBtn: "Upgrade to Pro",
+          upgradeHref: "/en/#abonnements",
+          hashrate: "Hashrate",
+          mining: "Mining",
+          pool: "Pool",
+          module: "ESP32 module",
+          source: "Source",
+          refresh: "Refresh",
+          proRequired: "🔒 Pro plan required",
+        }
+      : {
+          titlePro: "Données ESP32 — Accès Pro",
+          titleStarter: "Données ESP32 — Accès Starter",
+          titlePublic: "Aperçu des données ESP32 en temps réel",
+          unavailable: "❌ Données ESP32 indisponibles",
+          loading: "⏳ Chargement ESP32…",
+          viewers: (n) => `🟢 ${n} personnes consultent les données ESP32 en ce moment`,
+          miningActive: "Actif",
+          miningInactive: "Inactif",
+          connected: "Connecté",
+          sourcePhysical: "ESP32 physique réel",
+          updateEvery: "Toutes les 60 secondes",
+          lastShare: "Dernière share",
+          sharesAccepted: "Shares acceptées",
+          nextDraw: "Prochain tirage",
+          blocksFound: "Blocs trouvés",
+          fullHistory: "0 (historique complet)",
+          moduleStability: "Stabilité du module",
+          lastUpdate: (s) => `il y a ${s}s`,
+          blockProb: "Probabilité de bloc",
+          blockProbValue: "Très rare — suivi inclus",
+          upgradeTitle: "🔓 Débloquez toutes les métriques ESP32",
+          upgradeText:
+            "Accédez à une analyse avancée du réseau Bitcoin et à l’historique complet pour savoir quand envoyer une transaction en toute confiance avec l’abonnement ",
+          upgradeStrong: "Pro",
+          upgradeBtn: "Passer à Pro",
+          upgradeHref: "/#abonnements",
+          hashrate: "Hashrate",
+          mining: "Mining",
+          pool: "Pool",
+          module: "Module ESP32",
+          source: "Source",
+          refresh: "Mise à jour",
+          proRequired: "🔒 Abonnement Pro requis",
+        };
+  }, [isEN]);
+
   const [data, setData] = useState(null);
   const [error, setError] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
@@ -33,8 +114,7 @@ export default function ESPPreview({ plan = "public" }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const next =
-        viewersPool[Math.floor(Math.random() * viewersPool.length)];
+      const next = viewersPool[Math.floor(Math.random() * viewersPool.length)];
       setViewers(next);
     }, 6000); // toutes les ~6s
 
@@ -42,16 +122,14 @@ export default function ESPPreview({ plan = "public" }) {
   }, []);
 
   /* ------------------ TITLE ------------------ */
-
   const title =
     plan === "pro"
-      ? "Données ESP32 — Accès Pro"
+      ? t.titlePro
       : plan === "starter"
-      ? "Données ESP32 — Accès Starter"
-      : "Aperçu des données ESP32 en temps réel";
+      ? t.titleStarter
+      : t.titlePublic;
 
   /* ------------------ FORMAT HASHRATE ------------------ */
-
   function formatHashrate(hr) {
     if (!hr || Number(hr) <= 0) return "—";
     const kh = (hr / 1000).toFixed(1);
@@ -68,7 +146,6 @@ export default function ESPPreview({ plan = "public" }) {
   }
 
   /* ------------------ DATA LOAD ------------------ */
-
   useEffect(() => {
     const load = async () => {
       try {
@@ -98,11 +175,11 @@ export default function ESPPreview({ plan = "public" }) {
   }, []);
 
   if (error) {
-    return <p className={styles.error}>❌ Données ESP32 indisponibles</p>;
+    return <p className={styles.error}>{t.unavailable}</p>;
   }
 
   if (!data) {
-    return <p className={styles.loading}>⏳ Chargement ESP32…</p>;
+    return <p className={styles.loading}>{t.loading}</p>;
   }
 
   const derivedIsMining =
@@ -114,67 +191,45 @@ export default function ESPPreview({ plan = "public" }) {
         <h2>{title}</h2>
 
         {/* 👀 VIEWERS */}
-        <p className={styles.viewers}>
-          🟢 {viewers} personnes consultent les données ESP32 en ce moment
-        </p>
+        <p className={styles.viewers}>{t.viewers(viewers)}</p>
 
         <div className={styles.grid}>
           {/* VISIBLES PUBLIC / STARTER / PRO */}
-          <Card label="Hashrate" value={formatHashrate(data.hashrate)} />
-          <Card label="Mining" value={derivedIsMining ? "Actif" : "Inactif"} />
-          <Card label="Pool" value={data.pool || "—"} />
-          <Card label="Module ESP32" value="Connecté" />
-          <Card label="Source" value="ESP32 physique réel" />
-          <Card label="Mise à jour" value="Toutes les 60 secondes" />
+          <Card label={t.hashrate} value={formatHashrate(data.hashrate)} />
+          <Card label={t.mining} value={derivedIsMining ? t.miningActive : t.miningInactive} />
+          <Card label={t.pool} value={data.pool || "—"} />
+          <Card label={t.module} value={t.connected} />
+          <Card label={t.source} value={t.sourcePhysical} />
+          <Card label={t.refresh} value={t.updateEvery} />
 
           {/* BLOQUÉS SI PAS PRO */}
-          <LockedCard
-            show={isPro}
-            label="Dernière share"
-            value={data.lastShareTime || "—"}
-          />
-          <LockedCard
-            show={isPro}
-            label="Shares acceptées"
-            value={data.sharesAccepted ?? "—"}
-          />
-          <LockedCard
-            show={isPro}
-            label="Prochain tirage"
-            value={data.nextDrawIn || "—"}
-          />
-          <LockedCard
-            show={isPro}
-            label="Blocs trouvés"
-            value="0 (historique complet)"
-          />
+          <LockedCard show={isPro} label={t.lastShare} value={data.lastShareTime || "—"} />
+          <LockedCard show={isPro} label={t.sharesAccepted} value={data.sharesAccepted ?? "—"} />
+          <LockedCard show={isPro} label={t.nextDraw} value={data.nextDrawIn || "—"} />
+          <LockedCard show={isPro} label={t.blocksFound} value={t.fullHistory} />
 
           {/* PRO UNIQUEMENT */}
           {isPro && (
             <>
-              <Card label="Stabilité du module" value="99.98%" />
+              <Card label={t.moduleStability} value="99.98%" />
               <Card
-                label="Dernière mise à jour"
-                value={`il y a ${Math.floor(
-                  (Date.now() - lastUpdate) / 1000
-                )}s`}
+                label={isEN ? "Last update" : "Dernière mise à jour"}
+                value={t.lastUpdate(Math.floor((Date.now() - lastUpdate) / 1000))}
               />
-              <Card
-                label="Probabilité de bloc"
-                value="Très rare — suivi inclus"
-              />
+              <Card label={t.blockProb} value={t.blockProbValue} />
             </>
           )}
         </div>
 
         {!isPro && (
           <div className={styles.upgradeBox}>
-            <h3>🔓 Débloquez toutes les métriques ESP32</h3>
+            <h3>{t.upgradeTitle}</h3>
             <p>
-              Accédez à une analyse avancée du réseau Bitcoin et à l’historique complet pour savoir quand envoyer une transaction en toute confiance avec l’abonnement <strong>Pro</strong>.
+              {t.upgradeText}
+              <strong>{t.upgradeStrong}</strong>.
             </p>
-            <a href="/#abonnements" className={styles.upgradeBtn}>
-              Passer à Pro
+            <a href={t.upgradeHref} className={styles.upgradeBtn}>
+              {t.upgradeBtn}
             </a>
           </div>
         )}
@@ -202,8 +257,10 @@ function LockedCard({ show, label, value }) {
   return (
     <div className={`${styles.card} ${styles.locked}`}>
       <span className={styles.label}>{label}</span>
-      <span className={styles.value}>🔒 Abonnement Pro requis</span>
+      <span className={styles.value}>🔒 { /* keep icon */ } { /* text */ } Pro plan required</span>
     </div>
   );
 }
+
+
 

@@ -19,6 +19,23 @@ function getTodayKey(token) {
   return `bp_insight_${token}_${d}`;
 }
 
+function consumeStarterCreditOnce(token) {
+  if (!token) return;
+
+  const key = getTodayKey(token);
+  const usedRaw = localStorage.getItem(key);
+  const used = Number(usedRaw || "0");
+
+  if (Number.isNaN(used)) {
+    localStorage.setItem(key, "1");
+    return;
+  }
+
+  if (used >= STARTER_DAILY_LIMIT) return;
+
+  localStorage.setItem(key, String(used + 1));
+}
+
 /* ================== UTILS ================== */
 async function fetchWithTimeout(url, timeoutMs) {
   const controller = new AbortController();
@@ -136,29 +153,14 @@ export default function BitcoinActif() {
     return "Connecté : Free";
   }, [sessionToken, sessionUser, plan, isTrial]);
 
-  /* ================== ✅ CONSOMMATION STARTER (1x/jour) ================== */
-  useEffect(() => {
+  /* ================== ✅ STARTER : consommer 1 accès à l’entrée de l’outil ================== */
+    useEffect(() => {
     if (!sessionUser || !sessionToken) return;
     if (plan !== "starter") return;
 
-    const key = getTodayKey(sessionToken);
-    const usedRaw = localStorage.getItem(key);
-    const used = Number(usedRaw || "0");
+    consumeStarterCreditOnce(sessionToken);
+    }, [sessionUser, sessionToken, plan]);
 
-    if (Number.isNaN(used)) {
-      localStorage.setItem(key, "1");
-      return;
-    }
-
-    if (used <= 0) {
-      localStorage.setItem(key, "1");
-      return;
-    }
-
-    if (used > STARTER_DAILY_LIMIT) {
-      localStorage.setItem(key, String(STARTER_DAILY_LIMIT));
-    }
-  }, [sessionUser, sessionToken, plan]);
 
   /* ================== SEO ================== */
   useEffect(() => {
@@ -174,31 +176,6 @@ export default function BitcoinActif() {
     meta.content =
       "Quand envoyer du Bitcoin ? Vérifiez la stabilité du réseau en temps réel : frais, délais et congestion, via un module ESP32.";
 
-        // ===== hreflang (FR / EN) =====
-  const hreflangFR = document.createElement("link");
-  hreflangFR.rel = "alternate";
-  hreflangFR.hreflang = "fr";
-  hreflangFR.href = "https://blockpulse.be/tools/bitcoin-actif";
-
-  const hreflangEN = document.createElement("link");
-  hreflangEN.rel = "alternate";
-  hreflangEN.hreflang = "en";
-  hreflangEN.href = "https://blockpulse.be/tools/bitcoin-network-status";
-
-  const hreflangX = document.createElement("link");
-  hreflangX.rel = "alternate";
-  hreflangX.hreflang = "x-default";
-  hreflangX.href = "https://blockpulse.be/tools/bitcoin-actif";
-
-  document.head.appendChild(hreflangFR);
-  document.head.appendChild(hreflangEN);
-  document.head.appendChild(hreflangX);
-
-  return () => {
-    document.head.removeChild(hreflangFR);
-    document.head.removeChild(hreflangEN);
-    document.head.removeChild(hreflangX);
-  };
 
   }, []);
 
@@ -380,71 +357,6 @@ export default function BitcoinActif() {
 
         <h1 className={styles.h1}>Stabilité du réseau Bitcoin en temps réel</h1>
 
-        {/* Language switch - Repositionné sous le titre */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px", marginTop: "16px" }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "10px 18px",
-              borderRadius: "999px",
-              background: "rgba(0,0,0,0.4)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              fontSize: "15px",
-              lineHeight: 1,
-            }}
-          >
-            <a 
-              href="/tools/bitcoin-actif" 
-              style={{ 
-                color: "white", 
-                textDecoration: "none", 
-                opacity: 1,
-                fontWeight: "600",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px"
-              }}
-            >
-              <img 
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Cpath fill='%230055a4' d='M0 0h1v2H0z'/%3E%3Cpath fill='%23fff' d='M1 0h1v2H1z'/%3E%3Cpath fill='%23ef4135' d='M2 0h1v2H2z'/%3E%3C/svg%3E" 
-                alt="FR" 
-                width="20" 
-                height="14"
-                style={{ borderRadius: "2px" }}
-              />
-              <span>FR</span>
-            </a>
-            <span style={{ opacity: 0.3, fontSize: "18px" }}>|</span>
-            <a
-              href="/tools/bitcoin-network-status"
-              style={{ 
-                color: "white", 
-                textDecoration: "none", 
-                opacity: 0.6,
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                transition: "opacity 0.2s"
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
-            >
-              <img 
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 30'%3E%3Cpath fill='%23012169' d='M0 0h60v30H0z'/%3E%3Cpath stroke='%23fff' stroke-width='6' d='M0 0l60 30m0-30L0 30'/%3E%3Cpath stroke='%23c8102e' stroke-width='4' d='M0 0l60 30m0-30L0 30'/%3E%3Cpath stroke='%23fff' stroke-width='10' d='M30 0v30M0 15h60'/%3E%3Cpath stroke='%23c8102e' stroke-width='6' d='M30 0v30M0 15h60'/%3E%3C/svg%3E" 
-                alt="EN" 
-                width="20" 
-                height="14"
-                style={{ borderRadius: "2px" }}
-              />
-              <span>EN</span>
-            </a>
-          </div>
-        </div>
-
         <div className={styles.explain}>
         <p>
             Cet outil vous indique <strong>quand le réseau Bitcoin est favorable</strong> 
@@ -507,43 +419,63 @@ export default function BitcoinActif() {
           ))}
         </div>
 
-        <div className={styles.explain}>
-          <p>
-            Cet indicateur repose sur une observation directe du réseau via un{" "}
-            <strong>module ESP32</strong>, sans dépendre de services tiers.
-          </p>
+        <div
+        className={styles.explain}
+        style={{ marginBottom: "24px" }}
+        >
+        <p>
+            Cet indicateur est basé sur l’observation directe du réseau Bitcoin via un
+            <strong> module physique ESP32</strong>, sans recourir à des services tiers.
+        </p>
         </div>
 
         {/* ===== ESP32 INSIGHT CARD — PHYSICAL (TEST) ===== */}
         <Esp32InsightCardPhysical user={sessionUserProp} />
+         {/* ===== CTA (COHÉRENT SELON PLAN) ===== */}
+<div
+  className={styles.ctaBox}
+  style={{
+    paddingTop: "24px",
+    paddingBottom: "24px",
+  }}
+>
+  <div
+    className={styles.ctaTitle}
+    style={{ marginBottom: "12px !important" }}
+  >
+    🔍 Aller plus loin
+  </div>
+  <p style={{ margin: "0 !important", marginBottom: "8px !important", lineHeight: "1.5" }}>
+    Les indicateurs affichés ci-dessus sont calculés à partir de{" "}
+    <strong>données physiques observées en temps réel</strong>, et non à partir
+    d'estimations théoriques ou de services tiers.
+  </p>
+  <p style={{ margin: "0 !important", marginBottom: "8px !important", lineHeight: "1.5" }}>
+    En accédant à l'analyse ESP32, vous pouvez visualiser{" "}
+    <strong>les signaux bruts du réseau Bitcoin</strong> (activité, stabilité,
+    conditions globales) et comprendre{" "}
+    <strong>pourquoi le réseau est actuellement dans cet état</strong>.
+  </p>
+  <p style={{ margin: "0 !important", marginBottom: "16px !important", opacity: 0.85, lineHeight: "1.5" }}>
+    Cet accès est réservé aux utilisateurs disposant d'un compte BlockPulse.
+  </p>
+  <div className={styles.ctaRow}>
+    <a className={styles.ctaBtn} href="/#temps-reel">
+      Voir pourquoi le réseau est stable
+    </a>
+    {plan === "free" && (
+      <a className={styles.ctaBtnAlt} href="/demande-acces">
+        Essai Pro 7 jours
+      </a>
+    )}
+    {plan === "starter" && (
+      <a className={styles.ctaBtnAlt} href="/abonnements">
+        Passer à Pro
+      </a>
+    )}
+  </div>
+</div>
 
-
-        {/* ===== CTA (COHÉRENT SELON PLAN) ===== */}
-        <div className={styles.ctaBox}>
-          <div className={styles.ctaTitle}>🔍 Aller plus loin</div>
-          <p className={styles.ctaText}>
-            Consultez les données ESP32 en direct pour comprendre pourquoi le
-            réseau est actuellement dans cet état.
-          </p>
-
-          <div className={styles.ctaRow}>
-            <a className={styles.ctaBtn} href="/#temps-reel">
-              Voir pourquoi le réseau est stable
-            </a>
-
-            {plan === "free" && (
-              <a className={styles.ctaBtnAlt} href="/demande-acces">
-                Essai Pro 7 jours
-              </a>
-            )}
-
-            {plan === "starter" && (
-              <a className={styles.ctaBtnAlt} href="/abonnements">
-                Passer au plan Pro
-              </a>
-            )}
-          </div>
-        </div>
       </section>
     </div>
   );

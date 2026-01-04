@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import styles from "./TrustBar.module.css";
 
 import BeIcon from "@/assets/icons/be.svg?react";
@@ -6,22 +7,25 @@ import LockIcon from "@/assets/icons/lock.svg?react";
 import LinkedinIcon from "@/assets/icons/linkedin.svg?react";
 
 export default function TrustBar() {
+  const location = useLocation();
+  const isEN = location.pathname.startsWith("/en");
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.trustBar}>
         <span className={styles.item}>
           <BeIcon className={styles.icon} />
-          Projet belge
+          {isEN ? "Belgian project" : "Projet belge"}
         </span>
 
         <span className={styles.item}>
           <PaypalIcon className={styles.icon} />
-          Paiement sécurisé
+          {isEN ? "Secure payment" : "Paiement sécurisé"}
         </span>
 
         <span className={styles.item}>
           <LockIcon className={styles.icon} />
-          Données protégées
+          {isEN ? "Protected data" : "Données protégées"}
         </span>
 
         <a
@@ -31,7 +35,7 @@ export default function TrustBar() {
           rel="noopener noreferrer"
         >
           <LinkedinIcon className={styles.icon} />
-          LinkedIn officiel
+          {isEN ? "Official LinkedIn" : "LinkedIn officiel"}
         </a>
       </div>
     </div>

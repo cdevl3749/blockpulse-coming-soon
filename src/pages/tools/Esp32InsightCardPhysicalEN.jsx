@@ -101,8 +101,8 @@ export default function Esp32InsightCardPhysicalEN({ user }) {
   const isPro = plan === "pro";
 
   const isOnInsightPage =
-    typeof window !== "undefined" &&
-    window.location.pathname === "/tools/bitcoin-network-status";
+  typeof window !== "undefined" &&
+  window.location.pathname.endsWith("/tools/bitcoin-network-status");
 
   /* ================== STATE ================== */
   const [data, setData] = useState(null);
@@ -284,13 +284,13 @@ export default function Esp32InsightCardPhysicalEN({ user }) {
         </div>
       )}
 
-      {isLocked && (
+        {isLocked && (
         <div className={styles.upgrade}>
-          <a href="/#abonnements" className={styles.upgradeBtn}>
+            <a href="/en#abonnements" className={styles.upgradeBtn}>
             Choose Starter / Pro
-          </a>
+            </a>
         </div>
-      )}
+        )}
 
       <div className={styles.footer}>
         Estimate based on direct network observation via an ESP32 module

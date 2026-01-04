@@ -5,82 +5,107 @@ import linkedin from "@/assets/icons/linkedin.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Footer() {
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
+  const isEN = location.pathname.startsWith("/en");
 
-  const goToSection = (id) => {
-    const tryScroll = (attempt = 0) => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
-      if (attempt < 10) setTimeout(() => tryScroll(attempt + 1), 50);
-    };
+  /**
+   * Scroll to a section on the HOME page.
+   * Works even if we are currently on another route.
+   */
+  const goToHomeSection = (id) => {
+    const homePath = isEN ? "/en" : "/";
 
-    if (location.pathname !== "/") {
-      navigate(`/#${id}`);
-      setTimeout(() => tryScroll(0), 0);
+    // If not already on home, navigate first
+    if (location.pathname !== homePath) {
+      navigate(`${homePath}#${id}`);
       return;
     }
 
-    tryScroll(0);
+    // Already on home → scroll directly
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
+        {/* BRAND */}
         <div className={styles.brand}>
           <div className={styles.logoLine}>
-            <img src={beFlag} alt="Belgique" />
+            <img src={beFlag} alt="Belgium" />
             <span>BlockPulse</span>
           </div>
 
           <p>
-            Projet technique belge basé sur ESP32.<br />
-            Données crypto en temps réel, sans API externe.
+            {isEN ? (
+              <>
+                Belgian technical project based on ESP32.
+                <br />
+                Real-time crypto data, no external API.
+              </>
+            ) : (
+              <>
+                Projet technique belge basé sur ESP32.
+                <br />
+                Données crypto en temps réel, sans API externe.
+              </>
+            )}
           </p>
 
           <div className={styles.payment}>
             <img src={paypal} alt="PayPal" />
-            <span>Paiement sécurisé via PayPal</span>
+            <span>
+              {isEN ? "Secure payment via PayPal" : "Paiement sécurisé via PayPal"}
+            </span>
           </div>
         </div>
 
+        {/* NAVIGATION */}
         <div className={styles.links}>
           <h4>Navigation</h4>
 
-          <button type="button" onClick={() => goToSection("fonctionnement")}>
-            Fonctionnement
+          <button type="button" onClick={() => goToHomeSection("fonctionnement")}>
+            {isEN ? "How it works" : "Fonctionnement"}
           </button>
 
-          <button type="button" onClick={() => goToSection("abonnements")}>
-            Abonnements
+          <button type="button" onClick={() => goToHomeSection("abonnements")}>
+            {isEN ? "Pricing" : "Abonnements"}
           </button>
 
-          <button type="button" onClick={() => goToSection("faq")}>
+          <button type="button" onClick={() => goToHomeSection("faq")}>
             FAQ
           </button>
 
           <Link
-            to="/tools/bitcoin-actif"
+            to={
+              isEN
+                ? "/en/tools/bitcoin-network-status"
+                : "/tools/bitcoin-actif"
+            }
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
-            🟢 État du réseau Bitcoin
+            🟢 {isEN ? "Bitcoin network status" : "État du réseau Bitcoin"}
           </Link>
 
-          {/* ⚠️ Si ça va encore à la mauvaise section, l'ID n'est pas "temps-reel"
-              Remplace "temps-reel" par l'ID exact de ta section ESP32 sur la home. */}
-          <button type="button" onClick={() => goToSection("temps-reel")}>
-            📡 Données Bitcoin en direct
+          <button type="button" onClick={() => goToHomeSection("temps-reel")}>
+            📡 {isEN ? "Live Bitcoin data" : "Données Bitcoin en direct"}
           </button>
 
-          <Link to="/a-propos">À propos</Link>
-          <Link to="/contact">Contact</Link>
+          <Link to={isEN ? "/en/a-propos" : "/a-propos"}>
+            {isEN ? "About" : "À propos"}
+          </Link>
+
+          <Link to={isEN ? "/en/contact" : "/contact"}>
+            {isEN ? "Contact" : "Contact"}
+          </Link>
         </div>
 
+        {/* SOCIAL */}
         <div className={styles.social}>
-          <h4>Réseaux</h4>
+          <h4>{isEN ? "Social" : "Réseaux"}</h4>
           <a
             href="https://www.linkedin.com/in/christophe-devleeshouwer-882377399/"
             target="_blank"
@@ -92,16 +117,32 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* BOTTOM */}
       <div className={styles.bottom}>
         <span>© 2025 BlockPulse.be</span>
 
         <div className={styles.legal}>
-          <Link to="/mentions-legales">Mentions légales</Link>
-          <Link to="/confidentialite">Confidentialité</Link>
-          <Link to="/cookies">Cookies</Link>
+          <Link to={isEN ? "/en/mentions-legales" : "/mentions-legales"}>
+            {isEN ? "Legal notice" : "Mentions légales"}
+          </Link>
+
+          <Link
+            to={
+              isEN
+                ? "/en/politique-confidentialite"
+                : "/politique-confidentialite"
+            }
+          >
+            {isEN ? "Privacy policy" : "Confidentialité"}
+          </Link>
+
+          <Link to={isEN ? "/en/cookies" : "/cookies"}>Cookies</Link>
         </div>
       </div>
     </footer>
   );
 }
+
+
+
 

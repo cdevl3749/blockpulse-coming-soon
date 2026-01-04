@@ -101,8 +101,8 @@ export default function Esp32InsightCardPhysical({ user }) {
   const isPro = plan === "pro";
 
   const isOnInsightPage =
-    typeof window !== "undefined" &&
-    window.location.pathname === "/tools/bitcoin-actif";
+  typeof window !== "undefined" &&
+  window.location.pathname.endsWith("/tools/bitcoin-actif");
 
   /* ================== STATE ================== */
   const [data, setData] = useState(null);

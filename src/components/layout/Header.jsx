@@ -5,11 +5,81 @@ import styles from "./Header.module.css";
 // Logo
 import logo from "../../assets/logo-round.png";
 
+/**
+ * Route equivalence mapping (FR <-> EN)
+ * Keep this minimal and explicit to avoid surprises.
+ */
+const ROUTE_EQUIV = {
+  "/tools/bitcoin-actif": "/tools/bitcoin-network-status",
+  "/tools/bitcoin-network-status": "/tools/bitcoin-actif",
+};
+
+function computeLangSwitchHref({ pathname, search, hash }, targetLang) {
+  const isEN = pathname.startsWith("/en");
+  const base = isEN ? pathname.replace(/^\/en/, "") || "/" : pathname;
+
+  // Map specific routes (tools) to their equivalent.
+  const mapped = ROUTE_EQUIV[base] ?? base;
+
+  const nextPath =
+    targetLang === "en"
+      ? mapped === "/"
+        ? "/en"
+        : `/en${mapped}`
+      : mapped; // fr
+
+  return `${nextPath}${search || ""}${hash || ""}`;
+}
+
 export default function Header() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // ===============================
+  // 🌍 LANG SWITCH (FR / EN) — robuste
+  // ===============================
+  const isEN = location.pathname.startsWith("/en");
+
+  const switchToEN = computeLangSwitchHref(
+    {
+      pathname: location.pathname,
+      search: location.search,
+      hash: location.hash,
+    },
+    "en"
+  );
+
+  const switchToFR = computeLangSwitchHref(
+    {
+      pathname: location.pathname,
+      search: location.search,
+      hash: location.hash,
+    },
+    "fr"
+  );
+
+  // ===============================
+  // 🏷️ Labels navigation (FR / EN)
+  // ===============================
+  const labels = isEN
+    ? {
+        how: "How it works",
+        pricing: "Pricing",
+        faq: "FAQ",
+        contact: "Contact",
+        client: "Client area",
+      }
+    : {
+        how: "Fonctionnement",
+        pricing: "Abonnements",
+        faq: "FAQ",
+        contact: "Contact",
+        client: "Espace client",
+      };
+
+  // ===============================
   // ✅ Token client (dashboard)
+  // ===============================
   const [bpToken, setBpToken] = useState(() => {
     try {
       return localStorage.getItem("bp_token") || "";
@@ -18,19 +88,15 @@ export default function Header() {
     }
   });
 
-  // Fermer le menu quand on change de page
   useEffect(() => {
     setMenuOpen(false);
-
-    // Rafraîchir le token à chaque navigation
     try {
       setBpToken(localStorage.getItem("bp_token") || "");
     } catch {
       setBpToken("");
     }
-  }, [location.pathname, location.hash]);
+  }, [location.pathname, location.search, location.hash]);
 
-  // Bloquer le scroll quand le menu mobile est ouvert
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "unset";
     return () => {
@@ -38,7 +104,9 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  // ===== BTC price (temps réel, discret) =====
+  // ===============================
+  // ₿ BTC price
+  // ===============================
   const [btcEur, setBtcEur] = useState(null);
   const [btcStatus, setBtcStatus] = useState("idle");
 
@@ -84,47 +152,55 @@ export default function Header() {
     };
   }, []);
 
-  // 🔥 Scroll top logo
   const handleLogoClick = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
-  // ✅ Lien espace client intelligent
+  // ✅ Client area must follow language + keep token
+  const espaceClientBase = isEN ? "/en/mon-espace" : "/mon-espace";
   const espaceClientLink = bpToken
-    ? `/mon-espace?token=${encodeURIComponent(bpToken)}`
-    : "/mon-espace";
+    ? `${espaceClientBase}?token=${encodeURIComponent(bpToken)}`
+    : espaceClientBase;
 
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        {/* Logo → Accueil */}
-        <Link to="/" className={styles.logo} onClick={handleLogoClick}>
+        {/* Logo */}
+        <Link
+          to={isEN ? "/en" : "/"}
+          className={styles.logo}
+          onClick={handleLogoClick}
+        >
           <img src={logo} alt="BlockPulse logo" className={styles.logoImg} />
           <span>BlockPulse</span>
         </Link>
 
         <div className={styles.right}>
           {/* BTC pill */}
-          <div className={styles.btcPill} aria-label="Prix du Bitcoin">
+          <div className={styles.btcPill} aria-label="Bitcoin price">
             <span className={styles.btcLabel}>BTC</span>
             <span className={styles.btcValue}>
-              {btcEur
-                ? formatter.format(btcEur)
-                : btcStatus === "error"
-                ? "—"
-                : "…"}
+              {btcEur ? formatter.format(btcEur) : btcStatus === "error" ? "—" : "…"}
             </span>
+          </div>
+
+          {/* 🌍 LANG SWITCH (desktop) */}
+          <div style={{ marginLeft: "12px", fontSize: "14px", opacity: 0.8 }}>
+            {isEN ? <Link to={switchToFR}>FR</Link> : <Link to={switchToEN}>EN</Link>}
           </div>
 
           {/* Navigation Desktop */}
           <nav className={styles.nav}>
-            <Link to="/#fonctionnement">Fonctionnement</Link>
-            <Link to="/#abonnements">Abonnements</Link>
-            <Link to="/#faq">FAQ</Link>
-            <Link to="/contact">Contact</Link>
+            <Link to={isEN ? "/en#fonctionnement" : "/#fonctionnement"}>
+              {labels.how}
+            </Link>
+            <Link to={isEN ? "/en#abonnements" : "/#abonnements"}>
+              {labels.pricing}
+            </Link>
+            <Link to={isEN ? "/en#faq" : "/#faq"}>{labels.faq}</Link>
+            <Link to={isEN ? "/en/contact" : "/contact"}>{labels.contact}</Link>
 
-            {/* ✅ Espace client */}
-            <Link to={espaceClientLink}>Espace client</Link>
+            <Link to={espaceClientLink}>{labels.client}</Link>
           </nav>
 
           {/* Burger */}
@@ -141,25 +217,41 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Overlay mobile */}
       {menuOpen && (
         <div className={styles.overlay} onClick={() => setMenuOpen(false)} />
       )}
 
       {/* Navigation Mobile */}
       <nav
-        className={`${styles.mobileNav} ${
-          menuOpen ? styles.mobileNavOpen : ""
-        }`}
+        className={`${styles.mobileNav} ${menuOpen ? styles.mobileNavOpen : ""}`}
       >
-        <Link to="/#fonctionnement">🔧 Fonctionnement</Link>
-        <Link to="/abonnements">Abonnements</Link>
-        <Link to="/#faq">❓ FAQ</Link>
-        <Link to="/contact">✉️ Contact</Link>
+        {/* 🌍 LANG SWITCH (mobile) */}
+        <div style={{ padding: "12px 16px", fontWeight: 600 }}>
+          {isEN ? (
+            <Link to={switchToFR}>🇫🇷 Français</Link>
+          ) : (
+            <Link to={switchToEN}>🇬🇧 English</Link>
+          )}
+        </div>
 
-        {/* ✅ Espace client */}
-        <Link to={espaceClientLink}>👤 Espace client</Link>
+        <Link to={isEN ? "/en#fonctionnement" : "/#fonctionnement"}>
+          🔧 {labels.how}
+        </Link>
+
+        {/* ✅ FIX: FR must be /#abonnements (not /abonnements) */}
+        <Link to={isEN ? "/en#abonnements" : "/#abonnements"}>
+          {labels.pricing}
+        </Link>
+
+        <Link to={isEN ? "/en#faq" : "/#faq"}>❓ {labels.faq}</Link>
+        <Link to={isEN ? "/en/contact" : "/contact"}>✉️ {labels.contact}</Link>
+
+        <Link to={espaceClientLink}>👤 {labels.client}</Link>
       </nav>
     </header>
   );
 }
+
+
+
+

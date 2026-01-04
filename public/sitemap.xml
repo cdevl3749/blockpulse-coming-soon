@@ -1,39 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <url>
-    <loc>https://blockpulse.be/</loc>
-    <priority>1.0</priority>
-  </url>
+  <!-- FR -->
+  <url><loc>https://blockpulse.be/</loc></url>
+  <url><loc>https://blockpulse.be/abonnements</loc></url>
+  <url><loc>https://blockpulse.be/contact</loc></url>
+  <url><loc>https://blockpulse.be/faq</loc></url>
+  <url><loc>https://blockpulse.be/participer</loc></url>
+  <url><loc>https://blockpulse.be/temps-reel</loc></url>
+  <url><loc>https://blockpulse.be/tools/bitcoin-actif</loc></url>
 
-  <url>
-    <loc>https://blockpulse.be/abonnements</loc>
-    <priority>0.9</priority>
-  </url>
+  <!-- EN -->
+  <url><loc>https://blockpulse.be/en</loc></url>
+  <url><loc>https://blockpulse.be/en/abonnements</loc></url>
+  <url><loc>https://blockpulse.be/en/contact</loc></url>
+  <url><loc>https://blockpulse.be/en/faq</loc></url>
+  <url><loc>https://blockpulse.be/en/participer</loc></url>
+  <url><loc>https://blockpulse.be/en/temps-reel</loc></url>
+  <url><loc>https://blockpulse.be/en/tools/bitcoin-network-status</loc></url>
 
-  <url>
-    <loc>https://blockpulse.be/contact</loc>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://blockpulse.be/mentions-legales</loc>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://blockpulse.be/politique-confidentialite</loc>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://blockpulse.be/cookies</loc>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://blockpulse.be/tools/bitcoin-actif</loc>
-    <priority>0.7</priority>
-  </url>
+  <!-- Legal (shared importance) -->
+  <url><loc>https://blockpulse.be/mentions-legales</loc></url>
+  <url><loc>https://blockpulse.be/politique-confidentialite</loc></url>
+  <url><loc>https://blockpulse.be/cookies</loc></url>
 
 </urlset>
+

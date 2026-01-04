@@ -1,4 +1,14 @@
 User-agent: *
+Disallow: /mon-espace
+Disallow: /admin
+Disallow: /admin-clients
+Disallow: /dashboard-admin-blockpulse-8921
+Disallow: /paiement
+Disallow: /paiement/
+Disallow: /*?token=
+Disallow: /*?utm_
+
 Allow: /
 
 Sitemap: https://blockpulse.be/sitemap.xml
+

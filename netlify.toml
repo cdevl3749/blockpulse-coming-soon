@@ -3,24 +3,35 @@
   publish = "dist"
   functions = "netlify/functions"
 
-# Autoriser la fonction save-order
+# =========================
+# Netlify Functions
+# =========================
+
 [[redirects]]
   from = "/.netlify/functions/save-order"
   to = "/.netlify/functions/save-order"
   status = 200
   force = true
 
-# Autoriser la fonction status (ESP32)
 [[redirects]]
   from = "/.netlify/functions/status"
   to = "/.netlify/functions/status"
   status = 200
   force = true
 
-# Redirections anciennes URLs (SEO)
+# =========================
+# Redirections SEO (FR)
+# =========================
+
 [[redirects]]
   from = "/temps-reel"
   to = "/tools/bitcoin-actif"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/participer"
+  to = "/#fonctionnement"
   status = 301
   force = true
 
@@ -30,7 +41,40 @@
   status = 301
   force = true
 
-# Règle SPA (à laisser en dernier !)
+# =========================
+# Redirections SEO (EN)
+# =========================
+
+[[redirects]]
+  from = "/en/temps-reel"
+  to = "/en/tools/bitcoin-network-status"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/en/participer"
+  to = "/en#fonctionnement"
+  status = 301
+  force = true
+
+# =========================
+# Sécurité SEO (tokens)
+# =========================
+
+[[headers]]
+  for = "/mon-espace"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/en/mon-espace"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# =========================
+# Règle SPA (TOUJOURS EN DERNIER)
+# =========================
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

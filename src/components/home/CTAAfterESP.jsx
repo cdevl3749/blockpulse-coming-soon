@@ -13,23 +13,22 @@ export default function CTAAfterESP() {
   return (
     <section className={styles.ctaSection}>
       <div className={styles.inner}>
-        <h2>
-          Passez de l’aperçu à la <span>décision éclairée</span>
+       <h2>
+          Passez du signal à <span>l’explication</span>
         </h2>
 
         <p className={styles.subtitle}>
-          Vous venez de voir comment BlockPulse observe l’état réel du réseau
-          Bitcoin.
+          Vous venez de voir le signal “bon / neutre / mauvais moment”.
           <br />
-          Avec un abonnement, vous disposez d’un accès continu pour savoir
-          rapidement s’il vaut mieux envoyer une transaction… ou attendre.
+          L’accès Pro vous montre <strong>pourquoi</strong> le réseau est dans cet état
+          (congestion, stabilité, confirmations), pour décider vite et sans stress.
         </p>
 
         <ul className={styles.bullets}>
-          <li>🚦 Signal clair pour évaluer le bon moment avant une transaction</li>
+          <li>🧠 Comprendre le “pourquoi” derrière le signal (pas juste une couleur)</li>
           <li>📡 Observation indépendante du réseau Bitcoin (24/7)</li>
-          <li>🕒 Historique et suivi continu pour comparer les périodes</li>
-          <li>🔒 Accès sécurisé, sans dépendance à des API externes</li>
+          <li>🔎 Détails utiles : congestion, stabilité, confirmations</li>
+          <li>🕒 Suivi dans le temps pour comparer les périodes</li>
           <li className={styles.beLine}>
             <img src={beFlag} alt="Belgique" />
             Service belge, infrastructure transparente
@@ -37,16 +36,14 @@ export default function CTAAfterESP() {
         </ul>
 
         <div className={styles.actions}>
-          <a
-            href="/demande-acces"
-            className={styles.primaryBtn}
-          >
-            Essayer gratuitement pendant 7 jours
-          </a>
+         <a href="/demande-acces" className={styles.primaryBtn}>
+          Accéder aux explications détaillées
+         </a>
 
           <span className={styles.note}>
-            Paiement sécurisé via PayPal · Annulation à tout moment
+            Accès par abonnement · Annulation à tout moment
           </span>
+
         </div>
       </div>
     </section>

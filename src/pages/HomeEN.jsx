@@ -64,41 +64,20 @@ export default function HomeEN() {
       {/* HERO */}
       <section className={styles.hero}>
         <div className={styles.inner}>
-          {/* 🎯 7-day Pro trial */}
-          <div
+          {/* ⚡ Key message – no daily usage */}
+            <div
             style={{
-              marginBottom: "20px",
-              padding: "10px 14px",
-              borderRadius: "8px",
-              background: "rgba(255, 215, 0, 0.08)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: "12px",
-              fontSize: "14px",
+                marginBottom: "20px",
+                padding: "10px 14px",
+                borderRadius: "8px",
+                background: "rgba(0, 255, 136, 0.06)",
+                fontSize: "14px",
             }}
-          >
-            <span>
-              🎯 <strong>7-day Pro access included</strong> — try it with no
-              commitment
-            </span>
-
-            <a
-              href="/en/demande-acces"
-              style={{
-                whiteSpace: "nowrap",
-                padding: "6px 12px",
-                borderRadius: "6px",
-                background: "#FFD700",
-                color: "#000",
-                fontWeight: 600,
-                textDecoration: "none",
-                fontSize: "13px",
-              }}
             >
-              Try it for free
-            </a>
-          </div>
+            ⚡ <strong>You don’t need BlockPulse every day.</strong>
+            <br />
+            Check the current state of the Bitcoin network freely, without creating an account.
+            </div>
 
           <h1>
             BlockPulse simply tells you{" "}
@@ -146,8 +125,12 @@ export default function HomeEN() {
 
           <div className={styles.cta}>
             {/* PRIMARY CTA */}
-            <a href="/en/demande-acces" className={styles.primaryBtn}>
-              Try free for 7 days
+            <a
+            href="#temps-reel"
+            onClick={scrollToESP}
+            className={styles.primaryBtn}
+            >
+            View the current Bitcoin network state
             </a>
 
             {/* SECONDARY CTA */}
@@ -161,8 +144,9 @@ export default function HomeEN() {
 
             <span className={styles.note}>
               <img className={styles.flag} src={beFlag} alt="Belgium" />
-              Belgian project · Real-time data · Subscription access · Cancel
-              anytime
+             Belgian project · Real-time data ·
+             Free access without an account ·
+             Subscription only for advanced analysis
             </span>
           </div>
         </div>

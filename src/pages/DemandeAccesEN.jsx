@@ -34,9 +34,9 @@ export default function DemandeAccesEN() {
         {
           user_name: name,
           user_email: email,
-          message: `Pro access request (7-day trial)\n\nReason:\n${
+          message: `BlockPulse Pro access request\n\nUsage context:\n${
             message || "Not specified"
-          }`,
+            }`,
         },
         "o3sNWIRA-SH7s2nsx"
       );
@@ -57,12 +57,13 @@ export default function DemandeAccesEN() {
       {/* HERO */}
       <section style={{ marginBottom: "40px" }}>
         <h1 style={{ fontSize: "2rem", marginBottom: "12px" }}>
-          BlockPulse free trial — 7 days
+        BlockPulse Pro access
         </h1>
         <p style={{ opacity: 0.85 }}>
-          Try BlockPulse Pro for 7 days, with no commitment.
-          <br />
-          Access is activated within 24 hours.
+        Pro access helps you understand <strong>why</strong> the Bitcoin network
+        is in a given state (stable, neutral, or congested).
+        <br />
+        Requests are reviewed manually. Access is activated within 24 hours.
         </p>
       </section>
 
@@ -93,12 +94,12 @@ export default function DemandeAccesEN() {
         />
 
         <label>
-          Why would you like to try BlockPulse?{" "}
-          <span style={{ opacity: 0.6 }}>(optional)</span>
+        In which context would you like to use BlockPulse?
+        <span style={{ opacity: 0.6 }}> (optional)</span>
         </label>
         <textarea
           rows="4"
-          placeholder="Personal use, monitoring, technical curiosity, project…"
+          placeholder="Occasional transactions, professional use, automation, network analysis…"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           style={{ width: "100%", marginBottom: "20px" }}
@@ -118,7 +119,7 @@ export default function DemandeAccesEN() {
             cursor: "pointer",
           }}
         >
-          {loading ? "Sending..." : "Activate my free trial"}
+          {loading ? "Sending..." : "Request Pro access"}
         </button>
 
         {error && (
@@ -127,13 +128,13 @@ export default function DemandeAccesEN() {
 
         {success && (
           <p style={{ color: "#6bff95", marginTop: "12px" }}>
-            ✅ Request sent. You will receive an email within 24 hours.
-          </p>
+        ✅ Request sent. Your access will be activated after validation, within 24 hours.
+        </p>
         )}
 
         {!success && (
           <p style={{ opacity: 0.6, marginTop: "12px", fontSize: "14px" }}>
-            No payment required · No commitment · Cancel anytime
+            Subscription-based access · Cancel anytime · Payment only after activation
           </p>
         )}
       </section>

@@ -14,35 +14,34 @@ export default function CTAAfterESPEN() {
     <section className={styles.ctaSection}>
       <div className={styles.inner}>
         <h2>
-          Move from preview to a <span>confident decision</span>
+            Move from the signal to the <span>explanation</span>
         </h2>
 
         <p className={styles.subtitle}>
-          You’ve just seen how BlockPulse observes the real state of the Bitcoin
-          network.
-          <br />
-          With a subscription, you get continuous access to quickly decide
-          whether it’s better to send a transaction… or wait.
+        You’ve just seen the signal: good, neutral, or bad timing.
+        <br />
+        Pro access shows you <strong>why</strong> the network is in this state
+        (congestion, stability, confirmations), so you can decide calmly and fast.
         </p>
 
         <ul className={styles.bullets}>
-          <li>🚦 Clear signal to evaluate the right moment before a transaction</li>
-          <li>📡 Independent observation of the Bitcoin network (24/7)</li>
-          <li>🕒 History and continuous monitoring to compare periods</li>
-          <li>🔒 Secure access, with no dependency on external APIs</li>
-          <li className={styles.beLine}>
+        <li>🧠 Understand the “why” behind the signal — not just a color</li>
+        <li>📡 Independent Bitcoin network observation (24/7)</li>
+        <li>🔎 Useful context: congestion, stability, confirmation behavior</li>
+        <li>🕒 Time-based view to compare different network periods</li>
+        <li className={styles.beLine}>
             <img src={beFlag} alt="Belgium" />
             Belgian service, transparent infrastructure
-          </li>
+        </li>
         </ul>
 
         <div className={styles.actions}>
           <a href="/en/demande-acces" className={styles.primaryBtn}>
-            Try free for 7 days
+            Access detailed explanations
           </a>
 
           <span className={styles.note}>
-            Secure PayPal payment · Cancel anytime
+            Subscription-based access · Cancel anytime
           </span>
         </div>
       </div>

@@ -34,7 +34,7 @@ export default function DemandeAcces() {
         {
           user_name: name,
           user_email: email,
-          message: `Demande d'accès Pro (7 jours)\n\nMotivation :\n${message || "Non précisée"}`,
+          message: `Demande d'accès Pro BlockPulse\n\nContexte d’utilisation :\n${message || "Non précisé"}`,
         },
         "o3sNWIRA-SH7s2nsx"
       );
@@ -54,13 +54,14 @@ export default function DemandeAcces() {
     <main style={{ paddingTop: "90px", maxWidth: "720px", margin: "0 auto" }}>
       {/* HERO */}
       <section style={{ marginBottom: "40px" }}>
-        <h1 style={{ fontSize: "2rem", marginBottom: "12px" }}>
-          Essai gratuit BlockPulse — 7 jours
+       <h1 style={{ fontSize: "2rem", marginBottom: "12px" }}>
+        Accès Pro BlockPulse
         </h1>
         <p style={{ opacity: 0.85 }}>
-          Testez l’accès Pro à BlockPulse pendant 7 jours, sans engagement.
-          <br />
-          L’accès est activé sous 24h maximum.
+        L’accès Pro permet de comprendre <strong>pourquoi</strong> le réseau Bitcoin
+        est dans un certain état (stable, neutre ou congestionné).
+        <br />
+        Les demandes sont examinées manuellement. Activation sous 24h maximum.
         </p>
       </section>
 
@@ -91,12 +92,12 @@ export default function DemandeAcces() {
         />
 
         <label>
-          Pourquoi souhaitez-vous tester BlockPulse ?{" "}
-          <span style={{ opacity: 0.6 }}>(facultatif)</span>
+        Dans quel contexte souhaitez-vous utiliser BlockPulse ?
+        <span style={{ opacity: 0.6 }}> (facultatif)</span>
         </label>
         <textarea
           rows="4"
-          placeholder="Curiosité, usage personnel, monitoring, projet technique…"
+          placeholder="Envoi occasionnel, activité professionnelle, automatisation, analyse du réseau…"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           style={{ width: "100%", marginBottom: "20px" }}
@@ -125,13 +126,13 @@ export default function DemandeAcces() {
 
         {success && (
           <p style={{ color: "#6bff95", marginTop: "12px" }}>
-            ✅ Demande envoyée. Vous recevrez un email sous 24h maximum.
+            ✅ Demande envoyée. Votre accès sera activé après validation, sous 24h maximum.
           </p>
         )}
 
         {!success && (
           <p style={{ opacity: 0.6, marginTop: "12px", fontSize: "14px" }}>
-            Aucun paiement requis · Aucun engagement · Annulation libre
+            Accès par abonnement · Annulable à tout moment · Paiement uniquement après activation
           </p>
         )}
       </section>

@@ -240,6 +240,17 @@ export default function BitcoinActif() {
     };
   }, [stability]);
 
+    /* ================== 💡 EXEMPLE CONCRET ================== */
+    const example = useMemo(() => {
+        return {
+        title: "💡 Exemple concret",
+        text:
+            "Lorsque le réseau Bitcoin est congestionné, envoyer une transaction peut entraîner des frais nettement plus élevés qu’en période stable.",
+        disclaimer:
+            "Exemple indicatif basé sur l’état réel du réseau, pas une estimation de frais.",
+        };
+    }, []);
+
   /* ================== CONTEXTE TEMPOREL ================== */
   useEffect(() => {
     if (stability.level === "ok") {
@@ -415,6 +426,19 @@ export default function BitcoinActif() {
           </p>
         </div>
 
+        {/* ===== 💡 EXEMPLE CONCRET ===== */}
+        <div className={styles.explain}>
+        <p>
+            <strong>{example.title}</strong>
+            <br />
+            {example.text}
+            <br />
+            <span style={{ opacity: 0.75, fontSize: "0.95em" }}>
+            {example.disclaimer}
+            </span>
+        </p>
+        </div>
+
         {stableTicks >= 3 && (
           <div className={styles.explain}>
             <p>⏱️ Conditions stables observées depuis plusieurs minutes.</p>
@@ -476,11 +500,7 @@ export default function BitcoinActif() {
     <a className={styles.ctaBtn} href="/#temps-reel">
       Voir pourquoi le réseau est stable
     </a>
-    {plan === "free" && (
-      <a className={styles.ctaBtnAlt} href="/demande-acces">
-        Essai Pro 7 jours
-      </a>
-    )}
+    
     {plan === "starter" && (
       <a className={styles.ctaBtnAlt} href="/abonnements">
         Passer à Pro

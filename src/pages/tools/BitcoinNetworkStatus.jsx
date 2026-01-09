@@ -236,6 +236,18 @@ export default function BitcoinNetworkStatus() {
     };
   }, [stability]);
 
+  /* ================== 💡 EXAMPLE ================== */
+    const example = useMemo(() => {
+    return {
+        title: "💡 Example",
+        text:
+        "When the Bitcoin network is congested, sending a transaction can result in significantly higher fees than during stable periods.",
+        disclaimer:
+        "Indicative example based on the real network state, not a fee estimation.",
+    };
+    }, []);
+
+
   /* ================== CONTEXTE TEMPOREL ================== */
   useEffect(() => {
     if (stability.level === "ok") {
@@ -414,6 +426,19 @@ export default function BitcoinNetworkStatus() {
           </p>
         </div>
 
+        {/* ===== 💡 EXAMPLE ===== */}
+        <div className={styles.explain}>
+        <p>
+            <strong>{example.title}</strong>
+            <br />
+            {example.text}
+            <br />
+            <span style={{ opacity: 0.75, fontSize: "0.95em" }}>
+            {example.disclaimer}
+            </span>
+        </p>
+        </div>
+
         {stableTicks >= 3 && (
           <div className={styles.explain}>
             <p>⏱️ Stable conditions observed for several minutes.</p>
@@ -496,12 +521,6 @@ export default function BitcoinNetworkStatus() {
     <a className={styles.ctaBtn} href="/#temps-reel">
       See why the network is stable
     </a>
-
-    {plan === "free" && (
-      <a className={styles.ctaBtnAlt} href="/demande-acces">
-        Try Pro for 7 days
-      </a>
-    )}
 
     {plan === "starter" && (
       <a className={styles.ctaBtnAlt} href="/abonnements">

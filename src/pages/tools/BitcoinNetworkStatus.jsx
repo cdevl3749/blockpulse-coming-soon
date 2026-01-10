@@ -247,6 +247,35 @@ export default function BitcoinNetworkStatus() {
     };
     }, []);
 
+      /* ================== 🧭 RECENT TREND (24–48h) ================== */
+  const recentTrend = useMemo(() => {
+    if (stability.level === "ok" && stableTicks >= 3) {
+      return {
+        label: "Stable",
+        detail: "Favorable windows have been frequent recently.",
+      };
+    }
+
+    if (stability.level === "partial") {
+      return {
+        label: "Mixed",
+        detail: "Conditions have alternated between stable and congested.",
+      };
+    }
+
+    if (stability.level === "loading") {
+      return {
+        label: "Unavailable",
+        detail: "Analyzing the last hours…",
+      };
+    }
+
+    return {
+      label: "Unstable",
+      detail: "Congested periods have been dominant recently.",
+    };
+  }, [stability.level, stableTicks]);
+
 
   /* ================== CONTEXTE TEMPOREL ================== */
   useEffect(() => {
@@ -425,6 +454,29 @@ export default function BitcoinNetworkStatus() {
             {advice.text}
           </p>
         </div>
+
+        {/* ===== 🧭 RECENT TREND (locked if free) ===== */}
+<div className={styles.explain}>
+  <p>
+    <strong>🧭 Recent trend (24–48h)</strong>
+    <br />
+
+    {plan === "free" ? (
+      <span style={{ opacity: 0.7 }}>
+        🔒 Full analysis available to subscribers
+      </span>
+    ) : (
+      <>
+        <strong>{recentTrend.label}</strong>
+        <br />
+        <span style={{ opacity: 0.85 }}>
+          {recentTrend.detail}
+        </span>
+      </>
+    )}
+  </p>
+</div>
+
 
         {/* ===== 💡 EXAMPLE ===== */}
         <div className={styles.explain}>

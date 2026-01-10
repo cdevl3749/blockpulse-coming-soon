@@ -240,6 +240,38 @@ export default function BitcoinActif() {
     };
   }, [stability]);
 
+    /* ================== 🧭 TENDANCE RÉCENTE (24–48h) ================== */
+  const recentTrend = useMemo(() => {
+    // logique simple : on ne prétend pas faire un vrai historique,
+    // on donne une tendance "récente" basée sur stabilité + durée observée.
+    if (stability.level === "ok" && stableTicks >= 3) {
+      return {
+        label: "Stable",
+        detail: "Les périodes favorables ont été fréquentes récemment.",
+      };
+    }
+
+    if (stability.level === "partial") {
+      return {
+        label: "Variable",
+        detail: "Les conditions ont alterné entre stabilité et congestion.",
+      };
+    }
+
+    if (stability.level === "loading") {
+      return {
+        label: "Indisponible",
+        detail: "Analyse en cours sur les dernières heures.",
+      };
+    }
+
+    return {
+      label: "Instable",
+      detail: "Les périodes congestionnées ont été dominantes récemment.",
+    };
+  }, [stability.level, stableTicks]);
+
+
     /* ================== 💡 EXEMPLE CONCRET ================== */
     const example = useMemo(() => {
         return {
@@ -425,6 +457,29 @@ export default function BitcoinActif() {
             {advice.text}
           </p>
         </div>
+
+        {/* ===== 🧭 TENDANCE RÉCENTE (verrouillé si free) ===== */}
+<div className={styles.explain}>
+  <p>
+    <strong>🧭 Tendance récente (24–48h)</strong>
+    <br />
+
+    {plan === "free" ? (
+      <span style={{ opacity: 0.7 }}>
+        🔒 Analyse réservée aux abonnés
+      </span>
+    ) : (
+      <>
+        <strong>{recentTrend.label}</strong>
+        <br />
+        <span style={{ opacity: 0.85 }}>
+          {recentTrend.detail}
+        </span>
+      </>
+    )}
+  </p>
+</div>
+
 
         {/* ===== 💡 EXEMPLE CONCRET ===== */}
         <div className={styles.explain}>

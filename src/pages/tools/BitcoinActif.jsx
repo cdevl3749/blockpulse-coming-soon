@@ -402,7 +402,7 @@ export default function BitcoinActif() {
 
         <div className={styles.explain}>
         <p>
-            Cet outil vous indique <strong>quand le réseau Bitcoin est favorable</strong> 
+            Cet outil vous indique <strong>quand le réseau Bitcoin est favorable </strong> 
             pour envoyer une transaction — basé sur une{" "}
             <strong>observation physique en temps réel</strong>, et non sur des API publiques.
         </p>

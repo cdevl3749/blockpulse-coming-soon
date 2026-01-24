@@ -420,10 +420,18 @@ const Features = () => {
 const PricingSection = () => {
   const handlePreorder = async () => {
   try {
-    const res = await fetch(
-      "http://localhost:4242/api/create-checkout-session",
-      { method: "POST" }
-    );
+    const res = await fetch("/.netlify/functions/create-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      console.error("Checkout error:", res.status, txt);
+      alert("Erreur lors du paiement. Réessayez dans quelques secondes.");
+      return;
+    }
 
     const data = await res.json();
     window.location.href = data.url;
@@ -432,6 +440,7 @@ const PricingSection = () => {
     alert("Erreur lors du paiement. Réessayez.");
   }
 };
+
 
   return (
     <section id="offre" className="py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-br from-gray-50 to-green-50">

@@ -1,0 +1,22 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
+export default function PaymentCancel() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-orange-50 px-4">
+      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full text-center">
+        <div className="text-5xl mb-4">⚠️</div>
+        <h1 className="text-2xl font-bold mb-2">Paiement annulé</h1>
+        <p className="text-gray-600 mb-6">
+          Aucun paiement n’a été effectué. Tu peux réessayer quand tu veux.
+        </p>
+        <Link
+          to="/"
+          className="inline-block px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white"
+        >
+          Retour au site
+        </Link>
+      </div>
+    </div>
+  );
+}

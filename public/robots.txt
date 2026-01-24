@@ -1,0 +1,6 @@
+# robots.txt — BlockPulse
+
+User-agent: *
+Allow: /
+
+Sitemap: https://blockpulse.be/sitemap.xml

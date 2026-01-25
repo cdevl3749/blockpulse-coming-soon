@@ -144,68 +144,6 @@ const Header = () => {
   );
 };
 
-// Composant Barre de Progression
-const ProgressBar = ({ current, goal, onOrderClick }) => {
-  const percentage = Math.min((current / goal) * 100, 100);
-  const backers = 247;
-  const avgContribution = Math.round(current / backers);
-  
-  return (
-    <div className="w-full">
-      <div className="flex justify-between mb-2 text-sm">
-        <span className="font-semibold text-gray-700">{current.toLocaleString()}€ collectés</span>
-        <span className="text-gray-500">Objectif: {goal.toLocaleString()}€</span>
-      </div>
-      <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden shadow-inner">
-        <div
-          className="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 transition-all duration-1000 ease-out relative"
-          style={{ width: `${percentage}%` }}
-        >
-          <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
-        </div>
-      </div>
-      <div className="mt-4 text-center">
-        <span className="text-3xl font-bold bg-gradient-to-r from-green-600 via-yellow-600 to-red-600 bg-clip-text text-transparent">
-          {percentage.toFixed(1)}%
-        </span>
-      </div>
-      
-      {/* Urgence Section */}
-      <div className="mt-6 p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border-2 border-red-200">
-        <h4 className="font-bold text-red-700 mb-2 flex items-center gap-2">
-          <span className="text-xl">⏰</span>
-          Pourquoi commander maintenant ?
-        </h4>
-        <ul className="space-y-2 text-sm text-gray-700">
-          <li className="flex items-start gap-2">
-            <span className="text-green-600 font-bold mt-0.5">✓</span>
-            <span><strong>Réduction de -22%</strong> uniquement pour les premiers contributeurs</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="text-green-600 font-bold mt-0.5">✓</span>
-            <span><strong>Stock limité</strong> : seulement {300 - backers} places restantes</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="text-green-600 font-bold mt-0.5">✓</span>
-            <span><strong>Prix normal 89€</strong> après la campagne</span>
-          </li>
-          <li className="flex items-start gap-2">
-            <span className="text-green-600 font-bold mt-0.5">✓</span>
-            <span><strong>Livraison prioritaire</strong> pour les early birds</span>
-          </li>
-        </ul>
-        
-        <button 
-          onClick={onOrderClick}
-          className="w-full mt-4 py-3 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white rounded-lg font-bold hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-        >
-          🚀 Précommander maintenant - 69€
-        </button>
-      </div>
-    </div>
-  );
-};
-
 // Composant Hero Section
 const HeroSection = ({ fundingData, scrollToOffer }) => {
   return (
@@ -224,7 +162,7 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
 </h2>
 
             <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
-              BlockPulse vous indique en temps réel quand utiliser vos appareils électriques pour profiter des tarifs les plus avantageux et réduire votre empreinte carbone.
+              BlockPulse vous indique en temps réel quand consommer l’électricité pour payer moins, sans application ni réglages complexes.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button onClick={scrollToOffer} className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105 text-center">
@@ -271,7 +209,7 @@ const FAQ = () => {
     },
     {
       question: "Combien puis-je économiser réellement ?",
-      answer: "En moyenne, nos utilisateurs bêta-testeurs économisent entre 30% et 45% sur leur facture d'électricité en déplaçant simplement l'utilisation de leurs appareils aux heures creuses. Pour une famille moyenne belge, cela représente 200-400€ d'économies par an !"
+      answer: "En moyenne, nos premiers utilisateurs économisent entre 30% et 45% sur leur facture d'électricité en déplaçant simplement l'utilisation de leurs appareils aux heures creuses. Pour une famille moyenne belge, cela représente 200-400€ d'économies par an !"
     },
     {
       question: "BlockPulse fonctionne-t-il avec mon fournisseur d'énergie ?",
@@ -294,8 +232,8 @@ const FAQ = () => {
       answer: "Oui ! BlockPulse est garanti 2 ans contre tout défaut de fabrication. De plus, vous bénéficiez d'un droit de rétractation de 14 jours après réception. Si vous n'êtes pas satisfait, nous vous remboursons intégralement."
     },
     {
-      question: "Les mises à jour sont-elles payantes ?",
-      answer: "Non, toutes les mises à jour logicielles sont gratuites à vie ! Nous améliorons constamment les algorithmes de prédiction pour vous offrir les meilleures recommandations possibles."
+      question: "Le boîtier est-il évolutif ?",
+      answer: "Oui, BlockPulse est conçu pour fonctionner durablement dans le temps. Les mises à jour logicielles sont incluses et visent uniquement à améliorer la fiabilité et la précision des indications, sans modifier l’expérience utilisateur ni le fonctionnement du boîtier."
     }
   ];
 
@@ -474,7 +412,7 @@ const PricingSection = () => {
             </div>
 
             <p className="text-xs text-gray-500 text-center mb-4">
-              Prototype – design final en cours. Livraison prévue mars 2026.
+              Produit en cours de production – livraison prévue mars 2026.
             </p>
 
             <div className="mb-6">

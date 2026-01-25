@@ -225,15 +225,15 @@ const FAQ = () => {
     },
     {
       question: "Quand vais-je recevoir mon BlockPulse ?",
-      answer: "La livraison est prévue pour Mars 2026. Les contributeurs Early Bird recevront leur boîtier en priorité. Vous recevrez des mises à jour régulières sur l'avancement de la production par email."
+      answer: "La livraison est prévue pour Mars 2026. Nos premiers utilisateurs recevront leur boîtier en priorité. Vous recevrez des mises à jour régulières sur l'avancement de la production par email."
     },
     {
       question: "Y a-t-il une garantie ?",
       answer: "Oui ! BlockPulse est garanti 2 ans contre tout défaut de fabrication. De plus, vous bénéficiez d'un droit de rétractation de 14 jours après réception. Si vous n'êtes pas satisfait, nous vous remboursons intégralement."
     },
     {
-      question: "Le boîtier est-il évolutif ?",
-      answer: "Oui, BlockPulse est conçu pour fonctionner durablement dans le temps. Les mises à jour logicielles sont incluses et visent uniquement à améliorer la fiabilité et la précision des indications, sans modifier l’expérience utilisateur ni le fonctionnement du boîtier."
+      question: "Que vais-je recevoir exactement ?",
+      answer: "Le colis BlockPulse contiendra le boîtier prêt à l’emploi, une alimentation USB 5V (prise européenne), un câble USB et un guide de démarrage rapide. Le contenu est prévisionnel et pourra légèrement évoluer jusqu’à la version finale."
     }
   ];
 
@@ -289,6 +289,40 @@ const FAQ = () => {
     </section>
   );
 };
+
+const ProofSection = () => {
+  return (
+    <section className="py-10 px-4 bg-white">
+      <div className="max-w-4xl mx-auto text-center">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+          Pourquoi BlockPulse fonctionne
+        </h2>
+
+        <p className="text-gray-600 mb-6">
+          Le prix de l’électricité peut varier fortement au cours d’une même journée, parfois du simple au double.
+          BlockPulse rend ces variations visibles en temps réel, sans application ni réglages.
+        </p>
+
+        <div className="flex flex-col sm:flex-row justify-center gap-4 text-lg font-semibold">
+          <div className="flex items-center justify-center gap-2 bg-green-50 text-green-700 px-4 py-3 rounded-lg">
+            🟢 Prix bas – vous pouvez lancer
+          </div>
+          <div className="flex items-center justify-center gap-2 bg-yellow-50 text-yellow-700 px-4 py-3 rounded-lg">
+            🟠 Prix moyen – vous pouvez attendre
+          </div>
+          <div className="flex items-center justify-center gap-2 bg-red-50 text-red-700 px-4 py-3 rounded-lg">
+            🔴 Prix élevé – mieux vaut patienter
+          </div>
+        </div>
+
+        <p className="mt-4 text-sm text-gray-500">
+          Un simple coup d’œil suffit pour savoir s’il vaut mieux consommer maintenant… ou attendre.
+        </p>
+      </div>
+    </section>
+  );
+};
+
 const Features = () => {
   const features = [
     {
@@ -395,7 +429,7 @@ const PricingSection = () => {
             
             <div className="mb-4 mt-4">
               <span className="inline-block px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs sm:text-sm font-bold animate-pulse">
-                🔥 Série de lancement : 63 unités restantes
+                🔥 Série de lancement – quantité limitée
               </span>
             </div>
             
@@ -437,7 +471,7 @@ const PricingSection = () => {
               </li>
               <li className="flex items-start gap-2 sm:gap-3">
                 <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
-                <span className="text-sm sm:text-base text-gray-700"><strong>Livraison offerte</strong> en Belgique & UE</span>
+                <span className="text-sm sm:text-base text-gray-700"><strong>Livraison offerte</strong> en Belgique</span>
               </li>
               <li className="flex items-start gap-2 sm:gap-3">
                 <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
@@ -456,7 +490,29 @@ const PricingSection = () => {
                 <span className="text-sm sm:text-base text-gray-700"><strong>Guide d'optimisation</strong> énergétique</span>
               </li>
             </ul>
-            
+
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="font-semibold text-gray-800 mb-2">
+                📦 Contenu du colis (prévisionnel)
+              </p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• 1× BlockPulse</li>
+                <li>• 1× Alimentation USB 5V (prise EU)</li>
+                <li>• 1× Câble USB</li>
+                <li>• 1× Guide de démarrage rapide</li>
+              </ul>
+              <p className="mt-2 text-xs text-gray-500">
+                Contenu susceptible d’évoluer légèrement jusqu’à la version finale.
+              </p>
+            </div>
+
+            <p className="text-center text-gray-700 text-lg font-semibold mb-3">
+              69 € TTC — Offre de lancement
+              <span className="block text-sm font-normal text-gray-500">
+                Livraison offerte en Belgique
+              </span>
+            </p>
+
             <button 
               onClick={handlePreorder}
               className="w-full py-4 sm:py-5 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-2xl text-base sm:text-lg"
@@ -834,6 +890,7 @@ function Home() {
     <div className="min-h-screen bg-white">
       <Header />
       <HeroSection fundingData={fundingData} scrollToOffer={scrollToOffer} />
+      <ProofSection />
       <Features />
       <PricingSection />
       <FAQ />

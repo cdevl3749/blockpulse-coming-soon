@@ -129,13 +129,6 @@ const Header = () => {
       >
         FAQ
       </button>
-
-      <button 
-        onClick={() => scrollToSection('offre')} 
-        className="px-4 py-3 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg font-semibold text-center"
-      >
-        Précommander
-      </button>
     </div>
   </div>
 )}
@@ -164,6 +157,21 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
             <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
               BlockPulse vous indique en temps réel quand consommer l’électricité pour payer moins, sans application ni réglages complexes.
             </p>
+            <p className="text-sm text-gray-500 mb-6 flex items-center justify-center md:justify-start gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 3 2"
+                width="18"
+                height="12"
+                className="inline-block"
+              >
+                <rect width="1" height="2" x="0" fill="#000000" />
+                <rect width="1" height="2" x="1" fill="#FFD90C" />
+                <rect width="1" height="2" x="2" fill="#EF3340" />
+              </svg>
+              <span>Conçu et assemblé en Belgique</span>
+            </p>
+
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button onClick={scrollToOffer} className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105 text-center">
                 Précommander maintenant

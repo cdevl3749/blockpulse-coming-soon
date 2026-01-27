@@ -964,12 +964,12 @@ const handleAcceptCookies = () => {
   setCookiesAccepted(true);
 
   if (typeof window.gtag === "function") {
-    // 1️⃣ On autorise le tracking
+    // 1️⃣ Autoriser Analytics
     window.gtag("consent", "update", {
       analytics_storage: "granted",
     });
 
-    // 2️⃣ ON RELANCE LE CONFIG GA4 (OBLIGATOIRE)
+    // 2️⃣ INITIALISATION GA4 (C’EST ÇA QUI MANQUAIT)
     window.gtag("config", "G-FR53B6D9RY", {
       page_path: window.location.pathname,
     });

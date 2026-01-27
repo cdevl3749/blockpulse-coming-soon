@@ -21,7 +21,10 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://blockpulse.be/" />
-    <meta property="og:title" content="BlockPulse – Payer moins d’électricité, sans y penser" />
+    <meta
+      property="og:title"
+      content="BlockPulse – Payer moins d’électricité, sans y penser"
+    />
     <meta
       property="og:description"
       content="Le boîtier intelligent qui vous indique quand consommer l’électricité pour réduire votre facture. Sans application, sans réglages."
@@ -33,7 +36,10 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="BlockPulse – Payer moins d’électricité, sans y penser" />
+    <meta
+      name="twitter:title"
+      content="BlockPulse – Payer moins d’électricité, sans y penser"
+    />
     <meta
       name="twitter:description"
       content="Le boîtier intelligent qui vous indique quand consommer l’électricité pour réduire votre facture."
@@ -74,7 +80,7 @@
       }
     </script>
 
-    <!-- Google Analytics + Consent Mode -->
+    <!-- Google Analytics + Consent Mode (RGPD OK) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-FR53B6D9RY"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -82,7 +88,7 @@
         dataLayer.push(arguments);
       }
 
-      // Consentement par défaut (RGPD) : TOUT REFUSÉ tant que l'utilisateur n'a pas accepté
+      // 🔒 Consentement par défaut : tout refusé
       gtag("consent", "default", {
         ad_storage: "denied",
         analytics_storage: "denied",
@@ -92,8 +98,10 @@
 
       gtag("js", new Date());
 
+      // ⚠️ IMPORTANT : pas de page_view automatique (SPA + consent)
       gtag("config", "G-FR53B6D9RY", {
-        anonymize_ip: true
+        anonymize_ip: true,
+        send_page_view: false
       });
     </script>
   </head>

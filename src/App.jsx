@@ -4,6 +4,25 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 import deviceImage from "./assets/blockpulse-device.png";
 
+// ===== Tracking GA4 (respect cookiesAccepted) =====
+const GA_MEASUREMENT_ID = "G-FR53B6D9RY";
+
+function trackEvent(eventName, params = {}) {
+  try {
+    const consent = window.localStorage.getItem("cookiesAccepted");
+    if (consent !== "true") return; // pas de tracking sans consentement
+    if (typeof window.gtag !== "function") return; // GA pas chargé / bloqueur
+
+    window.gtag("event", eventName, {
+      ...params,
+      measurement_id: GA_MEASUREMENT_ID,
+    });
+  } catch (e) {
+    // silence (on ne casse rien)
+  }
+}
+
+
 // Composant Cookie Banner
 const CookieBanner = ({ onAccept, onRefuse }) => {
   return (
@@ -96,11 +115,15 @@ const Header = () => {
           </button>
 
           <button 
-            onClick={() => scrollToSection('offre')} 
+            onClick={() => {
+              trackEvent("preorder_click", { placement: "header_desktop" });
+              scrollToSection('offre');
+            }} 
             className="px-4 py-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg hover:shadow-lg transition-all hover:scale-105"
           >
             Précommander
           </button>
+
         </div>
 
         {/* Bouton Menu Mobile */}
@@ -173,9 +196,16 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <button onClick={scrollToOffer} className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105 text-center">
+              <button
+                onClick={() => {
+                  trackEvent("preorder_click", { placement: "hero" });
+                  scrollToOffer();
+                }}
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105 text-center"
+              >
                 Précommander maintenant
               </button>
+
               <button onClick={() => document.getElementById('projet').scrollIntoView({ behavior: 'smooth' })} className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border-2 border-green-600 text-green-700 rounded-lg font-semibold hover:bg-green-50 transition-all hover:scale-105 text-center">
                 En savoir plus
               </button>
@@ -399,6 +429,8 @@ const Features = () => {
 // Composant Offres
 const PricingSection = () => {
   const handlePreorder = async () => {
+    trackEvent("begin_checkout", { placement: "pricing", method: "stripe" });
+
   try {
     const res = await fetch("/.netlify/functions/create-checkout", {
       method: "POST",
@@ -928,14 +960,31 @@ function Home() {
   }, []);
 
   const handleAcceptCookies = () => {
-    window.localStorage.setItem("cookiesAccepted", "true");
-    setCookiesAccepted(true);
-  };
+  window.localStorage.setItem("cookiesAccepted", "true");
+  setCookiesAccepted(true);
 
-  const handleRefuseCookies = () => {
-    window.localStorage.setItem("cookiesAccepted", "false");
-    setCookiesAccepted(false);
-  };
+  if (typeof window.gtag === "function") {
+    window.gtag("consent", "update", {
+      analytics_storage: "granted",
+    });
+
+    // Envoie une page vue immédiatement
+    window.gtag("event", "page_view", {
+      page_path: window.location.pathname,
+    });
+  }
+};
+
+ const handleRefuseCookies = () => {
+  window.localStorage.setItem("cookiesAccepted", "false");
+  setCookiesAccepted(false);
+
+  if (typeof window.gtag === "function") {
+    window.gtag("consent", "update", {
+      analytics_storage: "denied",
+    });
+  }
+};
 
   const scrollToOffer = () => {
     const element = document.getElementById("offre");

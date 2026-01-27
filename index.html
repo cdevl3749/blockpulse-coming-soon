@@ -74,14 +74,25 @@
       }
     </script>
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics + Consent Mode -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-FR53B6D9RY"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
-      gtag('config', 'G-FR53B6D9RY', {
+      // Consentement par défaut (RGPD) : TOUT REFUSÉ tant que l'utilisateur n'a pas accepté
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        analytics_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied"
+      });
+
+      gtag("js", new Date());
+
+      gtag("config", "G-FR53B6D9RY", {
         anonymize_ip: true
       });
     </script>
@@ -92,4 +103,5 @@
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+
 

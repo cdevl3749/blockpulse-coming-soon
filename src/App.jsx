@@ -959,17 +959,18 @@ function Home() {
     }
   }, []);
 
-  const handleAcceptCookies = () => {
+const handleAcceptCookies = () => {
   window.localStorage.setItem("cookiesAccepted", "true");
   setCookiesAccepted(true);
 
   if (typeof window.gtag === "function") {
+    // 1️⃣ On autorise le tracking
     window.gtag("consent", "update", {
       analytics_storage: "granted",
     });
 
-    // Envoie une page vue immédiatement
-    window.gtag("event", "page_view", {
+    // 2️⃣ ON RELANCE LE CONFIG GA4 (OBLIGATOIRE)
+    window.gtag("config", "G-FR53B6D9RY", {
       page_path: window.location.pathname,
     });
   }

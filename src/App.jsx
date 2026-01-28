@@ -1059,11 +1059,15 @@ function RouteTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    trackPageView(location.pathname);
+    const consent = window.localStorage.getItem("cookiesAccepted");
+    if (consent === "true") {
+      trackPageView(location.pathname);
+    }
   }, [location]);
 
   return null;
 }
+
 export default function App() {
   return (
     <>

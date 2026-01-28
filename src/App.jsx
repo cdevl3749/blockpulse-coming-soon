@@ -987,12 +987,18 @@ const handleAcceptCookies = () => {
   setCookiesAccepted(true);
 
   if (typeof window.gtag === "function") {
-    // 1️⃣ Autoriser Analytics
+    // 1️⃣ Autoriser GA
     window.gtag("consent", "update", {
       analytics_storage: "granted",
     });
 
-    // 2️⃣ Envoyer la page view initiale
+    // 2️⃣ RECONFIGURER GA4 (OBLIGATOIRE)
+    window.gtag("config", "G-FR53B6D9RY", {
+      anonymize_ip: true,
+      send_page_view: false, // on gère nous-mêmes
+    });
+
+    // 3️⃣ Envoyer la page vue
     trackPageView(window.location.pathname);
   }
 };

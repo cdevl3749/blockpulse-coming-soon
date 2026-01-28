@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 import deviceImage from "./assets/blockpulse-device.png";
@@ -19,6 +19,23 @@ function trackEvent(eventName, params = {}) {
     });
   } catch (e) {
     // silence (on ne casse rien)
+  }
+}
+
+// Track page views
+function trackPageView(path) {
+  try {
+    const consent = window.localStorage.getItem("cookiesAccepted");
+    if (consent !== "true") return;
+    if (typeof window.gtag !== "function") return;
+
+    window.gtag("event", "page_view", {
+      page_path: path,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  } catch (e) {
+    // silence
   }
 }
 
@@ -953,11 +970,17 @@ function Home() {
   });
 
   useEffect(() => {
-    const savedCookies = window.localStorage.getItem("cookiesAccepted");
-    if (savedCookies !== null) {
-      setCookiesAccepted(JSON.parse(savedCookies));
+  const savedCookies = window.localStorage.getItem("cookiesAccepted");
+  if (savedCookies !== null) {
+    const accepted = JSON.parse(savedCookies);
+    setCookiesAccepted(accepted);
+    
+    // ✅ Si cookies déjà acceptés, tracker la page
+    if (accepted) {
+      trackPageView(window.location.pathname);
     }
-  }, []);
+  }
+}, []);
 
 const handleAcceptCookies = () => {
   window.localStorage.setItem("cookiesAccepted", "true");
@@ -969,10 +992,8 @@ const handleAcceptCookies = () => {
       analytics_storage: "granted",
     });
 
-    // 2️⃣ INITIALISATION GA4 (C’EST ÇA QUI MANQUAIT)
-    window.gtag("config", "G-FR53B6D9RY", {
-      page_path: window.location.pathname,
-    });
+    // 2️⃣ Envoyer la page view initiale
+    trackPageView(window.location.pathname);
   }
 };
 
@@ -1026,13 +1047,27 @@ const handleAcceptCookies = () => {
     </div>
   );
 }
+
+// Tracker les changements de route
+function RouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location]);
+
+  return null;
+}
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/paiement/success" element={<PaymentSuccess />} />
-      <Route path="/paiement/cancel" element={<PaymentCancel />} />
-    </Routes>
+    <>
+      <RouteTracker />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/paiement/success" element={<PaymentSuccess />} />
+        <Route path="/paiement/cancel" element={<PaymentCancel />} />
+      </Routes>
+    </>
   );
 }
 

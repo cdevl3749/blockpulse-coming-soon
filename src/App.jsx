@@ -5,7 +5,7 @@ import PaymentCancel from "./pages/PaymentCancel";
 import deviceImage from "./assets/blockpulse-device.png";
 
 // ===== Tracking GA4 (respect cookiesAccepted) =====
-const GA_MEASUREMENT_ID = "G-FR53B6D9RY";
+const GA_MEASUREMENT_ID = "G-CYKGCBJS9C";
 
 function trackEvent(eventName, params = {}) {
   try {
@@ -993,7 +993,7 @@ const handleAcceptCookies = () => {
     });
 
     // 2️⃣ RECONFIGURER GA4 (OBLIGATOIRE)
-    window.gtag("config", "G-FR53B6D9RY", {
+    window.gtag("config", "G-CYKGCBJS9C", {
       anonymize_ip: true,
       send_page_view: false, // on gère nous-mêmes
     });

@@ -184,9 +184,10 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="text-center md:text-left">
-          <h1 className="sr-only">
+        <h1 className="sr-only">
   BlockPulse, le boîtier intelligent pour économiser l’électricité
 </h1>
+
 <h2 className="font-bold leading-tight text-3xl sm:text-4xl lg:text-5xl">
   L&apos;énergie intelligente,
   <br />
@@ -194,23 +195,38 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
   <span className="text-orange-500">moment</span>
 </h2>
 
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
-              BlockPulse vous indique en temps réel quand consommer l’électricité pour payer moins, sans application ni réglages complexes.
-            </p>
-            <p className="text-sm text-gray-500 mb-6 flex items-center justify-center md:justify-start gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 3 2"
-                width="18"
-                height="12"
-                className="inline-block"
-              >
-                <rect width="1" height="2" x="0" fill="#000000" />
-                <rect width="1" height="2" x="1" fill="#FFD90C" />
-                <rect width="1" height="2" x="2" fill="#EF3340" />
-              </svg>
-              <span>Conçu et assemblé en Belgique</span>
-            </p>
+{/* 🔑 Preuves clés (nouveau bloc) */}
+<div className="mt-4 mb-5 flex flex-wrap gap-2 justify-center md:justify-start">
+  <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
+    Compatible avec tous les fournisseurs
+  </span>
+  <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
+    Sans application
+  </span>
+  <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
+    Sans abonnement
+  </span>
+</div>
+
+<p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
+  BlockPulse vous indique en temps réel quand consommer l’électricité pour payer moins,
+  sans application ni réglages complexes.
+</p>
+
+<p className="text-sm text-gray-500 mb-6 flex items-center justify-center md:justify-start gap-2">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 3 2"
+    width="18"
+    height="12"
+    className="inline-block"
+  >
+    <rect width="1" height="2" x="0" fill="#000000" />
+    <rect width="1" height="2" x="1" fill="#FFD90C" />
+    <rect width="1" height="2" x="2" fill="#EF3340" />
+  </svg>
+  <span>Conçu et assemblé en Belgique</span>
+</p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button

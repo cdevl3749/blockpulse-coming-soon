@@ -295,6 +295,10 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               )}
             </form>
 
+            <p className="mt-2 text-xs text-gray-500 text-center md:text-left">
+              🔒 Votre email ne sera jamais partagé. 1 message au lancement, rien de plus.
+            </p>
+
             {notifyStatus === "error" && (
               <p className="mt-2 text-sm text-red-600 text-center md:text-left">
                 {notifyError}

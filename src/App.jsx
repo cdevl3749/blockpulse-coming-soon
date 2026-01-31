@@ -179,82 +179,153 @@ const Header = () => {
 
 // Composant Hero Section
 const HeroSection = ({ fundingData, scrollToOffer }) => {
+  // --- Formulaire "Être informé du lancement"
+  const [notifyEmail, setNotifyEmail] = useState("");
+  const [notifyStatus, setNotifyStatus] = useState("idle"); 
+  // idle | loading | success | error
+  const [notifyError, setNotifyError] = useState("");
+
+  const handleNotifySubmit = async (e) => {
+    e.preventDefault();
+    setNotifyStatus("loading");
+    setNotifyError("");
+
+    try {
+      const res = await fetch("/.netlify/functions/notify-launch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: notifyEmail }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Erreur");
+      }
+
+      setNotifyStatus("success");
+      setNotifyEmail("");
+    } catch (err) {
+      setNotifyStatus("error");
+      setNotifyError(
+        "Une erreur est survenue. Merci de réessayer plus tard."
+      );
+    }
+  };
+
   return (
     <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 bg-gradient-to-br from-green-50 via-yellow-50 to-orange-50">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="text-center md:text-left">
-        <h1 className="sr-only">
-  BlockPulse, le boîtier intelligent pour économiser l’électricité
-</h1>
+            <h1 className="sr-only">
+              BlockPulse, le boîtier intelligent pour économiser l’électricité
+            </h1>
 
-<h2 className="font-bold leading-tight text-3xl sm:text-4xl lg:text-5xl">
-  L&apos;énergie intelligente,
-  <br />
-  <span className="text-green-600">au bon</span>{" "}
-  <span className="text-orange-500">moment</span>
-</h2>
+            <h2 className="font-bold leading-tight text-3xl sm:text-4xl lg:text-5xl">
+              L&apos;énergie intelligente,
+              <br />
+              <span className="text-green-600">au bon</span>{" "}
+              <span className="text-orange-500">moment</span>
+            </h2>
 
-{/* 🔑 Preuves clés (nouveau bloc) */}
-<div className="mt-4 mb-5 flex flex-wrap gap-2 justify-center md:justify-start">
-  <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
-    Compatible avec tous les fournisseurs
-  </span>
-  <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
-    Sans application
-  </span>
-  <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
-    Sans abonnement
-  </span>
-</div>
+            {/* 🔑 Preuves clés */}
+            <div className="mt-4 mb-5 flex flex-wrap gap-2 justify-center md:justify-start">
+              <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
+                Compatible avec tous les fournisseurs
+              </span>
+              <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
+                Sans application
+              </span>
+              <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
+                Sans abonnement
+              </span>
+            </div>
 
-<p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
-  BlockPulse vous indique en temps réel quand consommer l’électricité pour payer moins,
-  sans application ni réglages complexes.
-</p>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
+              BlockPulse vous indique en temps réel quand consommer l’électricité
+              pour payer moins, sans application ni réglages complexes.
+            </p>
 
-<p className="text-sm text-gray-500 mb-6 flex items-center justify-center md:justify-start gap-2">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 3 2"
-    width="18"
-    height="12"
-    className="inline-block"
-  >
-    <rect width="1" height="2" x="0" fill="#000000" />
-    <rect width="1" height="2" x="1" fill="#FFD90C" />
-    <rect width="1" height="2" x="2" fill="#EF3340" />
-  </svg>
-  <span>Conçu et assemblé en Belgique</span>
-</p>
-
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <button
-                onClick={() => {
-                  trackEvent("preorder_click", { placement: "hero" });
-                  scrollToOffer();
-                }}
-                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105 text-center"
+            <p className="text-sm text-gray-500 mb-6 flex items-center justify-center md:justify-start gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 3 2"
+                width="18"
+                height="12"
+                className="inline-block"
               >
-                Précommander maintenant
-              </button>
+                <rect width="1" height="2" x="0" fill="#000000" />
+                <rect width="1" height="2" x="1" fill="#FFD90C" />
+                <rect width="1" height="2" x="2" fill="#EF3340" />
+              </svg>
+              <span>Conçu et assemblé en Belgique</span>
+            </p>
 
-              <button onClick={() => document.getElementById('projet').scrollIntoView({ behavior: 'smooth' })} className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border-2 border-green-600 text-green-700 rounded-lg font-semibold hover:bg-green-50 transition-all hover:scale-105 text-center">
+            {/* 👉 FORMULAIRE À LA PLACE DU CTA */}
+            <form
+              onSubmit={handleNotifySubmit}
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4"
+            >
+              {notifyStatus === "success" ? (
+                <div className="w-full px-6 py-4 rounded-lg bg-green-50 border border-green-300 text-green-700 font-semibold text-center">
+                  ✅ Merci ! Vous serez informé du lancement de BlockPulse.
+                </div>
+              ) : (
+                <>
+                  <input
+                    type="email"
+                    required
+                    placeholder="Votre adresse email"
+                    value={notifyEmail}
+                    onChange={(e) => setNotifyEmail(e.target.value)}
+                    className="w-full sm:w-auto flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={notifyStatus === "loading"}
+                    className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105 disabled:opacity-60"
+                  >
+                    {notifyStatus === "loading"
+                      ? "Envoi en cours..."
+                      : "Être informé du lancement"}
+                  </button>
+                </>
+              )}
+            </form>
+
+            {notifyStatus === "error" && (
+              <p className="mt-2 text-sm text-red-600 text-center md:text-left">
+                {notifyError}
+              </p>
+            )}
+
+            {/* Bouton secondaire conservé */}
+            <div className="mt-4">
+              <button
+                onClick={() =>
+                  document
+                    .getElementById("projet")
+                    .scrollIntoView({ behavior: "smooth" })
+                }
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border-2 border-green-600 text-green-700 rounded-lg font-semibold hover:bg-green-50 transition-all hover:scale-105 text-center"
+              >
                 En savoir plus
               </button>
             </div>
           </div>
-         <div className="flex flex-col items-center gap-4">
-          <img
-            src={deviceImage}
-            alt="Boîtier BlockPulse avec écran LED indiquant le bon moment pour consommer"
-            className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
-          />
-          <p className="text-center text-green-600 font-bold text-lg sm:text-xl">
-            C'est le moment idéal !
-          </p>
-        </div>
 
+          <div className="flex flex-col items-center gap-4">
+            <img
+              src={deviceImage}
+              alt="Boîtier BlockPulse avec écran LED indiquant le bon moment pour consommer"
+              className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
+            />
+            <p className="text-center text-green-600 font-bold text-lg sm:text-xl">
+              C&apos;est le moment idéal !
+            </p>
+          </div>
         </div>
       </div>
     </section>

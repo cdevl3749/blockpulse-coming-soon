@@ -34,7 +34,7 @@ exports.handler = async (event) => {
       SMTP_PASS,
       NOTIFY_TO_EMAIL,
       NOTIFY_FROM_EMAIL,
-      SITE_NAME,
+      APP_NAME,
     } = process.env;
 
     if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !NOTIFY_TO_EMAIL) {
@@ -60,7 +60,7 @@ exports.handler = async (event) => {
 
     const now = new Date().toISOString();
 
-    const subject = `[${SITE_NAME || "BlockPulse"}] Nouvelle demande "Être informé"`;
+    const subject = `[${process.env.APP_NAME || "BlockPulse"}] Nouvelle demande "Être informé"`;
     const text = `Nouvel email inscrit : ${email}\nDate (ISO) : ${now}\nIP : ${event.headers["x-nf-client-connection-ip"] || "unknown"}\nUser-Agent : ${event.headers["user-agent"] || "unknown"}`;
 
     await transporter.sendMail({

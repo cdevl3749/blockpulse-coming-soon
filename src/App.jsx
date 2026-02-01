@@ -1074,23 +1074,17 @@ function Home() {
 }, []);
 
 const handleAcceptCookies = () => {
-  // ✅ Sauvegarde du consentement
-  window.localStorage.setItem("cookiesAccepted", "true");
+  // Sauvegarde du consentement
+  localStorage.setItem("cookiesAccepted", "true");
   setCookiesAccepted(true);
 
   if (typeof window.gtag === "function") {
-    // 1️⃣ Autoriser Google Analytics
+    // ✅ Autoriser Analytics
     window.gtag("consent", "update", {
       analytics_storage: "granted",
     });
 
-    // 2️⃣ Reconfigurer GA4 (SPA + RGPD)
-    window.gtag("config", "G-CYKGCBJS9C", {
-      anonymize_ip: true,
-      send_page_view: false, // on gère nous-mêmes
-    });
-
-    // 3️⃣ Envoyer MANUELLEMENT la page vue
+    // ✅ ENVOYER LE PAGE_VIEW MANUELLEMENT
     window.gtag("event", "page_view", {
       page_title: document.title,
       page_location: window.location.href,

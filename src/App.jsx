@@ -67,6 +67,38 @@ const CookieBanner = ({ onAccept, onRefuse }) => {
   );
 };
 
+// Composant Bouton CTA Flottant
+const FloatingCTA = ({ onClick }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.scrollY > 500) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    toggleVisibility();
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  if (!isVisible) return null;
+
+  return (
+    <button
+      onClick={onClick}
+      className="fixed bottom-6 right-6 z-50 px-6 py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-full shadow-2xl hover:shadow-xl hover:scale-105 transition-all duration-300 font-bold text-sm md:text-base flex items-center gap-2"
+    >
+      <span className="hidden md:inline">Précommander</span>
+      <span className="md:hidden">69€</span>
+      <span className="text-xl">→</span>
+    </button>
+  );
+};
+
 // Composant Logo
 const Logo = ({ clickable = false }) => {
   const handleClick = () => {
@@ -1128,6 +1160,13 @@ const handleAcceptCookies = () => {
       {cookiesAccepted === null && (
         <CookieBanner onAccept={handleAcceptCookies} onRefuse={handleRefuseCookies} />
       )}
+
+
+    {/* ✅ AJOUTE CETTE LIGNE ICI */}
+    <FloatingCTA onClick={() => {
+      trackEvent("floating_cta_click", { placement: "floating_button" });
+      scrollToOffer();
+    }} />
 
       <Modal isOpen={showLegalModal} onClose={() => setShowLegalModal(false)} title="Mentions légales">
         <LegalPage />

@@ -403,7 +403,7 @@ const FAQ = () => {
     },
     {
       question: "Quand vais-je recevoir mon BlockPulse ?",
-      answer: "La livraison est prévue pour Mars 2026. Nos premiers utilisateurs recevront leur boîtier en priorité. Vous recevrez des mises à jour régulières sur l'avancement de la production par email."
+      answer: "La livraison est prévue pour mi-mars 2026. Nos premiers utilisateurs recevront leur boîtier en priorité. Vous recevrez des mises à jour régulières sur l'avancement de la production par email."
     },
     {
       question: "Y a-t-il une garantie ?",
@@ -626,7 +626,7 @@ const PricingSection = () => {
             </div>
 
             <p className="text-xs text-gray-500 text-center mb-4">
-              Produit en cours de production – livraison prévue mars 2026.
+              Produit en cours de production – 📦 Livraison prévue : mi-mars 2026.
             </p>
 
             <div className="mb-6">
@@ -697,7 +697,7 @@ const PricingSection = () => {
               onClick={handlePreorder}
               className="w-full py-4 sm:py-5 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-2xl text-base sm:text-lg"
             >
-              🚀 Précommander maintenant
+              ⚡ Je précommande
             </button>
 
             {/* AJOUTEZ ICI - Juste après le bouton </button> et avant le <p className="mt-3..."> */}
@@ -721,7 +721,7 @@ const PricingSection = () => {
             <p className="mt-3 text-xs sm:text-sm text-gray-500 text-center">
               🔹 <strong>Précommande</strong> – produit en cours de développement.
               <br />
-              Livraison estimée : <strong>mars 2026</strong>.
+              📦 Livraison prévue : <strong>mi-mars 2026</strong>.
             </p>
 
             <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
@@ -737,7 +737,7 @@ const PricingSection = () => {
             🔒 Paiement 100% sécurisé par Stripe • Remboursement garanti si non satisfait
           </p>
           <p className="text-xs sm:text-sm text-gray-500">
-            📦 Livraison prévue: <strong>Mars 2026</strong> • Production éthique en Europe
+            📦 Livraison prévue: <strong>mi-mars 2026</strong> 🔔 Vous serez informé à chaque étape
           </p>
         </div>
       </div>
@@ -1047,7 +1047,7 @@ const CGVPage = () => {
       <section>
         <h3 className="text-xl font-bold mb-3">Article 5 – Livraison</h3>
         <p>
-          La livraison du produit BlockPulse est prévue pour <strong>mars 2026</strong>.
+          La livraison du produit BlockPulse est prévue pour <strong>mi-mars 2026</strong>.
           Cette date est indicative et peut évoluer en fonction des contraintes
           de production.
         </p>

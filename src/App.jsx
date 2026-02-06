@@ -93,7 +93,7 @@ const FloatingCTA = ({ onClick }) => {
       className="fixed bottom-6 right-6 z-50 px-6 py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-full shadow-2xl hover:shadow-xl hover:scale-105 transition-all duration-300 font-bold text-sm md:text-base flex items-center gap-2"
     >
       <span className="hidden md:inline">Précommander</span>
-      <span className="md:hidden">69€</span>
+      <span className="md:hidden">⚡ Préco</span>
       <span className="text-xl">→</span>
     </button>
   );

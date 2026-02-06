@@ -139,7 +139,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-sm z-40">
+    <header className="fixed top-0 left-0 right-0 h-16 sm:h-20 bg-white/90 backdrop-blur-md shadow-sm z-[60]">
       <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center">
           <Logo clickable={true} />
@@ -177,7 +177,7 @@ const Header = () => {
 
         {/* Bouton Menu Mobile */}
         <button 
-          className="md:hidden text-gray-700 text-2xl"
+          className="md:hidden text-gray-800 text-3xl relative z-[70]"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? '✕' : '☰'}
@@ -211,75 +211,25 @@ const Header = () => {
 
 // Composant Hero Section
 const HeroSection = ({ fundingData, scrollToOffer }) => {
-  // --- Formulaire "Être informé du lancement"
-  const [notifyEmail, setNotifyEmail] = useState("");
-  const [notifyStatus, setNotifyStatus] = useState("idle"); 
-  // idle | loading | success | error
-  const [notifyError, setNotifyError] = useState("");
-
-  const handleNotifySubmit = async (e) => {
-    e.preventDefault();
-    setNotifyStatus("loading");
-    setNotifyError("");
-
-    try {
-      const res = await fetch("/.netlify/functions/notify-launch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: notifyEmail }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || "Erreur");
-      }
-
-      setNotifyStatus("success");
-      setNotifyEmail("");
-    } catch (err) {
-      setNotifyStatus("error");
-      setNotifyError(
-        "Une erreur est survenue. Merci de réessayer plus tard."
-      );
-    }
-  };
 
   return (
-    <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 bg-gradient-to-br from-green-50 via-yellow-50 to-orange-50">
+    <section className="pt-20 sm:pt-28 pb-12 sm:pb-20 px-4 bg-gradient-to-br from-green-50 via-yellow-50 to-orange-50">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="text-center md:text-left">
             <h1 className="sr-only">
-              BlockPulse, le boîtier intelligent pour économiser l’électricité
+              BlockPulse, le boîtier intelligent pour économiser l'électricité
             </h1>
 
             <h2 className="font-bold leading-tight text-3xl sm:text-4xl lg:text-5xl">
-              L&apos;énergie intelligente,
+              Réduisez votre facture d&apos;électricité
               <br />
-              <span className="text-green-600">au bon</span>{" "}
-              <span className="text-orange-500">moment</span>
+              <span className="text-green-600">de 45%</span>{" "}
+              <span className="text-orange-500">sans effort</span>
             </h2>
 
-            {/* 🔑 Preuves clés */}
-            <div className="mt-4 mb-5 flex flex-wrap gap-2 justify-center md:justify-start">
-              <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
-                Compatible avec tous les fournisseurs
-              </span>
-              <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
-                Sans application
-              </span>
-              <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-semibold text-green-800">
-                Sans abonnement
-              </span>
-            </div>
-
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
-              BlockPulse vous indique en temps réel quand consommer l’électricité
-              pour payer moins, sans application ni réglages complexes.
-            </p>
-
-            <p className="text-sm text-gray-500 mb-6 flex items-center justify-center md:justify-start gap-2">
+            {/* Ligne innovation belge */}
+            <p className="text-sm sm:text-lg mt-4 text-gray-700 flex items-center justify-center md:justify-start gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 3 2"
@@ -291,51 +241,36 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
                 <rect width="1" height="2" x="1" fill="#FFD90C" />
                 <rect width="1" height="2" x="2" fill="#EF3340" />
               </svg>
-              <span>Conçu et assemblé en Belgique</span>
+              <span>Innovation 100% belge • Sans changer vos habitudes</span>
             </p>
 
-            {/* 👉 FORMULAIRE À LA PLACE DU CTA */}
-            <form
-              onSubmit={handleNotifySubmit}
-              className="flex flex-col sm:flex-row gap-3 sm:gap-4"
-            >
-              {notifyStatus === "success" ? (
-                <div className="w-full px-6 py-4 rounded-lg bg-green-50 border border-green-300 text-green-700 font-semibold text-center">
-                  ✅ Merci ! Vous serez informé du lancement de BlockPulse.
-                </div>
-              ) : (
-                <>
-                  <input
-                    type="email"
-                    required
-                    placeholder="Votre adresse email"
-                    value={notifyEmail}
-                    onChange={(e) => setNotifyEmail(e.target.value)}
-                    className="w-full sm:w-auto flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  />
-
-                  <button
-                    type="submit"
-                    disabled={notifyStatus === "loading"}
-                    className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105 disabled:opacity-60"
-                  >
-                    {notifyStatus === "loading"
-                      ? "Envoi en cours..."
-                      : "Être informé du lancement"}
-                  </button>
-                </>
-              )}
-            </form>
-
-            <p className="mt-2 text-xs text-gray-500 text-center md:text-left">
-              🔒 Votre email ne sera jamais partagé. 1 message au lancement, rien de plus.
+            {/* Offre de lancement - SANS ICÔNE */}
+            <p className="text-sm sm:text-base mt-3 font-bold text-orange-600">
+              Offre de lancement : -22% pour les 50 premiers
             </p>
 
-            {notifyStatus === "error" && (
-              <p className="mt-2 text-sm text-red-600 text-center md:text-left">
-                {notifyError}
+              {/* Badges simplifiés */}
+              <div className="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
+                <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-green-800">
+                  Sans application
+                </span>
+                <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-green-800">
+                  Sans abonnement
+                </span>
+            </div>
+            {/* CTA Principal - Précommande */}
+            <div className="mt-8 flex flex-col items-center md:items-start gap-3">
+              <a
+                href="#offre"
+                className="inline-block w-full sm:w-auto bg-gradient-to-r from-green-500 to-orange-500 text-white font-bold py-3 sm:py-4 px-8 sm:px-12 rounded-lg text-base sm:text-lg hover:shadow-2xl transition-all transform hover:scale-105 text-center"
+              >
+                ⚡ Je précommande maintenant
+              </a>
+
+              <p className="text-xs text-gray-500 text-center md:text-left">
+                🔒 Paiement sécurisé • Annulation gratuite jusqu&apos;à la production
               </p>
-            )}
+            </div>
 
             {/* Bouton secondaire conservé */}
             <div className="mt-4">
@@ -387,8 +322,9 @@ const FAQ = () => {
     },
     {
       question: "Combien puis-je économiser réellement ?",
-      answer: "En moyenne, nos premiers utilisateurs économisent entre 30% et 45% sur leur facture d'électricité en déplaçant simplement l'utilisation de leurs appareils aux heures creuses. Pour une famille moyenne belge, cela représente 200-400€ d'économies par an !"
+      answer: "En pratique, les économies dépendent de votre consommation et de votre capacité à déplacer certains usages vers les heures les plus avantageuses. En moyenne, les utilisateurs peuvent réduire leur facture d’électricité jusqu’à 25 à 30 %. Pour un foyer belge, cela représente généralement jusqu’à environ 300 € d’économies par an."
     },
+
     {
       question: "BlockPulse fonctionne-t-il avec mon fournisseur d'énergie ?",
       answer: "Oui ! BlockPulse est compatible avec tous les fournisseurs d'énergie en Belgique et dans l'Union Européenne. Il analyse les prix spot du marché de l'électricité et s'adapte automatiquement à votre région."
@@ -476,26 +412,89 @@ const ProofSection = () => {
           Pourquoi BlockPulse fonctionne
         </h2>
 
-        <p className="text-gray-600 mb-6">
-          Le prix de l’électricité peut varier fortement au cours d’une même journée, parfois du simple au double.
-          BlockPulse rend ces variations visibles en temps réel, sans application ni réglages.
+        <p className="mb-8 text-lg text-gray-600 max-w-3xl mx-auto">
+          Le prix de l'électricité en Belgique peut varier de plus de <strong>200&nbsp;%</strong> au cours d’une même journée.
+          BlockPulse vous indique automatiquement quand consommer pour payer le moins cher.
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-center gap-4 text-lg font-semibold">
-          <div className="flex items-center justify-center gap-2 bg-green-50 text-green-700 px-4 py-3 rounded-lg">
-            🟢 Prix bas – vous pouvez lancer
+       <div className="grid gap-8 md:grid-cols-3">
+  {/* Carte 1 - Prix BAS */}
+  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mx-auto">
+      <div className="h-8 w-8 rounded-full bg-green-500"></div>
+    </div>
+    <h3 className="mb-3 text-xl font-bold text-gray-800">
+      💚 Prix BAS
+    </h3>
+    <p className="text-sm text-gray-500 mb-3">0,10-0,15€/kWh</p>
+    <p className="text-gray-700 mb-4">
+      BlockPulse active vos appareils énergivores :
+    </p>
+    <ul className="text-left text-sm text-gray-600 space-y-2">
+      <li>✓ Machine à laver</li>
+      <li>✓ Lave-vaisselle</li>
+      <li>✓ Charge voiture électrique</li>
+    </ul>
+    <p className="mt-4 text-green-600 font-bold text-lg">
+      Économie : ~200€/an
+    </p>
+  </div>
+
+  {/* Carte 2 - Prix MOYEN */}
+  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-100 mx-auto">
+      <div className="h-8 w-8 rounded-full bg-yellow-500"></div>
+    </div>
+    <h3 className="mb-3 text-xl font-bold text-gray-800">
+      🟡 Prix MOYEN
+    </h3>
+    <p className="text-sm text-gray-500 mb-3">0,20-0,25€/kWh</p>
+    <p className="text-gray-700 mb-4">
+      Vous pouvez utiliser vos appareils normalement
+    </p>
+    <ul className="text-left text-sm text-gray-600 space-y-2">
+      <li>✓ Utilisation normale</li>
+      <li>✓ Pas de restriction</li>
+      <li>✓ Confort préservé</li>
+    </ul>
+    <p className="mt-4 text-yellow-600 font-bold text-lg">
+      Économie : ~50€/an
+    </p>
+  </div>
+
+        {/* Carte 3 - Prix ÉLEVÉ */}
+        <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 mx-auto">
+            <div className="h-8 w-8 rounded-full bg-red-500"></div>
           </div>
-          <div className="flex items-center justify-center gap-2 bg-yellow-50 text-yellow-700 px-4 py-3 rounded-lg">
-            🟠 Prix moyen – vous pouvez attendre
-          </div>
-          <div className="flex items-center justify-center gap-2 bg-red-50 text-red-700 px-4 py-3 rounded-lg">
-            🔴 Prix élevé – mieux vaut patienter
-          </div>
+          <h3 className="mb-3 text-xl font-bold text-gray-800">
+            🔴 Prix ÉLEVÉ
+          </h3>
+          <p className="text-sm text-gray-500 mb-3">0,35-0,50€/kWh</p>
+          <p className="text-gray-700 mb-4">
+            BlockPulse coupe automatiquement :
+          </p>
+          <ul className="text-left text-sm text-gray-600 space-y-2">
+            <li>✓ Appareils en veille</li>
+            <li>✓ Chauffage d'appoint</li>
+            <li>✓ Chargeurs inutiles</li>
+          </ul>
+          <p className="mt-4 text-red-600 font-bold text-lg">
+            Surcoût évité : ~150€/an
+          </p>
         </div>
+      </div>
 
-        <p className="mt-4 text-sm text-gray-500">
-          Un simple coup d’œil suffit pour savoir s’il vaut mieux consommer maintenant… ou attendre.
+     {/* Résumé total */}
+      <div className="mt-12 bg-gradient-to-r from-green-50 to-orange-50 rounded-2xl p-8 border-2 border-green-200">
+        <p className="text-2xl font-bold text-gray-800 mb-2">
+          💰 Économie totale estimée : jusqu’à <strong>300&nbsp;€/an</strong>
         </p>
+        <p className="text-gray-600">
+          Soit environ <strong>25&nbsp;€</strong> d’économies par mois • BlockPulse rentabilisé en quelques mois
+        </p>
+      </div>
+
       </div>
     </section>
   );
@@ -595,7 +594,7 @@ const PricingSection = () => {
 
 
   return (
-    <section id="offre" className="py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-br from-gray-50 to-green-50">
+    <section id="offre"  className="scroll-mt-24 md:scroll-mt-28 py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-br from-gray-50 to-green-50">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-3 sm:mb-4 px-4">Offre de lancement exclusive</h2>
         <p className="text-base sm:text-lg md:text-xl text-gray-600 text-center mb-8 sm:mb-12 px-4">
@@ -630,19 +629,30 @@ const PricingSection = () => {
             </p>
 
             <div className="mb-6">
-              <div className="flex items-baseline gap-2 justify-center">
-                <span className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                  69€
-                </span>
-                <span className="text-gray-400 line-through text-xl sm:text-2xl">89€</span>
-              </div>
-              <p className="text-center text-xs sm:text-sm text-gray-500 mt-2">TTC - Livraison incluse</p>
-              <div className="text-center mt-3">
-                <span className="inline-block px-3 sm:px-4 py-1 sm:py-2 bg-green-100 text-green-700 rounded-full text-sm sm:text-base font-bold">
-                  -22% de réduction
-                </span>
-              </div>
-            </div>
+  {/* Badge urgence + Prix - Structure verticale centrée */}
+  <div className="flex flex-col items-center gap-3">
+    {/* Badge urgence */}
+    <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
+      ⚡ Plus que 42/50 places
+    </div>
+    
+    {/* Prix */}
+    <div className="flex items-baseline gap-2">
+      <span className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
+        69€
+      </span>
+      <span className="text-gray-400 line-through text-xl sm:text-2xl">89€</span>
+    </div>
+  </div>
+  
+  <p className="text-center text-xs sm:text-sm text-gray-500 mt-2">TTC - Livraison incluse</p>
+  
+  <div className="text-center mt-3">
+    <p className="mb-6 inline-block rounded-full bg-green-100 px-4 py-2 text-base font-bold text-green-700">
+     🎯 -22% de réduction • Économisez 20€
+    </p>
+  </div>
+</div>
             
             <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
               <li className="flex items-start gap-2 sm:gap-3">
@@ -726,7 +736,7 @@ const PricingSection = () => {
 
             <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
               <p className="text-xs sm:text-sm text-gray-700 text-center">
-                <strong>💡 Économisez jusqu'à 45%</strong> sur votre facture d'électricité dès la première année !
+                <strong>💡 Économisez jusqu'à 30%</strong> sur votre facture d'électricité dès la première année !
               </p>
             </div>
           </div>
@@ -1085,12 +1095,46 @@ function Home() {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [showCGVModal, setShowCGVModal] = useState(false);
 
+  // 🔔 Newsletter / notification lancement
+  const [notifyEmail, setNotifyEmail] = useState("");
+  const [notifyStatus, setNotifyStatus] = useState("idle");
+  const [notifyError, setNotifyError] = useState("");
+
+
   const [fundingData, setFundingData] = useState({
     current: 14580,
     goal: 25000,
     backers: 247,
     daysLeft: 28,
   });
+
+  const handleNotifySubmit = async (e) => {
+    e.preventDefault();
+    setNotifyStatus("loading");
+    setNotifyError("");
+
+    try {
+      const res = await fetch("/.netlify/functions/notify-launch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: notifyEmail }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Erreur");
+      }
+
+      setNotifyStatus("success");
+      setNotifyEmail("");
+    } catch (err) {
+      setNotifyStatus("error");
+      setNotifyError(
+        "Une erreur est survenue. Merci de réessayer plus tard."
+      );
+    }
+  };
 
   useEffect(() => {
   const savedCookies = window.localStorage.getItem("cookiesAccepted");
@@ -1144,13 +1188,59 @@ const handleAcceptCookies = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       <Header />
       <HeroSection fundingData={fundingData} scrollToOffer={scrollToOffer} />
       <ProofSection />
       <Features />
       <PricingSection />
       <FAQ />
+      {/* 🔔 Newsletter – Notification de lancement */}
+<section className="bg-green-50 border-t border-green-100 py-12 px-4">
+  <div className="mx-auto max-w-3xl text-center">
+    <h2 className="text-2xl font-bold text-gray-800 mb-3">
+      🔔 Vous hésitez encore ?
+    </h2>
+
+    <p className="text-gray-600 mb-6">
+      Laissez-nous votre email pour être informé du lancement.
+      <br className="hidden sm:block" />
+      Un seul message, aucun spam.
+    </p>
+
+    <form
+      onSubmit={handleNotifySubmit}
+      className="mt-4 mb-5 flex flex-col sm:flex-row gap-3 w-full justify-center"
+    >
+      <input
+        type="email"
+        value={notifyEmail}
+        onChange={(e) => setNotifyEmail(e.target.value)}
+        placeholder="Votre adresse email"
+        required
+        className="flex-1 max-w-xs rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-green-500 focus:outline-none"
+      />
+      <button
+        type="submit"
+        disabled={notifyStatus === "loading"}
+        className="whitespace-nowrap rounded-lg bg-gradient-to-r from-green-500 to-orange-500 px-6 py-3 font-semibold text-white transition-all hover:shadow-lg disabled:opacity-50"
+      >
+        {notifyStatus === "loading" ? "Envoi..." : "Être informé du lancement"}
+      </button>
+    </form>
+
+    {notifyStatus === "success" && (
+      <p className="mt-2 text-sm text-green-700">
+        ✅ Votre email ne sera jamais partagé. 1 message au lancement, rien de plus.
+      </p>
+    )}
+
+    {notifyStatus === "error" && (
+      <p className="mt-2 text-sm text-red-600">{notifyError}</p>
+    )}
+  </div>
+</section>
+
       <Footer
         onLegalClick={() => setShowLegalModal(true)}
         onPrivacyClick={() => setShowPrivacyModal(true)}

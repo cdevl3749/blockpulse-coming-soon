@@ -224,7 +224,7 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
             <h2 className="font-bold leading-tight text-3xl sm:text-4xl lg:text-5xl">
               Réduisez votre facture d&apos;électricité
               <br />
-              <span className="text-green-600">de 45%</span>{" "}
+              <span className="text-green-600">jusqu&apos;à 30&nbsp;%</span>{" "}
               <span className="text-orange-500">sans effort</span>
             </h2>
 

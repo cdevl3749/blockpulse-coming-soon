@@ -308,9 +308,9 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               alt="Boîtier BlockPulse avec écran LED indiquant le bon moment pour consommer"
               className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
             />
-            <p className="text-center text-green-600 font-bold text-lg sm:text-xl">
-              C&apos;est le moment idéal !
-            </p>
+           <p className="text-center text-green-600 font-bold text-lg sm:text-xl">
+              Prototype réel → boîtier final
+           </p>
           </div>
         </div>
       </div>

@@ -163,6 +163,14 @@ const Header = () => {
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-yellow-500 to-orange-500 group-hover:w-full transition-all duration-300"></span>
           </button>
 
+          <button
+            onClick={() => scrollToSection("temoignages")}
+            className="text-gray-700 hover:text-orange-600 transition-all duration-300 font-medium relative group"
+          >
+            Témoignages
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-red-500 group-hover:w-full transition-all duration-300"></span>
+          </button>
+
           <button 
             onClick={() => {
               trackEvent("preorder_click", { placement: "header_desktop" });
@@ -201,6 +209,13 @@ const Header = () => {
       >
         FAQ
       </button>
+      <button
+        onClick={() => scrollToSection("temoignages")}
+        className="text-left text-gray-700 hover:text-orange-600 py-2 font-medium"
+      >
+        Témoignages
+      </button>
+
     </div>
   </div>
 )}
@@ -511,7 +526,7 @@ const Features = () => {
     {
       icon: "💰",
       title: "Économies garanties",
-      description: "Jusqu'à 45% d'économies sur votre facture d'électricité en utilisant l'énergie aux heures creuses.",
+      description: "Jusqu'à 30% d'économies sur votre facture d'électricité en utilisant l'énergie aux heures creuses.",
       color: "from-yellow-400 to-yellow-600"
     },
     {
@@ -541,7 +556,7 @@ const Features = () => {
   ];
 
   return (
-    <section id="projet" className="py-12 sm:py-16 md:py-20 px-4 bg-white">
+    <section id="projet" className="pt-12 sm:pt-16 pb-2 sm:pb-6 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-3 sm:mb-4">Comment ça fonctionne ?</h2>
         <p className="text-base sm:text-lg md:text-xl text-gray-600 text-center mb-8 sm:mb-12 max-w-3xl mx-auto px-4">
@@ -559,6 +574,74 @@ const Features = () => {
               <p className="text-sm sm:text-base text-gray-600 relative z-10">{feature.description}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const TestimonialsSection = () => {
+  const testimonials = [
+    {
+      name: "Julie, Liège",
+      title: "J’attends le prototype avec impatience",
+      quote:
+        "J’ai découvert BlockPulse via LinkedIn. L’idée est ultra claire : savoir quand consommer au bon moment sans se prendre la tête. Hâte de voir la version finale.",
+    },
+    {
+      name: "Marc, Namur",
+      title: "Réponse rapide du fondateur",
+      quote:
+        "J’ai posé 2 questions par email et j’ai eu une réponse simple et précise. Ça fait sérieux, et on sent que le produit est pensé pour les gens “normaux”.",
+    },
+  ];
+
+  return (
+    <section
+        id="temoignages"
+        className="pt-6 sm:pt-8 md:pt-10 pb-12 sm:pb-16 px-4 bg-white"
+    >
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-3 sm:mb-4">
+          Témoignages
+        </h2>
+        <p className="text-base sm:text-lg text-gray-600 text-center mb-8 sm:mb-12 max-w-3xl mx-auto">
+          Des retours de personnes qui suivent le projet et échangent déjà avec nous.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {testimonials.map((t, i) => (
+            <div
+              key={i}
+              className="rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-bold text-gray-900">{t.name}</p>
+                  <p className="text-sm text-gray-500">{t.title}</p>
+                </div>
+                <div className="text-3xl leading-none text-gray-200">“</div>
+              </div>
+
+              <p className="mt-4 text-gray-700 leading-relaxed">{t.quote}</p>
+
+              <div className="mt-5 flex items-center gap-2 text-xs text-gray-500">
+                <span className="inline-block h-2 w-2 rounded-full bg-green-500"></span>
+                <span>BlockPulse • Belgique</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <button
+            onClick={() =>
+              document.getElementById("offre")?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-lg transition-all hover:scale-105"
+          >
+            Voir l’offre de lancement
+          </button>
         </div>
       </div>
     </section>
@@ -633,7 +716,7 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 42/50 places
+      ⚡ Plus que 41/50 places
     </div>
     
     {/* Prix */}
@@ -1193,6 +1276,7 @@ const handleAcceptCookies = () => {
       <HeroSection fundingData={fundingData} scrollToOffer={scrollToOffer} />
       <ProofSection />
       <Features />
+      <TestimonialsSection />
       <PricingSection />
       <FAQ />
       {/* 🔔 Newsletter – Notification de lancement */}

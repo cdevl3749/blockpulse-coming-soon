@@ -716,7 +716,7 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 41/50 places
+      ⚡ Plus que 38/50 places
     </div>
     
     {/* Prix */}
@@ -1170,6 +1170,85 @@ const CGVPage = () => {
   );
 };
 
+  function LinkedinLanding() {
+  const [cookiesAccepted, setCookiesAccepted] = useState(null);
+
+  useEffect(() => {
+    const savedCookies = window.localStorage.getItem("cookiesAccepted");
+    if (savedCookies !== null) {
+      const accepted = JSON.parse(savedCookies);
+      setCookiesAccepted(accepted);
+
+      // Si cookies déjà acceptés, page_view
+      if (accepted) {
+        trackPageView(window.location.pathname);
+      }
+    }
+  }, []);
+
+  const handleAcceptCookies = () => {
+    localStorage.setItem("cookiesAccepted", "true");
+    setCookiesAccepted(true);
+
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", { analytics_storage: "granted" });
+      window.gtag("event", "page_view", {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: window.location.pathname,
+      });
+    }
+  };
+
+  const handleRefuseCookies = () => {
+    window.localStorage.setItem("cookiesAccepted", "false");
+    setCookiesAccepted(false);
+
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", { analytics_storage: "denied" });
+    }
+  };
+
+  const scrollToOffer = () => {
+    document.getElementById("offre")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // (Optionnel) Data si tu en as besoin dans HeroSection (chez toi c’est passé en props)
+  const fundingData = {
+    current: 14580,
+    goal: 25000,
+    backers: 247,
+    daysLeft: 28,
+  };
+
+  return (
+    <div className="min-h-screen bg-white overflow-x-hidden">
+      <Header />
+
+      {/* HERO (CTA vers #offre déjà OK dans ton HeroSection) */}
+      <HeroSection fundingData={fundingData} scrollToOffer={scrollToOffer} />
+
+      {/* Version LinkedIn = plus courte : on garde le “proof”, le fonctionnement, l’offre, la FAQ */}
+      <ProofSection />
+      <Features />
+      <PricingSection />
+      <FAQ />
+
+      <Footer />
+
+      {cookiesAccepted === null && (
+        <CookieBanner onAccept={handleAcceptCookies} onRefuse={handleRefuseCookies} />
+      )}
+
+      <FloatingCTA
+        onClick={() => {
+          trackEvent("floating_cta_click", { placement: "floating_button_linkedin" });
+          scrollToOffer();
+        }}
+      />
+    </div>
+  );
+}
 
 // App Principal
 function Home() {
@@ -1377,6 +1456,7 @@ export default function App() {
       <RouteTracker />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/linkedin" element={<LinkedinLanding />} />
         <Route path="/paiement/success" element={<PaymentSuccess />} />
         <Route path="/paiement/cancel" element={<PaymentCancel />} />
       </Routes>

@@ -4,3 +4,9 @@
 
 [functions]
   directory = "netlify/functions"
+
+# 🔴 IMPORTANT : redirect SPA pour React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

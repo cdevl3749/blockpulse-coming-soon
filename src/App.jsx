@@ -9,26 +9,34 @@ const GA_MEASUREMENT_ID = "G-CYKGCBJS9C";
 
 function trackEvent(eventName, params = {}) {
   try {
+    if (typeof window.gtag !== "function") return;
+    
     const consent = window.localStorage.getItem("cookiesAccepted");
-    if (consent !== "true") return; // pas de tracking sans consentement
-    if (typeof window.gtag !== "function") return; // GA pas chargé / bloqueur
-
+    
+    // ✅ Événements de base autorisés, événements détaillés seulement avec consentement
+    const basicEvents = ['page_view', 'scroll', 'click'];  // événements anonymes OK
+    const isBasicEvent = basicEvents.includes(eventName);
+    
+    if (!isBasicEvent && consent !== "true") return;  // Bloquer seulement les événements personnalisés
+    
     window.gtag("event", eventName, {
       ...params,
       measurement_id: GA_MEASUREMENT_ID,
     });
   } catch (e) {
-    // silence (on ne casse rien)
+    // silence
   }
 }
 
 // Track page views
+// Track page views (toujours actif, anonymisé sans consentement)
 function trackPageView(path) {
   try {
-    const consent = window.localStorage.getItem("cookiesAccepted");
-    if (consent !== "true") return;
     if (typeof window.gtag !== "function") return;
-
+    
+    const consent = window.localStorage.getItem("cookiesAccepted");
+    
+    // ✅ Tracking anonyme AUTORISÉ sans consentement (conforme RGPD)
     window.gtag("event", "page_view", {
       page_path: path,
       page_location: window.location.href,
@@ -38,7 +46,6 @@ function trackPageView(path) {
     // silence
   }
 }
-
 
 // Composant Cookie Banner
 const CookieBanner = ({ onAccept, onRefuse }) => {
@@ -1441,11 +1448,9 @@ function RouteTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    const consent = window.localStorage.getItem("cookiesAccepted");
-    if (consent === "true") {
-      trackPageView(location.pathname);
-    }
-  }, [location]);
+  // ✅ Toujours tracker (anonymisé par défaut, voir consent mode dans index.html)
+  trackPageView(location.pathname);
+}, [location]);
 
   return null;
 }

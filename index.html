@@ -89,20 +89,21 @@
       }
 
       // 🔒 Consentement par défaut : tout refusé
-      gtag("consent", "default", {
+        gtag("consent", "default", {
         ad_storage: "denied",
         analytics_storage: "denied",
         ad_user_data: "denied",
-        ad_personalization: "denied"
+        ad_personalization: "denied",
+        wait_for_update: 500
       });
 
       gtag("js", new Date());
 
       // ⚠️ IMPORTANT : pas de page_view automatique (SPA + consent)
       gtag("config", "G-CYKGCBJS9C", {
-        anonymize_ip: true
+      anonymize_ip: true
         // ✅ send_page_view est true par défaut quand on ne le spécifie pas
-      });
+       });
     </script>
   </head>
 

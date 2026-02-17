@@ -723,7 +723,7 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 38/50 places
+      ⚡ Plus que 37/50 places
     </div>
     
     {/* Prix */}
@@ -869,6 +869,7 @@ const Footer = ({ onLegalClick, onPrivacyClick, onCGVClick }) => {
             <ul className="space-y-2 text-gray-400 text-sm">
               <li><button onClick={() => scrollToSection('projet')} className="hover:text-white transition-colors">Fonctionnement</button></li>
               <li><button onClick={() => scrollToSection('offre')} className="hover:text-white transition-colors">Précommander</button></li>
+              <li><button onClick={() => scrollToSection('temoignages')} className="hover:text-white transition-colors">Témoignages</button></li>
               <li><a href="#faq" className="hover:text-white transition-colors">FAQ</a></li>
             </ul>
           </div>

@@ -889,10 +889,35 @@ const Footer = ({ onLegalClick, onPrivacyClick, onCGVClick }) => {
                   contact@blockpulse.be
                 </a>
               </li>
-              <li>Liège, Belgique</li>
-              <li className="flex gap-4 mt-4">
-                <a href="https://www.linkedin.com/in/christophe-devleeshouwer-882377399/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
-              </li>
+              <li className="flex items-center gap-4 mt-4">
+
+  {/* LinkedIn */}
+  <a
+    href="https://www.linkedin.com/in/christophe-devleeshouwer-882377399/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center gap-2 hover:text-white transition-colors"
+    aria-label="LinkedIn BlockPulse"
+  >
+    LinkedIn
+  </a>
+
+              {/* TikTok */}
+              <a
+                href="https://www.tiktok.com/@blockpulse_be"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-white transition-colors"
+                aria-label="TikTok BlockPulse"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.004 2c1.073 0 2.115.195 3.092.555v3.04c-.844-.114-1.674-.387-2.431-.806v7.418c0 3.05-2.48 5.52-5.53 5.52-3.05 0-5.53-2.47-5.53-5.52 0-3.05 2.48-5.52 5.53-5.52.29 0 .57.025.844.073v3.065a2.44 2.44 0 00-.844-.148c-1.35 0-2.444 1.094-2.444 2.444s1.094 2.444 2.444 2.444 2.444-1.094 2.444-2.444V2z"/>
+                </svg>
+                <span>@blockpulse_be</span>
+              </a>
+
+            </li>
+
             </ul>
           </div>
         </div>
@@ -1469,4 +1494,5 @@ export default function App() {
     </>
   );
 }
+
 

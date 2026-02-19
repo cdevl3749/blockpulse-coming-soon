@@ -836,6 +836,13 @@ const PricingSection = () => {
               ⚡ Je précommande
             </button>
 
+            <p className="mt-3 text-center text-sm text-green-700 font-semibold">
+              🎁 Offre TikTok : <span className="font-bold">–15 % appliqués automatiquement</span>
+            </p>
+            <p className="text-center text-xs text-gray-500">
+              via le lien dans la bio • aucun code à entrer
+            </p>
+
             {/* AJOUTEZ ICI - Juste après le bouton </button> et avant le <p className="mt-3..."> */}
 
 <div className="mt-4 flex items-center justify-center gap-4 text-xs text-gray-500">

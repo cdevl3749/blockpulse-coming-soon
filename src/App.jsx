@@ -233,54 +233,82 @@ const Header = () => {
 
 // Composant Hero Section
 const HeroSection = ({ fundingData, scrollToOffer }) => {
-
   return (
     <section className="pt-20 sm:pt-28 pb-12 sm:pb-20 px-4 bg-gradient-to-br from-green-50 via-yellow-50 to-orange-50">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+
+          {/* TEXTE */}
           <div className="text-center md:text-left">
+
+            {/* SEO */}
             <h1 className="sr-only">
-              BlockPulse, le boîtier intelligent pour économiser l'électricité
+              BlockPulse, le boîtier intelligent pour économiser l'électricité jusqu’à 30 %
             </h1>
 
-            <h2 className="font-bold leading-tight text-3xl sm:text-4xl lg:text-5xl">
-              Réduisez votre facture d&apos;électricité
-              <br />
-              <span className="text-green-600">jusqu&apos;à 30&nbsp;%</span>{" "}
-              <span className="text-orange-500">sans effort</span>
-            </h2>
+            {/* Message principal */}
+           
+           
+           <h2 className="font-bold leading-tight text-3xl sm:text-4xl lg:text-5xl">
+  {/* Première ligne : centrée sur mobile, gauche sur desktop */}
+  <span className="block text-gray-900 text-center md:text-left">
+    Ne consommez plus
+  </span>
+  
+  {/* Deuxième ligne : LED + texte rouge */}
+  <span className="flex items-start justify-center md:justify-start gap-3 sm:gap-4 mt-3">
+    {/* LED rouge MEGA visible - toujours visible */}
+    <span
+      className="
+        inline-block
+        w-5 h-5 sm:w-5 sm:h-5
+        rounded-full
+        bg-red-600
+        shadow-[0_0_20px_rgba(220,38,38,1),0_0_40px_rgba(220,38,38,0.6)]
+        animate-[pulse_1.5s_ease-in-out_infinite]
+        ring-4 ring-red-200
+        flex-shrink-0
+        mt-1
+      "
+    ></span>
+    {/* Texte CHOC qui peut se couper sur 2 lignes */}
+    <span className="text-red-600 font-extrabold drop-shadow-lg text-2xl sm:text-3xl lg:text-4xl">
+      quand l&apos;électricité est chère
+    </span>
+  </span>
+</h2>
 
-            {/* Ligne innovation belge */}
-            <p className="text-sm sm:text-lg mt-4 text-gray-700 flex items-center justify-center md:justify-start gap-2">
+            {/* Sous-message */}
+            <p className="mt-4 text-base sm:text-lg text-gray-700 max-w-xl mx-auto md:mx-0">
+              BlockPulse vous indique en temps réel quand attendre ou consommer.
+            </p>
+
+            {/* Bénéfice clé */}
+            <p className="mt-2 font-semibold text-green-600">
+              Jusqu&apos;à 30&nbsp;% d&apos;économies • Sans application
+            </p>
+
+            {/* Innovation belge */}
+            <p className="text-sm sm:text-base mt-4 text-gray-700 flex items-center justify-center md:justify-start gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 3 2"
                 width="18"
                 height="12"
-                className="inline-block"
               >
                 <rect width="1" height="2" x="0" fill="#000000" />
                 <rect width="1" height="2" x="1" fill="#FFD90C" />
                 <rect width="1" height="2" x="2" fill="#EF3340" />
               </svg>
-              <span>Innovation 100% belge • Sans changer vos habitudes</span>
+              <span>Innovation 100% belge</span>
             </p>
 
-            {/* Offre de lancement - SANS ICÔNE */}
+            {/* Offre */}
             <p className="text-sm sm:text-base mt-3 font-bold text-orange-600">
               Offre de lancement : -22% pour les 50 premiers
             </p>
 
-              {/* Badges simplifiés */}
-              <div className="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
-                <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-green-800">
-                  Sans application
-                </span>
-                <span className="rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-green-800">
-                  Sans abonnement
-                </span>
-            </div>
-            {/* CTA Principal - Précommande */}
+            {/* CTA */}
             <div className="mt-8 flex flex-col items-center md:items-start gap-3">
               <a
                 href="#offre"
@@ -294,13 +322,13 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               </p>
             </div>
 
-            {/* Bouton secondaire conservé */}
+            {/* Secondaire */}
             <div className="mt-4">
               <button
                 onClick={() =>
                   document
                     .getElementById("projet")
-                    .scrollIntoView({ behavior: "smooth" })
+                    ?.scrollIntoView({ behavior: "smooth" })
                 }
                 className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border-2 border-green-600 text-green-700 rounded-lg font-semibold hover:bg-green-50 transition-all hover:scale-105 text-center"
               >
@@ -309,21 +337,24 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
             </div>
           </div>
 
+          {/* IMAGE */}
           <div className="flex flex-col items-center gap-4">
             <img
               src={deviceImage}
-              alt="Boîtier BlockPulse avec écran LED indiquant le bon moment pour consommer"
+              alt="Boîtier BlockPulse avec LED indiquant quand consommer l’électricité"
               className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
             />
-           <p className="text-center text-green-600 font-bold text-lg sm:text-xl">
+            <p className="text-center text-green-600 font-bold text-lg sm:text-xl">
               Prototype réel → boîtier final
-           </p>
+            </p>
           </div>
+
         </div>
       </div>
     </section>
   );
 };
+
 
 // Composant FAQ
 const FAQ = () => {
@@ -723,7 +754,7 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 37/50 places
+      ⚡ Plus que 32/50 places
     </div>
     
     {/* Prix */}

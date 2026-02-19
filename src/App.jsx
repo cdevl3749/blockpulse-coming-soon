@@ -825,7 +825,7 @@ const PricingSection = () => {
             <p className="text-center text-gray-700 text-lg font-semibold mb-3">
               69 € TTC — Offre de lancement
               <span className="block text-sm font-normal text-gray-500">
-                Livraison offerte en Belgique
+                Livraison offerte en Belgique & France
               </span>
             </p>
 

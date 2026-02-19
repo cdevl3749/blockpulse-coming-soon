@@ -689,13 +689,19 @@ const TestimonialsSection = () => {
 // Composant Offres
 const PricingSection = () => {
   const handlePreorder = async () => {
-    trackEvent("begin_checkout", { placement: "pricing", method: "stripe" });
+  trackEvent("begin_checkout", { placement: "pricing", method: "stripe" });
 
   try {
+    // 🔍 Lire la promo depuis l’URL
+    const params = new URLSearchParams(window.location.search);
+    const promoFromUrl = params.get("promo"); // "tiktok" si lien TikTok
+
     const res = await fetch("/.netlify/functions/create-checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({}),
+      body: JSON.stringify({
+        promo: promoFromUrl === "tiktok" ? "TIKTOK15" : null,
+      }),
     });
 
     if (!res.ok) {
@@ -712,7 +718,6 @@ const PricingSection = () => {
     alert("Erreur lors du paiement. Réessayez.");
   }
 };
-
 
   return (
     <section id="offre"  className="scroll-mt-24 md:scroll-mt-28 py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-br from-gray-50 to-green-50">

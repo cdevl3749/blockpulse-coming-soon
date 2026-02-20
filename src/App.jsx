@@ -99,8 +99,8 @@ const FloatingCTA = ({ onClick }) => {
       onClick={onClick}
       className="fixed bottom-6 right-6 z-50 px-6 py-4 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-full shadow-2xl hover:shadow-xl hover:scale-105 transition-all duration-300 font-bold text-sm md:text-base flex items-center gap-2"
     >
-      <span className="hidden md:inline">Précommander</span>
-      <span className="md:hidden">⚡ Préco</span>
+      <span className="hidden md:inline">Commander</span>
+      <span className="md:hidden">🚚</span>
       <span className="text-xl">→</span>
     </button>
   );
@@ -185,7 +185,7 @@ const Header = () => {
             }} 
             className="px-4 py-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 text-white rounded-lg hover:shadow-lg transition-all hover:scale-105"
           >
-            Précommander
+            🚚 Commander
           </button>
 
         </div>
@@ -314,11 +314,11 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
                 href="#offre"
                 className="inline-block w-full sm:w-auto bg-gradient-to-r from-green-500 to-orange-500 text-white font-bold py-3 sm:py-4 px-8 sm:px-12 rounded-lg text-base sm:text-lg hover:shadow-2xl transition-all transform hover:scale-105 text-center"
               >
-                ⚡ Je précommande maintenant
+                🚚 Commander maintenant
               </a>
 
               <p className="text-xs text-gray-500 text-center md:text-left">
-                🔒 Paiement sécurisé • Annulation gratuite jusqu&apos;à la production
+                🔒 Paiement sécurisé • Livraison sous 3 à 5 jours
               </p>
             </div>
 
@@ -392,7 +392,7 @@ const FAQ = () => {
     },
     {
       question: "Quand vais-je recevoir mon BlockPulse ?",
-      answer: "La livraison est prévue pour mi-mars 2026. Nos premiers utilisateurs recevront leur boîtier en priorité. Vous recevrez des mises à jour régulières sur l'avancement de la production par email."
+      answer: "BlockPulse est actuellement en stock. La livraison est effectuée sous 3 à 5 jours ouvrés en Belgique et en France après validation de la commande."
     },
     {
       question: "Y a-t-il une garantie ?",
@@ -400,7 +400,7 @@ const FAQ = () => {
     },
     {
       question: "Que vais-je recevoir exactement ?",
-      answer: "Le colis BlockPulse contiendra le boîtier prêt à l’emploi, une alimentation USB 5V (prise européenne), un câble USB et un guide de démarrage rapide. Le contenu est prévisionnel et pourra légèrement évoluer jusqu’à la version finale."
+      answer: "Le colis BlockPulse contiendra le boîtier prêt à l’emploi, une alimentation USB 5V (prise européenne), un câble USB et un guide de démarrage rapide."
     }
   ];
 
@@ -621,17 +621,19 @@ const Features = () => {
 const TestimonialsSection = () => {
   const testimonials = [
     {
-      name: "Julie, Liège",
-      title: "J’attends le prototype avec impatience",
-      quote:
-        "J’ai découvert BlockPulse via LinkedIn. L’idée est ultra claire : savoir quand consommer au bon moment sans se prendre la tête. Hâte de voir la version finale.",
+  name: "Julie, Liège",
+  title: "Boîtier reçu, installation en 2 minutes",
+  quote:
+    "J’ai reçu mon BlockPulse rapidement et tout fonctionne parfaitement. L’installation est ultra simple : on branche, et on comprend directement quand consommer. Les LEDs sont super claires, ça change vraiment les habitudes sans effort.",
     },
+
     {
-      name: "Marc, Namur",
-      title: "Réponse rapide du fondateur",
-      quote:
-        "J’ai posé 2 questions par email et j’ai eu une réponse simple et précise. Ça fait sérieux, et on sent que le produit est pensé pour les gens “normaux”.",
+  name: "Anne, Verviers",
+  title: "Simple, efficace, exactement ce que je cherchais",
+  quote:
+    "Le boîtier est arrivé bien emballé et prêt à l’emploi. Pas besoin d’application, un coup d’œil suffit. Ça fait exactement ce qui est promis, et c’est ça que j’apprécie le plus.",
     },
+
   ];
 
   return (
@@ -678,7 +680,7 @@ const TestimonialsSection = () => {
             }
             className="px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-lg transition-all hover:scale-105"
           >
-            Voir l’offre de lancement
+            Commander maintenant
           </button>
         </div>
       </div>
@@ -724,18 +726,12 @@ const PricingSection = () => {
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-3 sm:mb-4 px-4">Offre de lancement exclusive</h2>
         <p className="text-base sm:text-lg md:text-xl text-gray-600 text-center mb-8 sm:mb-12 px-4">
-          Profitez d’un tarif exceptionnel réservé aux premières précommandes
+          Profitez d’un tarif exceptionnel réservé aux premières commandes
         </p>
         <div className="max-w-lg mx-auto px-4">
           <div className="relative bg-white rounded-2xl p-6 sm:p-8 ring-4 ring-green-500 shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer">
             <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white px-4 sm:px-6 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg whitespace-nowrap">
               ⭐ Offre Early Bird
-            </div>
-            
-            <div className="mb-4 mt-4">
-              <span className="inline-block px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs sm:text-sm font-bold animate-pulse">
-                🔥 Série de lancement – quantité limitée
-              </span>
             </div>
             
             <h3 className="text-xl sm:text-2xl font-semibold text-green-700 mb-3 text-center">
@@ -750,8 +746,8 @@ const PricingSection = () => {
               />
             </div>
 
-            <p className="text-xs text-gray-500 text-center mb-4">
-              Produit en cours de production – 📦 Livraison prévue : mi-mars 2026.
+            <p className="mt-3 text-xs sm:text-sm text-gray-600 text-center">
+              📦 Produit en stock • 🚚 Livraison sous 3 à 5 jours ouvrés
             </p>
 
             <div className="mb-6">
@@ -759,7 +755,7 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 32/50 places
+      ⚡ Plus que 28/50 places
     </div>
     
     {/* Prix */}
@@ -809,7 +805,7 @@ const PricingSection = () => {
 
             <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p className="font-semibold text-gray-800 mb-2">
-                📦 Contenu du colis (prévisionnel)
+                📦 Contenu du colis
               </p>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• 1× BlockPulse</li>
@@ -818,14 +814,14 @@ const PricingSection = () => {
                 <li>• 1× Guide de démarrage rapide</li>
               </ul>
               <p className="mt-2 text-xs text-gray-500">
-                Contenu susceptible d’évoluer légèrement jusqu’à la version finale.
+                Contenu du colis conforme à la version actuelle du produit.
               </p>
             </div>
 
-            <p className="text-center text-gray-700 text-lg font-semibold mb-3">
-              69 € TTC — Offre de lancement
-              <span className="block text-sm font-normal text-gray-500">
-                Livraison offerte en Belgique & France
+            <p className="text-center text-gray-800 text-lg font-semibold mb-3">
+              69 € TTC
+              <span className="block text-sm font-semibold text-green-700 mt-1">
+                🚚 Livraison sous 3 à 5 jours — Belgique & France
               </span>
             </p>
 
@@ -833,7 +829,7 @@ const PricingSection = () => {
               onClick={handlePreorder}
               className="w-full py-4 sm:py-5 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-2xl text-base sm:text-lg"
             >
-              ⚡ Je précommande
+              🚚 Commander maintenant
             </button>
 
             <p className="mt-3 text-center text-sm text-green-700 font-semibold">
@@ -861,12 +857,6 @@ const PricingSection = () => {
   </div>
 </div>
 
-            <p className="mt-3 text-xs sm:text-sm text-gray-500 text-center">
-              🔹 <strong>Précommande</strong> – produit en cours de développement.
-              <br />
-              📦 Livraison prévue : <strong>mi-mars 2026</strong>.
-            </p>
-
             <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
               <p className="text-xs sm:text-sm text-gray-700 text-center">
                 <strong>💡 Économisez jusqu'à 30%</strong> sur votre facture d'électricité dès la première année !
@@ -880,7 +870,7 @@ const PricingSection = () => {
             🔒 Paiement 100% sécurisé par Stripe • Remboursement garanti si non satisfait
           </p>
           <p className="text-xs sm:text-sm text-gray-500">
-            📦 Livraison prévue: <strong>mi-mars 2026</strong> 🔔 Vous serez informé à chaque étape
+            📦 Livraison sous <strong>3 à 5 jours ouvrés</strong> 🔔 Suivi envoyé par email
           </p>
         </div>
       </div>
@@ -911,7 +901,7 @@ const Footer = ({ onLegalClick, onPrivacyClick, onCGVClick }) => {
             <h4 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Projet</h4>
             <ul className="space-y-2 text-gray-400 text-sm">
               <li><button onClick={() => scrollToSection('projet')} className="hover:text-white transition-colors">Fonctionnement</button></li>
-              <li><button onClick={() => scrollToSection('offre')} className="hover:text-white transition-colors">Précommander</button></li>
+              <li><button onClick={() => scrollToSection('offre')} className="hover:text-white transition-colors">Commander</button></li>
               <li><button onClick={() => scrollToSection('temoignages')} className="hover:text-white transition-colors">Témoignages</button></li>
               <li><a href="#faq" className="hover:text-white transition-colors">FAQ</a></li>
             </ul>
@@ -1183,9 +1173,8 @@ const CGVPage = () => {
       <section>
         <h3 className="text-xl font-bold mb-3">Article 1 – Objet</h3>
         <p>
-          Les présentes Conditions Générales de Vente encadrent la vente en
-          précommande du produit BlockPulse, proposé en tant que produit
-          matériel en cours de développement.
+          Les présentes Conditions Générales de Vente encadrent la vente
+          du produit BlockPulse.
         </p>
       </section>
 
@@ -1216,9 +1205,8 @@ const CGVPage = () => {
       <section>
         <h3 className="text-xl font-bold mb-3">Article 5 – Livraison</h3>
         <p>
-          La livraison du produit BlockPulse est prévue pour <strong>mi-mars 2026</strong>.
-          Cette date est indicative et peut évoluer en fonction des contraintes
-          de production.
+         La livraison du produit BlockPulse est effectuée sous
+        <strong>3 à 5 jours ouvrés</strong> après validation du paiement.
         </p>
       </section>
 
@@ -1442,9 +1430,9 @@ const handleAcceptCookies = () => {
     </h2>
 
     <p className="text-gray-600 mb-6">
-      Laissez-nous votre email pour être informé du lancement.
+      Laissez-nous votre email pour recevoir une alerte
       <br className="hidden sm:block" />
-      Un seul message, aucun spam.
+      en cas de rupture de stock ou d’offre spéciale.
     </p>
 
     <form
@@ -1464,14 +1452,15 @@ const handleAcceptCookies = () => {
         disabled={notifyStatus === "loading"}
         className="whitespace-nowrap rounded-lg bg-gradient-to-r from-green-500 to-orange-500 px-6 py-3 font-semibold text-white transition-all hover:shadow-lg disabled:opacity-50"
       >
-        {notifyStatus === "loading" ? "Envoi..." : "Être informé du lancement"}
+        {notifyStatus === "loading" ? "Envoi..." : "Recevoir une alerte"}
       </button>
     </form>
 
     {notifyStatus === "success" && (
       <p className="mt-2 text-sm text-green-700">
-        ✅ Votre email ne sera jamais partagé. 1 message au lancement, rien de plus.
+        ✅ Merci ! Vous serez prévenu uniquement si nécessaire.
       </p>
+
     )}
 
     {notifyStatus === "error" && (

@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 import deviceImage from "./assets/blockpulse-device.png";
+import deviceImageV2Lite from "./assets/blockpulse_v2.png";
 
 // ===== Tracking GA4 (respect cookiesAccepted) =====
 const GA_MEASUREMENT_ID = "G-CYKGCBJS9C";
@@ -317,6 +318,15 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
                 🚚 Commander maintenant
               </a>
 
+              <button
+                onClick={() =>
+                  document.getElementById("v2lite")?.scrollIntoView({ behavior: "smooth" })
+                }
+                className="text-sm font-semibold text-green-700 hover:text-orange-600 underline underline-offset-4 transition-colors"
+              >
+                👉 Découvrir la version V2 Lite (39 €)
+              </button>
+
               <p className="text-xs text-gray-500 text-center md:text-left">
                 🔒 Paiement sécurisé • Livraison sous 3 à 5 jours
               </p>
@@ -345,7 +355,10 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
             />
             <p className="text-center text-green-600 font-bold text-lg sm:text-xl">
-              Prototype réel → boîtier final
+              Photo réelle — boîtier final livré chez vous
+            </p>
+            <p className="mt-1 text-center text-sm text-gray-500">
+              Existe aussi en version <strong>V2 Lite LED</strong> — 39 €
             </p>
           </div>
 
@@ -371,16 +384,16 @@ const FAQ = () => {
     },
     {
       question: "L'installation est-elle compliquée ?",
-      answer: "Pas du tout ! Il suffit de brancher BlockPulse sur une prise électrique et de le connecter à votre Wi-Fi via l'application web incluse. Aucun outil nécessaire, aucune compétence technique requise. L'installation prend moins de 5 minutes."
+      answer: "Pas du tout ! Il suffit de brancher BlockPulse sur une prise USB. Aucun Wi-Fi obligatoire, aucune application à installer et aucun réglage à effectuer. Tout est indiqué directement sur le boîtier via les LEDs. Installation immédiate."
     },
     {
       question: "Combien puis-je économiser réellement ?",
-      answer: "En pratique, les économies dépendent de votre consommation et de votre capacité à déplacer certains usages vers les heures les plus avantageuses. En moyenne, les utilisateurs peuvent réduire leur facture d’électricité jusqu’à 25 à 30 %. Pour un foyer belge, cela représente généralement jusqu’à environ 300 € d’économies par an."
+      answer: "Les économies dépendent de vos habitudes et de votre capacité à décaler certains usages. De nombreux foyers peuvent réduire significativement leur facture en utilisant les heures les plus avantageuses. Dans certains cas, les économies peuvent atteindre plusieurs centaines d’euros par an."
     },
 
     {
       question: "BlockPulse fonctionne-t-il avec mon fournisseur d'énergie ?",
-      answer: "Oui ! BlockPulse est compatible avec tous les fournisseurs d'énergie en Belgique et dans l'Union Européenne. Il analyse les prix spot du marché de l'électricité et s'adapte automatiquement à votre région."
+      answer: "Oui. BlockPulse fonctionne avec tous les fournisseurs d’énergie en Belgique et en France. Il se base sur les plages horaires et les variations du prix de l’électricité."
     },
     {
       question: "Ai-je besoin d'une application mobile ?",
@@ -397,10 +410,6 @@ const FAQ = () => {
     {
       question: "Y a-t-il une garantie ?",
       answer: "Oui ! BlockPulse est garanti 2 ans contre tout défaut de fabrication. De plus, vous bénéficiez d'un droit de rétractation de 14 jours après réception. Si vous n'êtes pas satisfait, nous vous remboursons intégralement."
-    },
-    {
-      question: "Que vais-je recevoir exactement ?",
-      answer: "Le colis BlockPulse contiendra le boîtier prêt à l’emploi, une alimentation USB 5V (prise européenne), un câble USB et un guide de démarrage rapide."
     }
   ];
 
@@ -462,97 +471,143 @@ const ProofSection = () => {
     <section className="py-10 px-4 bg-white">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-          Pourquoi BlockPulse fonctionne
+          Comprendre les signaux BlockPulse
         </h2>
 
         <p className="mb-8 text-lg text-gray-600 max-w-3xl mx-auto">
-          Le prix de l'électricité en Belgique peut varier de plus de <strong>200&nbsp;%</strong> au cours d’une même journée.
+          Le prix de l'électricité en Belgique peut fortement varier au cours d’une même journée.
           BlockPulse vous indique automatiquement quand consommer pour payer le moins cher.
         </p>
 
-       <div className="grid gap-8 md:grid-cols-3">
-  {/* Carte 1 - Prix BAS */}
-  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mx-auto">
-      <div className="h-8 w-8 rounded-full bg-green-500"></div>
-    </div>
-    <h3 className="mb-3 text-xl font-bold text-gray-800">
-      💚 Prix BAS
-    </h3>
-    <p className="text-sm text-gray-500 mb-3">0,10-0,15€/kWh</p>
-    <p className="text-gray-700 mb-4">
-      BlockPulse active vos appareils énergivores :
-    </p>
-    <ul className="text-left text-sm text-gray-600 space-y-2">
-      <li>✓ Machine à laver</li>
-      <li>✓ Lave-vaisselle</li>
-      <li>✓ Charge voiture électrique</li>
-    </ul>
-    <p className="mt-4 text-green-600 font-bold text-lg">
-      Économie : ~200€/an
-    </p>
-  </div>
+        <div className="grid gap-8 md:grid-cols-3">
+          {/* Carte 1 - Prix BAS */}
+          <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mx-auto">
+              <div className="h-8 w-8 rounded-full bg-green-500"></div>
+            </div>
 
-  {/* Carte 2 - Prix MOYEN */}
-  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-100 mx-auto">
-      <div className="h-8 w-8 rounded-full bg-yellow-500"></div>
-    </div>
-    <h3 className="mb-3 text-xl font-bold text-gray-800">
-      🟡 Prix MOYEN
-    </h3>
-    <p className="text-sm text-gray-500 mb-3">0,20-0,25€/kWh</p>
-    <p className="text-gray-700 mb-4">
-      Vous pouvez utiliser vos appareils normalement
-    </p>
-    <ul className="text-left text-sm text-gray-600 space-y-2">
-      <li>✓ Utilisation normale</li>
-      <li>✓ Pas de restriction</li>
-      <li>✓ Confort préservé</li>
-    </ul>
-    <p className="mt-4 text-yellow-600 font-bold text-lg">
-      Économie : ~50€/an
-    </p>
-  </div>
+            <div className="min-h-[72px] flex flex-col items-center justify-center mb-3">
+              <h3 className="text-xl font-bold text-gray-800">💚 Prix BAS</h3>
+              <p className="text-sm text-gray-500">0,10–0,15€/kWh</p>
+            </div>
 
-        {/* Carte 3 - Prix ÉLEVÉ */}
-        <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 mx-auto">
-            <div className="h-8 w-8 rounded-full bg-red-500"></div>
+            {/* ZONE ALIGNÉE */}
+            <div className="min-h-[150px] flex flex-col items-center justify-start">
+              <p className="text-gray-700 mb-3 text-center">
+                BlockPulse active vos appareils énergivores
+              </p>
+
+              <ul className="mx-auto inline-block text-left text-sm text-gray-600 space-y-2">
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Machine à laver</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Lave-vaisselle</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Charge voiture électrique</span>
+                </li>
+              </ul>
+            </div>
+
+            <p className="mt-4 text-green-600 font-bold text-lg">
+              Économie : ~200€/an
+            </p>
           </div>
-          <h3 className="mb-3 text-xl font-bold text-gray-800">
-            🔴 Prix ÉLEVÉ
-          </h3>
-          <p className="text-sm text-gray-500 mb-3">0,35-0,50€/kWh</p>
-          <p className="text-gray-700 mb-4">
-            BlockPulse coupe automatiquement :
+
+          {/* Carte 2 - Prix MOYEN */}
+          <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-100 mx-auto">
+              <div className="h-8 w-8 rounded-full bg-yellow-500"></div>
+            </div>
+
+            <div className="min-h-[72px] flex flex-col items-center justify-center mb-3">
+              <h3 className="text-xl font-bold text-gray-800">🟡 Prix MOYEN</h3>
+              <p className="text-sm text-gray-500">0,20–0,25€/kWh</p>
+            </div>
+
+            {/* ZONE ALIGNÉE */}
+            <div className="min-h-[150px] flex flex-col items-center justify-start">
+              <p className="text-gray-700 mb-3 text-center">
+                Vous pouvez utiliser vos appareils normalement
+              </p>
+
+              <ul className="mx-auto inline-block text-left text-sm text-gray-600 space-y-2">
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Utilisation normale</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Pas de restriction</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Confort préservé</span>
+                </li>
+              </ul>
+            </div>
+
+            <p className="mt-4 text-yellow-600 font-bold text-lg">
+              Économie : ~50€/an
+            </p>
+          </div>
+
+          {/* Carte 3 - Prix ÉLEVÉ */}
+          <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 mx-auto">
+              <div className="h-8 w-8 rounded-full bg-red-500"></div>
+            </div>
+
+            <div className="min-h-[72px] flex flex-col items-center justify-center mb-3">
+              <h3 className="text-xl font-bold text-gray-800">🔴 Prix ÉLEVÉ</h3>
+              <p className="text-sm text-gray-500">0,35–0,50€/kWh</p>
+            </div>
+
+            {/* ZONE ALIGNÉE */}
+            <div className="min-h-[150px] flex flex-col items-center justify-start">
+              <p className="text-gray-700 mb-3 text-center">
+                BlockPulse coupe automatiquement
+              </p>
+
+              <ul className="mx-auto inline-block text-left text-sm text-gray-600 space-y-2">
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Appareils en veille</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Chauffage d&apos;appoint</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span>Chargeurs inutiles</span>
+                </li>
+              </ul>
+            </div>
+
+            <p className="mt-4 text-red-600 font-bold text-lg">
+              Surcoût évité : ~150€/an
+            </p>
+          </div>
+        </div>
+
+        {/* Résumé total */}
+        <div className="mt-12 bg-gradient-to-r from-green-50 to-orange-50 rounded-2xl p-8 border-2 border-green-200">
+          <p className="text-2xl font-bold text-gray-800 mb-2">
+            💰 Économies significatives sur l’année
           </p>
-          <ul className="text-left text-sm text-gray-600 space-y-2">
-            <li>✓ Appareils en veille</li>
-            <li>✓ Chauffage d'appoint</li>
-            <li>✓ Chargeurs inutiles</li>
-          </ul>
-          <p className="mt-4 text-red-600 font-bold text-lg">
-            Surcoût évité : ~150€/an
+          <p className="text-gray-600">
+            Soit environ <strong>25&nbsp;€</strong> d’économies par mois selon les habitudes de consommation
           </p>
         </div>
-      </div>
-
-     {/* Résumé total */}
-      <div className="mt-12 bg-gradient-to-r from-green-50 to-orange-50 rounded-2xl p-8 border-2 border-green-200">
-        <p className="text-2xl font-bold text-gray-800 mb-2">
-          💰 Économie totale estimée : jusqu’à <strong>300&nbsp;€/an</strong>
-        </p>
-        <p className="text-gray-600">
-          Soit environ <strong>25&nbsp;€</strong> d’économies par mois • BlockPulse rentabilisé en quelques mois
-        </p>
-      </div>
-
       </div>
     </section>
   );
 };
-
 const Features = () => {
   const features = [
     {
@@ -582,7 +637,7 @@ const Features = () => {
     {
       icon: "🔌",
       title: "Compatible partout",
-      description: "Fonctionne avec tous les fournisseurs d'énergie en Belgique et dans toute l'Europe.",
+      description: "Fonctionne avec tous les fournisseurs d'énergie en Belgique et en France.",
       color: "from-yellow-500 to-orange-600"
     },
     {
@@ -690,36 +745,40 @@ const TestimonialsSection = () => {
 
 // Composant Offres
 const PricingSection = () => {
-  const handlePreorder = async () => {
-  trackEvent("begin_checkout", { placement: "pricing", method: "stripe" });
 
-  try {
-    // 🔍 Lire la promo depuis l’URL
-    const params = new URLSearchParams(window.location.search);
-    const promoFromUrl = params.get("promo"); // "tiktok" si lien TikTok
-
-    const res = await fetch("/.netlify/functions/create-checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        promo: promoFromUrl === "tiktok" ? "TIKTOK15" : null,
-      }),
+  const startCheckout = async (product) => {
+    trackEvent("begin_checkout", {
+      product, // "standard" ou "lite"
+      method: "stripe",
     });
 
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "");
-      console.error("Checkout error:", res.status, txt);
-      alert("Erreur lors du paiement. Réessayez dans quelques secondes.");
-      return;
-    }
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const promoFromUrl = params.get("promo");
 
-    const data = await res.json();
-    window.location.href = data.url;
-  } catch (err) {
-    console.error(err);
-    alert("Erreur lors du paiement. Réessayez.");
-  }
-};
+      const res = await fetch("/.netlify/functions/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product, // 👈 clé importante
+          promo: promoFromUrl === "tiktok" ? "TIKTOK15" : null,
+        }),
+      });
+
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        console.error("Checkout error:", txt);
+        alert("Erreur lors du paiement.");
+        return;
+      }
+
+      const data = await res.json();
+      window.location.href = data.url;
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors du paiement.");
+    }
+  };
 
   return (
     <section id="offre"  className="scroll-mt-24 md:scroll-mt-28 py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-br from-gray-50 to-green-50">
@@ -755,7 +814,7 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 28/50 places
+      ⚡ Plus que 22/50 places
     </div>
     
     {/* Prix */}
@@ -821,12 +880,12 @@ const PricingSection = () => {
             <p className="text-center text-gray-800 text-lg font-semibold mb-3">
               69 € TTC
               <span className="block text-sm font-semibold text-green-700 mt-1">
-                🚚 Livraison sous 3 à 5 jours — Belgique & France
+                🚚 Livraison gratuite sous 3 à 5 jours — Belgique & France
               </span>
             </p>
 
             <button 
-              onClick={handlePreorder}
+              onClick={() => startCheckout("standard")}
               className="w-full py-4 sm:py-5 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-2xl text-base sm:text-lg"
             >
               🚚 Commander maintenant
@@ -872,6 +931,18 @@ const PricingSection = () => {
           <p className="text-xs sm:text-sm text-gray-500">
             📦 Livraison sous <strong>3 à 5 jours ouvrés</strong> 🔔 Suivi envoyé par email
           </p>
+        </div>
+
+        <div className="mt-6 text-center">
+          <button
+            onClick={() =>
+              document.getElementById("v2lite")?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="inline-flex items-center gap-2 text-sm font-semibold text-green-700 hover:text-orange-600 underline underline-offset-4 transition-colors"
+          >
+            👉 Vous cherchez une version plus simple et moins chère ?
+            <span className="font-bold">Voir la V2 Lite (39 €)</span>
+          </button>
         </div>
       </div>
     </section>
@@ -1182,7 +1253,7 @@ const CGVPage = () => {
         <h3 className="text-xl font-bold mb-3">Article 2 – Prix</h3>
         <p>
           Les prix sont exprimés en euros, toutes taxes comprises (TTC).
-          La livraison en Belgique et dans l’Union Européenne est incluse.
+          La livraison en Belgique et en France.
         </p>
       </section>
 
@@ -1294,6 +1365,9 @@ const CGVPage = () => {
 
       {/* Version LinkedIn = plus courte : on garde le “proof”, le fonctionnement, l’offre, la FAQ */}
       <ProofSection />
+
+      {/* 👉 ICI on ajoutera la V2 Lite */}
+      <V2LiteSection />
       <Features />
       <PricingSection />
       <FAQ />
@@ -1314,6 +1388,160 @@ const CGVPage = () => {
   );
 }
 
+const V2LiteSection = () => {
+  const startCheckoutLite = async () => {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const promoFromUrl = params.get("promo");
+
+    const res = await fetch("/.netlify/functions/create-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        product: "lite", // 👈 V2 Lite
+        promo: promoFromUrl === "tiktok" ? "TIKTOK15" : null,
+      }),
+    });
+
+    if (!res.ok) {
+      alert("Erreur lors du paiement.");
+      return;
+    }
+
+    const data = await res.json();
+    window.location.href = data.url;
+  } catch (err) {
+    console.error(err);
+    alert("Erreur lors du paiement.");
+  }
+};
+  return (
+    <section
+      id="v2lite"
+      className="py-12 sm:py-16 px-4 bg-white border-t border-gray-100"
+    >
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
+          Une version plus simple est aussi disponible
+        </h2>
+
+        <p className="text-center text-gray-600 mb-10 max-w-3xl mx-auto">
+          BlockPulse V2 Lite est une version sans écran ni bouton, basée uniquement sur un indicateur LED simple et efficace.
+        </p>
+
+        {/* OPTION A : en mobile = image au-dessus, en desktop = 2 colonnes */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          {/* Image */}
+          <div className="flex justify-center md:justify-start order-1 md:order-none">
+            <img
+              src={deviceImageV2Lite}
+              alt="BlockPulse V2 Lite - Édition LED"
+              className="w-full max-w-xs sm:max-w-sm rounded-xl shadow-lg"
+            />
+          </div>
+
+          {/* Texte */}
+          <div className="order-2 md:order-none text-center md:flex md:flex-col md:items-center">
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">
+              BlockPulse V2 Lite — Édition LED
+            </h3>
+
+            <ul className="space-y-3 text-gray-700 mb-6">
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
+                <span>Sans écran, sans bouton</span>
+              </li>
+
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
+                <span>3 LEDs : vert / jaune / rouge</span>
+              </li>
+
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
+                <span>Basé sur les heures belges et françaises</span>
+              </li>
+
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
+                <span>Aucun réglage, aucun écran</span>
+              </li>
+
+              <li className="flex items-start gap-2">
+                <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
+                <span>Idéal pour lave-linge, lave-vaisselle, sèche-linge</span>
+              </li>
+            </ul>
+
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="font-semibold text-gray-800 mb-2">
+                📦 Contenu du colis
+              </p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• 1× BlockPulse V2 Lite</li>
+                <li>• 1× Alimentation USB 5V (prise EU)</li>
+                <li>• 1× Câble USB</li>
+                <li>• 1× Guide de démarrage rapide</li>
+              </ul>
+              <p className="mt-2 text-xs text-gray-500">
+                Version V2 Lite avec indication par LEDs uniquement.
+              </p>
+            </div>
+
+            <div className="flex items-baseline justify-center md:justify-start gap-3 mb-4">
+              <span className="text-4xl font-bold text-green-600">39 €</span>
+              <span className="text-gray-500 text-sm">TTC</span>
+            </div>
+
+            <p className="text-sm text-gray-500 mb-4">
+              Livraison gratuite en Belgique & France • Paiement sécurisé
+            </p>
+
+            <button
+              onClick={startCheckoutLite}
+              className="px-6 py-3 rounded-lg bg-gradient-to-r from-green-500 to-orange-500 text-white font-semibold hover:shadow-lg transition-all"
+            >
+              🚚 Commander V2 Lite
+            </button>
+
+            <div className="mt-3 w-full text-center">
+  <div className="inline-flex items-center gap-3 text-xs text-gray-500">
+    
+    {/* Icône + texte */}
+    <div className="inline-flex items-center gap-2">
+      <svg
+        className="w-4 h-4 text-green-500"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fillRule="evenodd"
+          d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+          clipRule="evenodd"
+        />
+      </svg>
+      <span className="font-medium">Paiement 100&nbsp;% sécurisé</span>
+    </div>
+
+    {/* Séparateur */}
+    <span className="text-gray-300">•</span>
+
+    {/* Badge Stripe */}
+    <span className="px-2 py-0.5 bg-blue-600 text-white text-xs font-bold rounded">
+      stripe
+    </span>
+  </div>
+</div>
+
+            <p className="mt-2 text-xs text-gray-400">
+              Version simplifiée — idéale si vous voulez aller à l’essentiel.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 // App Principal
 function Home() {
   const [cookiesAccepted, setCookiesAccepted] = useState(null);
@@ -1326,6 +1554,8 @@ function Home() {
   const [notifyStatus, setNotifyStatus] = useState("idle");
   const [notifyError, setNotifyError] = useState("");
 
+  const [selectedProduct, setSelectedProduct] = useState("standard");
+// "standard" | "lite"
 
   const [fundingData, setFundingData] = useState({
     current: 14580,
@@ -1420,6 +1650,7 @@ const handleAcceptCookies = () => {
       <ProofSection />
       <Features />
       <TestimonialsSection />
+      <V2LiteSection />
       <PricingSection />
       <FAQ />
       {/* 🔔 Newsletter – Notification de lancement */}

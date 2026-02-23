@@ -6,6 +6,19 @@ export const handler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");
 
+    // ✅ Déterminer le produit
+    const product = body.product || "standard";
+
+    // ✅ Prix Stripe selon le produit
+    let priceId;
+
+    if (product === "lite") {
+      priceId = process.env.STRIPE_PRICE_LITE_ID; // 39 €
+    } else {
+      priceId = process.env.STRIPE_PRICE_ID; // 69 € (produit principal)
+    }
+
+    // ✅ Coupon TikTok (inchangé)
     const promoCode =
       body.promo === "TIKTOK15"
         ? process.env.STRIPE_TIKTOK_COUPON_ID
@@ -16,13 +29,11 @@ export const handler = async (event) => {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: process.env.STRIPE_PRICE_ID,
+          price: priceId,
           quantity: 1,
         },
       ],
-      discounts: promoCode
-        ? [{ coupon: promoCode }]
-        : [],
+      discounts: promoCode ? [{ coupon: promoCode }] : [],
       success_url: `${process.env.CLIENT_URL}/paiement/success`,
       cancel_url: `${process.env.CLIENT_URL}/paiement/cancel`,
     });
@@ -40,5 +51,3 @@ export const handler = async (event) => {
     };
   }
 };
-
-

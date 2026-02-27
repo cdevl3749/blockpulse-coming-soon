@@ -788,7 +788,7 @@ const PricingSection = () => {
           Profitez d’un tarif exceptionnel réservé aux premières commandes
         </p>
         <div className="max-w-lg mx-auto px-4">
-          <div className="relative bg-white rounded-2xl p-6 sm:p-8 ring-4 ring-green-500 shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer">
+          <div className="relative bg-white rounded-2xl pt-12 pb-6 px-6 sm:pt-14 sm:pb-8 sm:px-8 ring-4 ring-green-500 shadow-2xl transition">
             <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white px-4 sm:px-6 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg whitespace-nowrap">
               ⭐ Offre Early Bird
             </div>
@@ -814,7 +814,7 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 22/50 places
+      ⚡ Plus que 18/50 places
     </div>
     
     {/* Prix */}
@@ -835,33 +835,42 @@ const PricingSection = () => {
   </div>
 </div>
             
-            <ul className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-              <li className="flex items-start gap-2 sm:gap-3">
-                <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
-                <span className="text-sm sm:text-base text-gray-700"><strong>1 BlockPulse</strong> - Boîtier intelligent</span>
-              </li>
-              <li className="flex items-start gap-2 sm:gap-3">
-                <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
-                <span className="text-sm sm:text-base text-gray-700"><strong>Livraison offerte</strong> en Belgique</span>
-              </li>
-              <li className="flex items-start gap-2 sm:gap-3">
-                <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
-                <span className="text-sm sm:text-base text-gray-700"><strong>Garantie 2 ans</strong> constructeur</span>
-              </li>
-              <li className="flex items-start gap-2 sm:gap-3">
-                <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
-                <span className="text-sm sm:text-base text-gray-700"><strong>Mises à jour gratuites</strong> à vie</span>
-              </li>
-              <li className="flex items-start gap-2 sm:gap-3">
-                <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
-                <span className="text-sm sm:text-base text-gray-700"><strong>Support prioritaire</strong> email</span>
-              </li>
-              <li className="flex items-start gap-2 sm:gap-3">
-                <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
-                <span className="text-sm sm:text-base text-gray-700"><strong>Guide d'optimisation</strong> énergétique</span>
-              </li>
-            </ul>
+            <ul className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+  <li className="flex items-start gap-2 sm:gap-3">
+    <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
+    <span className="text-sm sm:text-base text-gray-700">
+      <strong>1 BlockPulse</strong> — prêt à l’emploi
+    </span>
+  </li>
 
+  <li className="flex items-start gap-2 sm:gap-3">
+    <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
+    <span className="text-sm sm:text-base text-gray-700">
+      <strong>Livraison incluse</strong> (Belgique & France)
+    </span>
+  </li>
+
+  <li className="flex items-start gap-2 sm:gap-3">
+    <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
+    <span className="text-sm sm:text-base text-gray-700">
+      <strong>Garantie 2 ans</strong> + support email
+    </span>
+  </li>
+</ul>
+
+<details className="mb-6 rounded-lg border border-gray-200 bg-white/60 p-4">
+  <summary className="cursor-pointer text-sm font-semibold text-gray-800">
+    ➕ Voir les détails (mises à jour, guide, support…)
+  </summary>
+
+  <div className="mt-3">
+    <ul className="space-y-2 text-sm text-gray-600">
+      <li>✓ Mises à jour gratuites à vie</li>
+      <li>✓ Support prioritaire email</li>
+      <li>✓ Guide d’optimisation énergétique</li>
+    </ul>
+  </div>
+</details>
             <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p className="font-semibold text-gray-800 mb-2">
                 📦 Contenu du colis
@@ -884,11 +893,15 @@ const PricingSection = () => {
               </span>
             </p>
 
+            <p className="text-sm text-gray-600 text-center mb-3">
+              Installation en 30 secondes • Aucun réglage nécessaire
+            </p>
+
             <button 
               onClick={() => startCheckout("standard")}
               className="w-full py-4 sm:py-5 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-2xl text-base sm:text-lg"
             >
-              🚚 Commander maintenant
+              ⚡ Je profite de l’offre
             </button>
 
             <p className="mt-3 text-center text-sm text-green-700 font-semibold">
@@ -1436,7 +1449,7 @@ const V2LiteSection = () => {
             <img
               src={deviceImageV2Lite}
               alt="BlockPulse V2 Lite - Édition LED"
-              className="w-full max-w-xs sm:max-w-sm rounded-xl shadow-lg"
+              className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-xl shadow-lg mx-auto md:mx-0"
             />
           </div>
 

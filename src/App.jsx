@@ -78,22 +78,36 @@ const CookieBanner = ({ onAccept, onRefuse }) => {
 // Composant Bouton CTA Flottant
 const FloatingCTA = ({ onClick }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isInOfferSection, setIsInOfferSection] = useState(false);
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 500) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(window.scrollY > 500);
     };
 
     toggleVisibility();
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility);
+
+    return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
-  if (!isVisible) return null;
+  useEffect(() => {
+    const section = document.getElementById("offre");
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInOfferSection(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+
+  if (!isVisible || isInOfferSection) return null;
 
   return (
     <button
@@ -106,7 +120,6 @@ const FloatingCTA = ({ onClick }) => {
     </button>
   );
 };
-
 // Composant Logo
 const Logo = ({ clickable = false }) => {
   const handleClick = () => {

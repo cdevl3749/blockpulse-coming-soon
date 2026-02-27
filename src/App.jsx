@@ -863,13 +863,26 @@ const PricingSection = () => {
     ➕ Voir les détails (mises à jour, guide, support…)
   </summary>
 
-  <div className="mt-3">
-    <ul className="space-y-2 text-sm text-gray-600">
-      <li>✓ Mises à jour gratuites à vie</li>
-      <li>✓ Support prioritaire email</li>
-      <li>✓ Guide d’optimisation énergétique</li>
-    </ul>
-  </div>
+ <div className="mt-3">
+  <ul className="space-y-2 text-sm text-gray-700">
+    
+    <li className="flex items-start gap-2">
+      <span className="text-green-600 font-bold mt-0.5">✓</span>
+      <span>Mises à jour gratuites à vie</span>
+    </li>
+
+    <li className="flex items-start gap-2">
+      <span className="text-green-600 font-bold mt-0.5">✓</span>
+      <span>Support prioritaire email</span>
+    </li>
+
+    <li className="flex items-start gap-2">
+      <span className="text-green-600 font-bold mt-0.5">✓</span>
+      <span>Guide d’optimisation énergétique</span>
+    </li>
+
+  </ul>
+</div>
 </details>
             <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p className="font-semibold text-gray-800 mb-2">
@@ -901,7 +914,7 @@ const PricingSection = () => {
               onClick={() => startCheckout("standard")}
               className="w-full py-4 sm:py-5 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-2xl text-base sm:text-lg"
             >
-              ⚡ Je profite de l’offre
+              🚚 Commander maintenant
             </button>
 
             <p className="mt-3 text-center text-sm text-green-700 font-semibold">

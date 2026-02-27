@@ -1605,6 +1605,22 @@ function Home() {
   }
 }, []);
 
+// 🎯 Scroll automatique si promo TikTok
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const promo = params.get("promo");
+
+  if (promo === "tiktok") {
+    // petit délai pour laisser le DOM charger
+    setTimeout(() => {
+      const element = document.getElementById("offre");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 300);
+  }
+}, []);
+
 const handleAcceptCookies = () => {
   // Sauvegarde du consentement
   localStorage.setItem("cookiesAccepted", "true");

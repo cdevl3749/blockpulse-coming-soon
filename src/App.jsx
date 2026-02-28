@@ -291,6 +291,12 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
     </span>
   </span>
 </h2>
+            <div className="mt-4 flex items-center justify-center md:justify-start gap-2">
+              <span className="text-xl">🔥</span>
+              <span className="text-sm sm:text-base font-semibold text-orange-600">
+                Déjà +100 000 vues sur TikTok
+              </span>
+            </div>
 
             {/* Sous-message */}
             <p className="mt-4 text-base sm:text-lg text-gray-700 max-w-xl mx-auto md:mx-0">

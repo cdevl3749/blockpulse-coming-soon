@@ -294,7 +294,7 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
             <div className="mt-4 flex items-center justify-center md:justify-start gap-2">
               <span className="text-xl">🔥</span>
               <span className="text-sm sm:text-base font-semibold text-orange-600">
-                Déjà +100 000 vues sur TikTok
+                Déjà +100 000 vues sur TikTok en 10 jours
               </span>
             </div>
 

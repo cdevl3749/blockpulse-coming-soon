@@ -1505,8 +1505,6 @@ const V2LiteSection = () => {
                     <rect width="1" height="2" x="2" fill="#EF3340" />
                   </svg>
 
-                  <span>/</span>
-
                   {/* Drapeau France */}
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
                     <rect width="1" height="2" x="0" fill="#0055A4" />

@@ -833,7 +833,7 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 18/50 places
+      ⚡ Plus que 16/50 places
     </div>
     
     {/* Prix */}
@@ -1494,7 +1494,27 @@ const V2LiteSection = () => {
             <ul className="space-y-3 text-gray-700 mb-6">
               <li className="flex items-start gap-2">
                 <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
-                <span>Sans écran, sans bouton</span>
+
+                <span className="flex items-center gap-2">
+                  Sans écran, sélecteur discret
+
+                  {/* Drapeau Belgique */}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
+                    <rect width="1" height="2" x="0" fill="#000000" />
+                    <rect width="1" height="2" x="1" fill="#FFD90C" />
+                    <rect width="1" height="2" x="2" fill="#EF3340" />
+                  </svg>
+
+                  <span>/</span>
+
+                  {/* Drapeau France */}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
+                    <rect width="1" height="2" x="0" fill="#0055A4" />
+                    <rect width="1" height="2" x="1" fill="#FFFFFF" />
+                    <rect width="1" height="2" x="2" fill="#EF4135" />
+                  </svg>
+
+                </span>
               </li>
 
               <li className="flex items-start gap-2">
@@ -1509,7 +1529,7 @@ const V2LiteSection = () => {
 
               <li className="flex items-start gap-2">
                 <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
-                <span>Aucun réglage, aucun écran</span>
+                <span>Aucun réglage complexe</span>
               </li>
 
               <li className="flex items-start gap-2">

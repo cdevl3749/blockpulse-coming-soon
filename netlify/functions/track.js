@@ -1,6 +1,4 @@
-import fs from "fs";
-
-const FILE = "/tmp/blockpulse_stats.json";
+import { getStore } from "@netlify/blobs";
 
 export default async (request) => {
 
@@ -10,23 +8,23 @@ export default async (request) => {
 
   const data = await request.json();
 
-  let stats = {
-    visitors: 0,
-    clickOrder: 0,
-    stripeStart: 0
-  };
+  const store = getStore("blockpulse");
 
-  // charger stats existantes
-  if (fs.existsSync(FILE)) {
-    const raw = fs.readFileSync(FILE);
-    stats = JSON.parse(raw);
+  let stats = await store.get("stats", { type: "json" });
+
+  if (!stats) {
+    stats = {
+      visitors: 0,
+      clickOrder: 0,
+      stripeStart: 0
+    };
   }
 
   if (data.type === "visit") stats.visitors++;
   if (data.type === "click_order") stats.clickOrder++;
   if (data.type === "stripe_start") stats.stripeStart++;
 
-  fs.writeFileSync(FILE, JSON.stringify(stats));
+  await store.set("stats", JSON.stringify(stats));
 
   return new Response(JSON.stringify({ ok: true }), {
     headers: { "Content-Type": "application/json" }

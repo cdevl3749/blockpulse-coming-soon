@@ -1,8 +1,6 @@
-let stats = {
-  visitors: 0,
-  clickOrder: 0,
-  stripeStart: 0
-};
+import fs from "fs";
+
+const FILE = "/tmp/blockpulse_stats.json";
 
 export default async (request) => {
 
@@ -12,24 +10,25 @@ export default async (request) => {
 
   const data = await request.json();
 
-  if (data.type === "visit") {
-    stats.visitors++;
+  let stats = {
+    visitors: 0,
+    clickOrder: 0,
+    stripeStart: 0
+  };
+
+  // charger stats existantes
+  if (fs.existsSync(FILE)) {
+    const raw = fs.readFileSync(FILE);
+    stats = JSON.parse(raw);
   }
 
-  if (data.type === "click_order") {
-    stats.clickOrder++;
-  }
+  if (data.type === "visit") stats.visitors++;
+  if (data.type === "click_order") stats.clickOrder++;
+  if (data.type === "stripe_start") stats.stripeStart++;
 
-  if (data.type === "stripe_start") {
-    stats.stripeStart++;
-  }
-
-  console.log("BLOCKPULSE EVENT:", data.type);
+  fs.writeFileSync(FILE, JSON.stringify(stats));
 
   return new Response(JSON.stringify({ ok: true }), {
     headers: { "Content-Type": "application/json" }
   });
 };
-
-// export pour stats
-export { stats };

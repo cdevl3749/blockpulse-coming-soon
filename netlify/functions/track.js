@@ -20,10 +20,21 @@ export default async (request) => {
     };
   }
 
+  // 👇 RESET DES STATS
+  if (data.type === "reset") {
+    stats = {
+      visitors: 0,
+      clickOrder: 0,
+      stripeStart: 0
+    };
+  }
+
+  // 👇 TRACKING NORMAL
   if (data.type === "visit") stats.visitors++;
   if (data.type === "click_order") stats.clickOrder++;
   if (data.type === "stripe_start") stats.stripeStart++;
 
+  // 👇 SAUVEGARDE
   await store.set("stats", JSON.stringify(stats));
 
   return new Response(JSON.stringify({ ok: true }), {

@@ -6,6 +6,7 @@ import deviceImage from "./assets/blockpulse-device.png";
 import deviceImageV2Lite from "./assets/blockpulse_v2.png";
 
 import { trackPageView } from "./utils/track";
+import Dashboard from "./pages/Dashboard";
 
 // ===== Tracking GA4 (respect cookiesAccepted) =====
 const GA_MEASUREMENT_ID = "G-CYKGCBJS9C";
@@ -1840,6 +1841,8 @@ export default function App() {
         <Route path="/linkedin" element={<LinkedinLanding />} />
         <Route path="/paiement/success" element={<PaymentSuccess />} />
         <Route path="/paiement/cancel" element={<PaymentCancel />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </>
   );

@@ -1,7 +1,4 @@
-import fs from "fs";
-import path from "path";
-
-const file = path.join(process.cwd(), "netlify/data/stats.json");
+import { getStore } from "@netlify/blobs";
 
 export default async (request) => {
 
@@ -10,13 +7,24 @@ export default async (request) => {
   }
 
   const body = await request.json();
-  const stats = JSON.parse(fs.readFileSync(file));
+
+  const store = getStore("stats");
+
+  let stats = await store.get("data", { type: "json" });
+
+  if (!stats) {
+    stats = {
+      visitors: 0,
+      clickOrder: 0,
+      stripeStart: 0
+    };
+  }
 
   if (body.type === "visit") stats.visitors++;
   if (body.type === "click_order") stats.clickOrder++;
   if (body.type === "stripe_start") stats.stripeStart++;
 
-  fs.writeFileSync(file, JSON.stringify(stats));
+  await store.set("data", stats);
 
   return new Response(JSON.stringify({ ok: true, stats }), {
     headers: { "Content-Type": "application/json" }

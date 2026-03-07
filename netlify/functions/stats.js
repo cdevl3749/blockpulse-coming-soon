@@ -1,11 +1,18 @@
-import fs from "fs";
-import path from "path";
-
-const file = path.join(process.cwd(), "netlify/data/stats.json");
+import { getStore } from "@netlify/blobs";
 
 export default async () => {
 
-  const stats = JSON.parse(fs.readFileSync(file));
+  const store = getStore("stats");
+
+  let stats = await store.get("data", { type: "json" });
+
+  if (!stats) {
+    stats = {
+      visitors: 0,
+      clickOrder: 0,
+      stripeStart: 0
+    };
+  }
 
   return new Response(JSON.stringify(stats), {
     headers: { "Content-Type": "application/json" }

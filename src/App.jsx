@@ -767,11 +767,18 @@ const TestimonialsSection = () => {
 // Composant Offres
 const PricingSection = () => {
 
-  const startCheckout = async (product) => {
-    trackEvent("begin_checkout", {
-      product, // "standard" ou "lite"
-      method: "stripe",
-    });
+ const startCheckout = async (product) => {
+  trackEvent("begin_checkout", {
+    product,
+    method: "stripe",
+  });
+
+   // 👇 AJOUT tracking BlockPulse
+  fetch("/.netlify/functions/track", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "click_order", product })
+  });
 
     try {
       const params = new URLSearchParams(window.location.search);
@@ -1437,6 +1444,12 @@ const CGVPage = () => {
 
 const V2LiteSection = () => {
   const startCheckoutLite = async () => {
+     // 👇 tracking clic V2 Lite
+  fetch("/.netlify/functions/track", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "click_order", product: "lite" })
+  });
   try {
     const params = new URLSearchParams(window.location.search);
     const promoFromUrl = params.get("promo");

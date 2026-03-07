@@ -1467,11 +1467,11 @@ const V2LiteSection = () => {
     >
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-          Une version plus simple est aussi disponible
+          V2 Lite — Simplement efficace
         </h2>
-
         <p className="text-center text-gray-600 mb-10 max-w-3xl mx-auto">
-          BlockPulse V2 Lite est une version sans écran ni bouton, basée uniquement sur un indicateur LED simple et efficace.
+          BlockPulse V2 Lite mise sur l’essentiel : sans écran, avec un sélecteur intégré pour s’adapter à votre pays.  
+          Un simple regard aux LEDs suffit pour savoir quand consommer.
         </p>
 
         {/* OPTION A : en mobile = image au-dessus, en desktop = 2 colonnes */}

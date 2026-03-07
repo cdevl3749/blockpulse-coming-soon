@@ -5,6 +5,8 @@ import PaymentCancel from "./pages/PaymentCancel";
 import deviceImage from "./assets/blockpulse-device.png";
 import deviceImageV2Lite from "./assets/blockpulse_v2.png";
 
+import { trackPageView } from "./utils/track";
+
 // ===== Tracking GA4 (respect cookiesAccepted) =====
 const GA_MEASUREMENT_ID = "G-CYKGCBJS9C";
 
@@ -1824,6 +1826,7 @@ function RouteTracker() {
 }
 
 export default function App() {
+  
   return (
     <>
       <RouteTracker />

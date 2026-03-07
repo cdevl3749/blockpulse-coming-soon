@@ -1828,6 +1828,35 @@ function RouteTracker() {
     });
   }, [location]);
 
+  useEffect(() => {
+
+  // visiteur entre sur le site
+  fetch("/.netlify/functions/track", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      type: "active_enter"
+    })
+  });
+
+  // visiteur quitte le site
+  const handleLeave = () => {
+    navigator.sendBeacon(
+      "/.netlify/functions/track",
+      JSON.stringify({ type: "active_leave" })
+    );
+  };
+
+  window.addEventListener("beforeunload", handleLeave);
+
+  return () => {
+    window.removeEventListener("beforeunload", handleLeave);
+  };
+
+}, []);
+
   return null;
 }
 

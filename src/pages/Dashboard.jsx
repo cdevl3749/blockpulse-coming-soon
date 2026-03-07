@@ -6,7 +6,8 @@ export default function Dashboard() {
     visitors: 0,
     clickOrder: 0,
     stripeStart: 0,
-    countries: {}
+    countries: {},
+    activeVisitors: 0
   });
 
   const loadStats = async () => {
@@ -38,6 +39,9 @@ export default function Dashboard() {
 
       <div style={{ fontSize: 22, marginTop: 30 }}>
         <p>👀 Visitors: {stats.visitors}</p>
+
+        <p>🟢 Active visitors: {stats.activeVisitors}</p>
+
         <p>🛒 Click Order: {stats.clickOrder}</p>
         <p>💳 Stripe Start: {stats.stripeStart}</p>
 

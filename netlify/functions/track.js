@@ -25,9 +25,14 @@ export default async (request) => {
       visitors: 0,
       clickOrder: 0,
       stripeStart: 0,
-      countries: {}
+      countries: {},
+      activeVisitors: 0
     };
   }
+
+  // sécurité si ancienne structure
+  if (!stats.countries) stats.countries = {};
+  if (!stats.activeVisitors) stats.activeVisitors = 0;
 
   // 👇 RESET DES STATS
   if (data.type === "reset") {
@@ -35,7 +40,8 @@ export default async (request) => {
       visitors: 0,
       clickOrder: 0,
       stripeStart: 0,
-      countries: {}
+      countries: {},
+      activeVisitors: 0
     };
   }
 
@@ -51,20 +57,36 @@ export default async (request) => {
     } catch {}
   }
 
-  // 👇 TRACKING VISITE
+  // fallback Cloudflare
+  if (country === "Unknown") {
+    const cfCountry = request.headers.get("cf-ipcountry");
+    if (cfCountry) {
+      country = cfCountry;
+    }
+  }
+
+  // 👇 VISITE
   if (data.type === "visit") {
 
     stats.visitors++;
-
-    if (!stats.countries) {
-      stats.countries = {};
-    }
 
     if (!stats.countries[country]) {
       stats.countries[country] = 0;
     }
 
     stats.countries[country]++;
+  }
+
+  // 👇 VISITEUR ENTRE SUR LE SITE
+  if (data.type === "active_enter") {
+    stats.activeVisitors++;
+  }
+
+  // 👇 VISITEUR QUITTE LE SITE
+  if (data.type === "active_leave") {
+    if (stats.activeVisitors > 0) {
+      stats.activeVisitors--;
+    }
   }
 
   // 👇 AUTRES EVENTS

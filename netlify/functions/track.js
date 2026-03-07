@@ -1,24 +1,6 @@
 import fs from "fs";
-import path from "path";
 
-const filePath = "/tmp/blockpulse-stats.json";
-
-function readStats() {
-  try {
-    const data = fs.readFileSync(filePath);
-    return JSON.parse(data);
-  } catch {
-    return {
-      visitors: 0,
-      clickOrder: 0,
-      stripeStart: 0
-    };
-  }
-}
-
-function saveStats(stats) {
-  fs.writeFileSync(filePath, JSON.stringify(stats));
-}
+const FILE = "/tmp/stats.json";
 
 export default async (request) => {
 
@@ -26,14 +8,35 @@ export default async (request) => {
     return new Response("Method not allowed", { status: 405 });
   }
 
-  const body = await request.json();
-  let stats = readStats();
+  const data = await request.json();
 
-  if (body.type === "visit") stats.visitors++;
-  if (body.type === "click_order") stats.clickOrder++;
-  if (body.type === "stripe_start") stats.stripeStart++;
+  // Charger stats existantes
+  let stats = {
+    visitors: 0,
+    clickOrder: 0,
+    stripeStart: 0
+  };
 
-  saveStats(stats);
+  if (fs.existsSync(FILE)) {
+    const raw = fs.readFileSync(FILE);
+    stats = JSON.parse(raw);
+  }
+
+  // Incrémenter
+  if (data.type === "visit") {
+    stats.visitors++;
+  }
+
+  if (data.type === "click_order") {
+    stats.clickOrder++;
+  }
+
+  if (data.type === "stripe_start") {
+    stats.stripeStart++;
+  }
+
+  // Sauvegarder
+  fs.writeFileSync(FILE, JSON.stringify(stats));
 
   return new Response(JSON.stringify({ ok: true }), {
     headers: { "Content-Type": "application/json" }

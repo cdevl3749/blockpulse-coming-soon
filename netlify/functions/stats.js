@@ -1,22 +1,21 @@
 import fs from "fs";
 
-const filePath = "/tmp/blockpulse-stats.json";
+const FILE = "/tmp/stats.json";
 
 export default async () => {
 
-  try {
-    const data = fs.readFileSync(filePath);
-    return new Response(data, {
-      headers: { "Content-Type": "application/json" }
-    });
-  } catch {
-    return new Response(
-      JSON.stringify({
-        visitors: 0,
-        clickOrder: 0,
-        stripeStart: 0
-      }),
-      { headers: { "Content-Type": "application/json" } }
-    );
+  let stats = {
+    visitors: 0,
+    clickOrder: 0,
+    stripeStart: 0
+  };
+
+  if (fs.existsSync(FILE)) {
+    const raw = fs.readFileSync(FILE);
+    stats = JSON.parse(raw);
   }
+
+  return new Response(JSON.stringify(stats), {
+    headers: { "Content-Type": "application/json" }
+  });
 };

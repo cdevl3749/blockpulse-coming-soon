@@ -1837,35 +1837,29 @@ function RouteTracker() {
 
 }, []);
 
-  useEffect(() => {
+ useEffect(() => {
 
-  // visiteur entre sur le site
-  fetch("/.netlify/functions/track", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      type: "active_enter"
-    })
-  });
-
-  // visiteur quitte le site
-  const handleLeave = () => {
-    navigator.sendBeacon(
-      "/.netlify/functions/track",
-      JSON.stringify({ type: "active_leave" })
-    );
+  const sendPing = () => {
+    fetch("/.netlify/functions/track", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        type: "active_ping"
+      })
+    });
   };
 
-  window.addEventListener("beforeunload", handleLeave);
+  // premier ping
+  sendPing();
 
-  return () => {
-    window.removeEventListener("beforeunload", handleLeave);
-  };
+  // ping toutes les 20 secondes
+  const interval = setInterval(sendPing, 20000);
+
+  return () => clearInterval(interval);
 
 }, []);
-
   return null;
 }
 

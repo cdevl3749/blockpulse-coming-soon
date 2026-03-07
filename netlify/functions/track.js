@@ -26,13 +26,15 @@ export default async (request) => {
       clickOrder: 0,
       stripeStart: 0,
       countries: {},
-      activeVisitors: 0
+      activeVisitors: 0,
+      lastPing: 0
     };
   }
 
   // sécurité si ancienne structure
   if (!stats.countries) stats.countries = {};
   if (!stats.activeVisitors) stats.activeVisitors = 0;
+  if (!stats.lastPing) stats.lastPing = 0;
 
   // 👇 RESET DES STATS
   if (data.type === "reset") {
@@ -41,7 +43,8 @@ export default async (request) => {
       clickOrder: 0,
       stripeStart: 0,
       countries: {},
-      activeVisitors: 0
+      activeVisitors: 0,
+      lastPing: 0
     };
   }
 
@@ -77,26 +80,26 @@ export default async (request) => {
     stats.countries[country]++;
   }
 
-  // 👇 VISITEUR ENTRE SUR LE SITE
-  if (data.type === "active_enter") {
-    stats.activeVisitors++;
-  }
-
-  // 👇 VISITEUR QUITTE LE SITE
-  if (data.type === "active_leave") {
-    if (stats.activeVisitors > 0) {
-      stats.activeVisitors--;
-    }
+  // 👇 PING VISITEUR ACTIF
+  if (data.type === "active_ping") {
+    stats.lastPing = Date.now();
   }
 
   // 👇 AUTRES EVENTS
   if (data.type === "click_order") stats.clickOrder++;
   if (data.type === "stripe_start") stats.stripeStart++;
 
+  // 👇 CALCUL VISITEURS ACTIFS (30 sec)
+  if (stats.lastPing && Date.now() - stats.lastPing < 30000) {
+    stats.activeVisitors = 1;
+  } else {
+    stats.activeVisitors = 0;
+  }
+
   // 👇 SAUVEGARDE
   await store.set("stats", JSON.stringify(stats));
 
-  return new Response(JSON.stringify({ ok: true }), {
+  return new Response(JSON.stringify(stats), {
     headers: { "Content-Type": "application/json" }
   });
 };

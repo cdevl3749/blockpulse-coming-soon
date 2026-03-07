@@ -1815,7 +1815,12 @@ const handleAcceptCookies = () => {
 function RouteTracker() {
   const location = useLocation();
 
-  useEffect(() => {
+ useEffect(() => {
+
+  const alreadyVisited = sessionStorage.getItem("bp_visit");
+
+  if (!alreadyVisited) {
+
     fetch("/.netlify/functions/track", {
       method: "POST",
       headers: {
@@ -1826,7 +1831,11 @@ function RouteTracker() {
         page: location.pathname
       })
     });
-  }, [location]);
+
+    sessionStorage.setItem("bp_visit", "true");
+  }
+
+}, []);
 
   useEffect(() => {
 

@@ -1,8 +1,7 @@
-let stats = {
-  visitors: 0,
-  clickOrder: 0,
-  stripeStart: 0
-};
+import fs from "fs";
+import path from "path";
+
+const filePath = path.join(process.cwd(), "netlify", "data", "stats.json");
 
 export default async (request) => {
 
@@ -11,6 +10,9 @@ export default async (request) => {
   }
 
   const data = await request.json();
+
+  // lire stats
+  let stats = JSON.parse(fs.readFileSync(filePath));
 
   if (data.type === "visit") {
     stats.visitors++;
@@ -23,6 +25,9 @@ export default async (request) => {
   if (data.type === "stripe_start") {
     stats.stripeStart++;
   }
+
+  // sauvegarder
+  fs.writeFileSync(filePath, JSON.stringify(stats));
 
   return new Response(
     JSON.stringify({

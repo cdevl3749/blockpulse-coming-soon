@@ -1,14 +1,13 @@
-let stats = {
-  visitors: 0,
-  clickOrder: 0,
-  stripeStart: 0
-};
+import fs from "fs";
+import path from "path";
+
+const file = path.join(process.cwd(), "netlify/data/stats.json");
 
 export default async () => {
-  return new Response(
-    JSON.stringify(stats),
-    {
-      headers: { "Content-Type": "application/json" }
-    }
-  );
+
+  const stats = JSON.parse(fs.readFileSync(file));
+
+  return new Response(JSON.stringify(stats), {
+    headers: { "Content-Type": "application/json" }
+  });
 };

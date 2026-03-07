@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const filePath = path.join(process.cwd(), "netlify", "data", "stats.json");
+const file = path.join(process.cwd(), "netlify/data/stats.json");
 
 export default async (request) => {
 
@@ -9,31 +9,16 @@ export default async (request) => {
     return new Response("Method not allowed", { status: 405 });
   }
 
-  const data = await request.json();
+  const body = await request.json();
+  const stats = JSON.parse(fs.readFileSync(file));
 
-  // lire stats
-  let stats = JSON.parse(fs.readFileSync(filePath));
+  if (body.type === "visit") stats.visitors++;
+  if (body.type === "click_order") stats.clickOrder++;
+  if (body.type === "stripe_start") stats.stripeStart++;
 
-  if (data.type === "visit") {
-    stats.visitors++;
-  }
+  fs.writeFileSync(file, JSON.stringify(stats));
 
-  if (data.type === "click_order") {
-    stats.clickOrder++;
-  }
-
-  if (data.type === "stripe_start") {
-    stats.stripeStart++;
-  }
-
-  // sauvegarder
-  fs.writeFileSync(filePath, JSON.stringify(stats));
-
-  return new Response(
-    JSON.stringify({
-      ok: true,
-      stats
-    }),
-    { headers: { "Content-Type": "application/json" } }
-  );
+  return new Response(JSON.stringify({ ok: true, stats }), {
+    headers: { "Content-Type": "application/json" }
+  });
 };

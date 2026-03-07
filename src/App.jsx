@@ -33,22 +33,6 @@ function trackEvent(eventName, params = {}) {
 
 // Track page views
 // Track page views (toujours actif, anonymisé sans consentement)
-function trackPageView(path) {
-  try {
-    if (typeof window.gtag !== "function") return;
-    
-    const consent = window.localStorage.getItem("cookiesAccepted");
-    
-    // ✅ Tracking anonyme AUTORISÉ sans consentement (conforme RGPD)
-    window.gtag("event", "page_view", {
-      page_path: path,
-      page_location: window.location.href,
-      page_title: document.title,
-    });
-  } catch (e) {
-    // silence
-  }
-}
 
 // Composant Cookie Banner
 const CookieBanner = ({ onAccept, onRefuse }) => {

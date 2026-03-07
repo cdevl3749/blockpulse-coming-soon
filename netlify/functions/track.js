@@ -1,3 +1,9 @@
+let stats = {
+  visitors: 0,
+  clickOrder: 0,
+  stripeStart: 0
+};
+
 export default async (request) => {
 
   if (request.method !== "POST") {
@@ -6,10 +12,24 @@ export default async (request) => {
 
   const data = await request.json();
 
-  console.log("BLOCKPULSE EVENT:", data.type, data.product || "");
+  if (data.type === "visit") {
+    stats.visitors++;
+  }
 
-  return new Response(
-    JSON.stringify({ ok: true }),
-    { headers: { "Content-Type": "application/json" } }
-  );
+  if (data.type === "click_order") {
+    stats.clickOrder++;
+  }
+
+  if (data.type === "stripe_start") {
+    stats.stripeStart++;
+  }
+
+  console.log("BLOCKPULSE EVENT:", data.type);
+
+  return new Response(JSON.stringify({ ok: true }), {
+    headers: { "Content-Type": "application/json" }
+  });
 };
+
+// export pour stats
+export { stats };

@@ -1815,9 +1815,17 @@ function RouteTracker() {
   const location = useLocation();
 
   useEffect(() => {
-  // ✅ Toujours tracker (anonymisé par défaut, voir consent mode dans index.html)
-  trackPageView(location.pathname);
-}, [location]);
+    fetch("/.netlify/functions/track", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        type: "visit",
+        page: location.pathname
+      })
+    });
+  }, [location]);
 
   return null;
 }

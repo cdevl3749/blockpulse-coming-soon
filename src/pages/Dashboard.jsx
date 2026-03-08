@@ -45,6 +45,17 @@ export default function Dashboard() {
         <p>🛒 Click Order: {stats.clickOrder}</p>
         <p>💳 Stripe Start: {stats.stripeStart}</p>
 
+        {/* Funnel */}
+        <div style={{ marginTop: 30 }}>
+          <h2>Conversion Funnel</h2>
+
+          <p>👀 Visitors → {stats.visitors}</p>
+          <p>⬇</p>
+          <p>🛒 Click Order → {stats.clickOrder}</p>
+          <p>⬇</p>
+          <p>💳 Stripe Start → {stats.stripeStart}</p>
+        </div>
+
         <p style={{ marginTop: 20 }}>
           📈 Click rate: {clickRate}%
         </p>

@@ -15,10 +15,10 @@ export const handler = async (event) => {
     if (product === "lite") {
       priceId = process.env.STRIPE_PRICE_LITE_ID; // 39 €
     } else {
-      priceId = process.env.STRIPE_PRICE_ID; // 69 € (produit principal)
+      priceId = process.env.STRIPE_PRICE_ID; // 69 €
     }
 
-    // ✅ Coupon TikTok (inchangé)
+    // ✅ Coupon TikTok
     const promoCode =
       body.promo === "TIKTOK15"
         ? process.env.STRIPE_TIKTOK_COUPON_ID
@@ -38,10 +38,26 @@ export const handler = async (event) => {
       cancel_url: `${process.env.CLIENT_URL}/paiement/cancel`,
     });
 
+    // 📊 TRACKING : Stripe Start
+    try {
+      await fetch(`${process.env.CLIENT_URL}/.netlify/functions/track`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          type: "stripe_start"
+        })
+      });
+    } catch (err) {
+      console.log("Tracking stripe_start failed:", err);
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({ url: session.url }),
     };
+
   } catch (error) {
     console.error("Stripe checkout error:", error);
 

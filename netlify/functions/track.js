@@ -25,6 +25,7 @@ export default async (request) => {
       visitors: 0,
       clickOrder: 0,
       stripeStart: 0,
+      paymentSuccess: 0,
       countries: {},
       activeVisitors: 0,
       lastPing: 0
@@ -35,6 +36,7 @@ export default async (request) => {
   if (!stats.countries) stats.countries = {};
   if (!stats.activeVisitors) stats.activeVisitors = 0;
   if (!stats.lastPing) stats.lastPing = 0;
+  if (!stats.paymentSuccess) stats.paymentSuccess = 0;
 
   // 👇 RESET DES STATS
   if (data.type === "reset") {
@@ -42,6 +44,7 @@ export default async (request) => {
       visitors: 0,
       clickOrder: 0,
       stripeStart: 0,
+      paymentSuccess: 0,
       countries: {},
       activeVisitors: 0,
       lastPing: 0
@@ -88,6 +91,7 @@ export default async (request) => {
   // 👇 AUTRES EVENTS
   if (data.type === "click_order") stats.clickOrder++;
   if (data.type === "stripe_start") stats.stripeStart++;
+  if (data.type === "payment_success") stats.paymentSuccess++;
 
   // 👇 CALCUL VISITEURS ACTIFS (30 sec)
   if (stats.lastPing && Date.now() - stats.lastPing < 30000) {

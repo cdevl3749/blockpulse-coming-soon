@@ -1815,6 +1815,10 @@ const handleAcceptCookies = () => {
 function RouteTracker() {
   const location = useLocation();
 
+  if (location.pathname === "/dashboard") {
+  return null;
+}
+
  useEffect(() => {
 
   const alreadyVisited = sessionStorage.getItem("bp_visit");

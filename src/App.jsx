@@ -279,9 +279,9 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
   </span>
 </h2>
             <div className="mt-4 flex items-center justify-center md:justify-start gap-2">
-              <span className="text-xl">🔥</span>
+              
               <span className="text-sm sm:text-base font-semibold text-orange-600">
-                Déjà +100 000 vues sur TikTok en 10 jours
+                🔥 +140 000 vues sur TikTok
               </span>
             </div>
 
@@ -293,6 +293,34 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
             {/* Bénéfice clé */}
             <p className="mt-2 font-semibold text-green-600">
               Jusqu&apos;à 30&nbsp;% d&apos;économies • Sans application
+            </p>
+
+            <p className="text-xs mt-1 text-green-700 flex items-center gap-2 flex-wrap">
+              ⭐ Déjà utilisé en Belgique
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 3 2"
+                width="18"
+                height="12"
+              >
+                <rect width="1" height="2" x="0" fill="#000000" />
+                <rect width="1" height="2" x="1" fill="#FFD90C" />
+                <rect width="1" height="2" x="2" fill="#EF3340" />
+              </svg>
+
+              et en France
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 3 2"
+                width="18"
+                height="12"
+              >
+                <rect width="1" height="2" x="0" fill="#0055A4" />
+                <rect width="1" height="2" x="1" fill="#FFFFFF" />
+                <rect width="1" height="2" x="2" fill="#EF4135" />
+              </svg>
             </p>
 
             {/* Innovation belge */}
@@ -332,6 +360,14 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               >
                 👉 Découvrir la version V2 Lite (39 €)
               </button>
+
+              <p className="text-xs text-orange-600 font-semibold text-center md:text-left">
+                🔥 17 boîtiers commandés cette semaine
+              </p>
+
+              <p className="text-xs text-green-700 font-semibold text-center md:text-left">
+                ✔ Installation en 10 secondes
+              </p>
 
               <p className="text-xs text-gray-500 text-center md:text-left">
                 🔒 Paiement sécurisé • Livraison sous 3 à 5 jours
@@ -752,6 +788,11 @@ const TestimonialsSection = () => {
 // Composant Offres
 const PricingSection = () => {
 
+  const totalBoitiers = 50;
+  const boitiersRestants = 27;
+
+  const progress = ((totalBoitiers - boitiersRestants) / totalBoitiers) * 100;
+
  const startCheckout = async (product) => {
   trackEvent("begin_checkout", {
     product,
@@ -827,7 +868,14 @@ const PricingSection = () => {
   <div className="flex flex-col items-center gap-3">
     {/* Badge urgence */}
     <div className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-bold">
-      ⚡ Plus que 16/50 places
+      ⚡ Plus que {boitiersRestants} boîtiers disponibles
+    </div>
+
+    <div className="w-full bg-gray-200 rounded-full h-2 mt-2 mb-3">
+      <div
+        className="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full"
+        style={{ width: `${progress}%` }}
+      ></div>
     </div>
     
     {/* Prix */}
@@ -1556,6 +1604,10 @@ const V2LiteSection = () => {
               <span className="text-gray-500 text-sm">TTC</span>
             </div>
 
+            <p className="text-xs font-semibold text-green-700 bg-green-100 inline-block px-3 py-1 rounded-full mb-2">
+              ⭐ Version la plus populaire
+            </p>
+
             <p className="text-sm text-gray-500 mb-4">
               Livraison gratuite en Belgique & France • Paiement sécurisé
             </p>
@@ -1564,8 +1616,12 @@ const V2LiteSection = () => {
               onClick={startCheckoutLite}
               className="px-6 py-3 rounded-lg bg-gradient-to-r from-green-500 to-orange-500 text-white font-semibold hover:shadow-lg transition-all"
             >
-              🚚 Commander V2 Lite
+              🚚 Commander V2 Lite — 39€
             </button>
+
+           <p className="mt-2 text-xs text-green-700 font-semibold text-center md:text-left">
+              ✔ Aucun abonnement • aucun compte à créer
+           </p>
 
             <div className="mt-3 w-full text-center">
   <div className="inline-flex items-center gap-3 text-xs text-gray-500">

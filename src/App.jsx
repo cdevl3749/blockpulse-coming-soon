@@ -295,34 +295,6 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               Jusqu&apos;à 30&nbsp;% d&apos;économies • Sans application
             </p>
 
-            <p className="text-xs mt-1 text-green-700 flex items-center gap-2 flex-wrap">
-              ⭐ Déjà utilisé en Belgique
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 3 2"
-                width="18"
-                height="12"
-              >
-                <rect width="1" height="2" x="0" fill="#000000" />
-                <rect width="1" height="2" x="1" fill="#FFD90C" />
-                <rect width="1" height="2" x="2" fill="#EF3340" />
-              </svg>
-
-              et en France
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 3 2"
-                width="18"
-                height="12"
-              >
-                <rect width="1" height="2" x="0" fill="#0055A4" />
-                <rect width="1" height="2" x="1" fill="#FFFFFF" />
-                <rect width="1" height="2" x="2" fill="#EF4135" />
-              </svg>
-            </p>
-
             {/* Innovation belge */}
             <p className="text-sm sm:text-base mt-4 text-gray-700 flex items-center justify-center md:justify-start gap-2">
               <svg
@@ -893,6 +865,9 @@ const PricingSection = () => {
     <p className="mb-6 inline-block rounded-full bg-green-100 px-4 py-2 text-base font-bold text-green-700">
      🎯 -22% de réduction • Économisez 20€
     </p>
+    <p className="mt-2 inline-block rounded-full bg-yellow-100 px-4 py-2 text-sm font-bold text-yellow-700">
+    ☀️ Panneau solaire OFFERT pour les 50 premières commandes
+    </p>
   </div>
 </div>
             
@@ -954,6 +929,7 @@ const PricingSection = () => {
                 <li>• 1× Alimentation USB 5V (prise EU)</li>
                 <li>• 1× Câble USB</li>
                 <li>• 1× Guide de démarrage rapide</li>
+                <li>• ☀️ Mini panneau solaire offert (50 premières commandes)</li>
               </ul>
               <p className="mt-2 text-xs text-gray-500">
                 Contenu du colis conforme à la version actuelle du produit.
@@ -1593,6 +1569,7 @@ const V2LiteSection = () => {
                 <li>• 1× Alimentation USB 5V (prise EU)</li>
                 <li>• 1× Câble USB</li>
                 <li>• 1× Guide de démarrage rapide</li>
+                <li>• ☀️ Mini panneau solaire offert (50 premières commandes)</li>
               </ul>
               <p className="mt-2 text-xs text-gray-500">
                 Version V2 Lite avec indication par LEDs uniquement.
@@ -1607,6 +1584,12 @@ const V2LiteSection = () => {
             <p className="text-xs font-semibold text-green-700 bg-green-100 inline-block px-3 py-1 rounded-full mb-2">
               ⭐ Version la plus populaire
             </p>
+
+            <div className="mt-2">
+            <p className="inline-block rounded-full bg-yellow-100 px-4 py-2 text-sm font-bold text-yellow-700">
+              ☀️ Panneau solaire OFFERT pour les 50 premières commandes
+            </p>
+            </div>
 
             <p className="text-sm text-gray-500 mb-4">
               Livraison gratuite en Belgique & France • Paiement sécurisé

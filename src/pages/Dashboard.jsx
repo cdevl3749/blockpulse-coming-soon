@@ -45,7 +45,6 @@ export default function Dashboard() {
       const res = await fetch("/.netlify/functions/stats");
       const data = await res.json();
 
-      // première charge = initialise les valeurs
       if (!initialized.current) {
 
         lastVisitors.current = data.visitors;
@@ -60,7 +59,6 @@ export default function Dashboard() {
 
       }
 
-      // 👀 visiteur
       if (data.visitors > lastVisitors.current) {
 
         notify(
@@ -70,7 +68,6 @@ export default function Dashboard() {
 
       }
 
-      // 🛒 click commander
       if (data.clickOrder > lastClickOrder.current) {
 
         notify(
@@ -80,7 +77,6 @@ export default function Dashboard() {
 
       }
 
-      // 💳 stripe start
       if (data.stripeStart > lastStripeStart.current) {
 
         notify(
@@ -90,7 +86,6 @@ export default function Dashboard() {
 
       }
 
-      // 🎉 vente
       if (data.paymentSuccess > lastPaymentSuccess.current) {
 
         playCashSound();
@@ -117,17 +112,36 @@ export default function Dashboard() {
 
   };
 
+  // 🔄 Reset stats
+  const resetStats = async () => {
+
+    if (!confirm("Reset all dashboard stats ?")) return;
+
+    await fetch("/.netlify/functions/track", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        type: "reset"
+      })
+    });
+
+    loadStats();
+
+  };
+
   useEffect(() => {
 
     if ("Notification" in window) {
 
-  Notification.requestPermission().then(permission => {
+      Notification.requestPermission().then(permission => {
 
-    console.log("Notification permission:", permission);
+        console.log("Notification permission:", permission);
 
-  });
+      });
 
-}
+    }
 
     loadStats();
 
@@ -154,6 +168,26 @@ export default function Dashboard() {
     <div style={{ padding: 40, fontFamily: "Arial" }}>
 
       <h1>⚡ BlockPulse Dashboard</h1>
+
+      {/* bouton reset */}
+      <div style={{ marginTop: 20, marginBottom: 30 }}>
+
+        <button
+          onClick={resetStats}
+          style={{
+            padding: "12px 20px",
+            fontSize: "16px",
+            background: "#ff4d4d",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer"
+          }}
+        >
+          🔄 Reset Dashboard Stats
+        </button>
+
+      </div>
 
       <div style={{ fontSize: 22, marginTop: 30 }}>
 

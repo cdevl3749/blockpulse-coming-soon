@@ -8,7 +8,12 @@ export default function Dashboard() {
     stripeStart: 0,
     paymentSuccess: 0,
     countries: {},
-    activeVisitors: 0
+    activeVisitors: 0,
+    sources: {
+      reddit: 0,
+      tiktok: 0,
+      direct: 0
+    }
   });
 
   const initialized = useRef(false);
@@ -17,6 +22,8 @@ export default function Dashboard() {
   const lastClickOrder = useRef(0);
   const lastStripeStart = useRef(0);
   const lastPaymentSuccess = useRef(0);
+
+  const visitorHistory = useRef([]);
 
   const playCashSound = () => {
     const audio = new Audio("/cha-ching.mp3");
@@ -66,6 +73,10 @@ export default function Dashboard() {
           "Quelqu’un vient d’arriver sur blockpulse.be"
         );
 
+        visitorHistory.current.push({
+          time: Date.now()
+        });
+
       }
 
       if (data.clickOrder > lastClickOrder.current) {
@@ -112,7 +123,6 @@ export default function Dashboard() {
 
   };
 
-  // 🔄 Reset stats
   const resetStats = async () => {
 
     if (!confirm("Reset all dashboard stats ?")) return;
@@ -163,13 +173,16 @@ export default function Dashboard() {
     ? ((stats.paymentSuccess / stats.visitors) * 100).toFixed(1)
     : 0;
 
+  const visitorsLast10Min = visitorHistory.current.filter(v =>
+    Date.now() - v.time < 600000
+  ).length;
+
   return (
 
-    <div style={{ padding: 40, fontFamily: "Arial" }}>
+    <div style={{ padding: 40, fontFamily: "Arial", maxWidth: 1200 }}>
 
-      <h1>⚡ BlockPulse Dashboard</h1>
+      <h1>⚡ Dashboard BlockPulse</h1>
 
-      {/* bouton reset */}
       <div style={{ marginTop: 20, marginBottom: 30 }}>
 
         <button
@@ -184,57 +197,107 @@ export default function Dashboard() {
             cursor: "pointer"
           }}
         >
-          🔄 Reset Dashboard Stats
+          🔄 Reset statistiques
         </button>
 
       </div>
 
-      <div style={{ fontSize: 22, marginTop: 30 }}>
+      {/* STATISTIQUES PRINCIPALES */}
 
-        <p>👀 Visitors: {stats.visitors}</p>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3,1fr)",
+        gap: 25,
+        fontSize: 20,
+        marginBottom: 40
+      }}>
 
-        <p>🟢 Active visitors: {stats.activeVisitors}</p>
+        <div>👀 Visiteurs<br /><b>{stats.visitors}</b></div>
 
-        <p>🛒 Click Order: {stats.clickOrder}</p>
+        <div>🟢 Visiteurs actifs<br /><b>{stats.activeVisitors}</b></div>
 
-        <p>💳 Stripe Start: {stats.stripeStart}</p>
+        <div>🔥 Visiteurs 10 min<br /><b>{visitorsLast10Min}</b></div>
 
-        <p>✅ Payment Success: {stats.paymentSuccess}</p>
+        <div>🛒 Clic Commander<br /><b>{stats.clickOrder}</b></div>
 
-        <div style={{ marginTop: 30 }}>
+        <div>💳 Arrivés sur Stripe<br /><b>{stats.stripeStart}</b></div>
 
-          <h2>Conversion Funnel</h2>
+        <div>✅ Paiements réussis<br /><b>{stats.paymentSuccess}</b></div>
 
-          <p>👀 Visitors → {stats.visitors}</p>
-          <p>⬇</p>
+      </div>
 
-          <p>🛒 Click Order → {stats.clickOrder}</p>
-          <p>⬇</p>
+      {/* SOURCES TRAFIC */}
 
-          <p>💳 Stripe Start → {stats.stripeStart}</p>
-          <p>⬇</p>
+      <h2>📊 Sources du trafic</h2>
 
-          <p>✅ Payment Success → {stats.paymentSuccess}</p>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3,1fr)",
+        gap: 30,
+        fontSize: 20,
+        marginTop: 20,
+        marginBottom: 40
+      }}>
 
+        <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
+          🔴 Reddit
+          <br />
+          <b>{stats.sources?.reddit || 0}</b>
         </div>
 
+        <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
+          🎵 TikTok
+          <br />
+          <b>{stats.sources?.tiktok || 0}</b>
+        </div>
+
+        <div style={{ border: "1px solid #ddd", padding: 20, borderRadius: 8 }}>
+          🌐 Direct
+          <br />
+          <b>{stats.sources?.direct || 0}</b>
+        </div>
+
+      </div>
+
+      {/* FUNNEL */}
+
+      <div style={{ marginTop: 40 }}>
+
+        <h2>🔁 Funnel de conversion</h2>
+
+        <p>👀 Visiteurs → {stats.visitors}</p>
+
+        <p>⬇</p>
+
+        <p>🛒 Clic Commander → {stats.clickOrder}</p>
+
+        <p>⬇</p>
+
+        <p>💳 Stripe → {stats.stripeStart}</p>
+
+        <p>⬇</p>
+
+        <p>✅ Paiements → {stats.paymentSuccess}</p>
+
         <p style={{ marginTop: 20 }}>
-          📈 Click rate: {clickRate}%
+          📈 Taux clic: {clickRate}%
         </p>
 
         <p>
-          💳 Stripe rate: {stripeRate}%
+          💳 Taux Stripe: {stripeRate}%
         </p>
 
         <p>
-          🎉 Success rate: {successRate}%
+          🎉 Taux succès: {successRate}%
         </p>
 
       </div>
 
+      {/* PAYS */}
+
       <div style={{ marginTop: 40 }}>
 
-        <h2>🌍 Visitors by country</h2>
+        <h2>🌍 Visiteurs par pays</h2>
 
         {stats.countries && Object.keys(stats.countries).length > 0 ? (
 
@@ -248,7 +311,7 @@ export default function Dashboard() {
 
         ) : (
 
-          <p>No country data yet</p>
+          <p>Aucune donnée pour le moment</p>
 
         )}
 

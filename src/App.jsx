@@ -369,7 +369,7 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-xl shadow-lg"
             />
             <p className="text-center text-green-600 font-bold text-lg sm:text-xl">
-              Photo réelle — boîtier final livré chez vous
+              Prototype réel BlockPulse — conçu et assemblé en Belgique
             </p>
             <p className="mt-1 text-center text-sm text-gray-500">
               Existe aussi en version <strong>V2 Lite LED</strong> — 39 €
@@ -1501,12 +1501,18 @@ const V2LiteSection = () => {
         {/* OPTION A : en mobile = image au-dessus, en desktop = 2 colonnes */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Image */}
-          <div className="flex justify-center md:justify-start order-1 md:order-none">
+          <div className="flex flex-col items-center md:items-start order-1 md:order-none">
+
             <img
               src={deviceImageV2Lite}
               alt="BlockPulse V2 Lite - Édition LED"
               className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-xl shadow-lg mx-auto md:mx-0"
             />
+
+            <p className="text-center text-green-600 font-medium mt-4">
+              Prototype réel BlockPulse — conçu et assemblé en Belgique
+            </p>
+
           </div>
 
           {/* Texte */}

@@ -125,21 +125,23 @@ export default function Dashboard() {
 
   const resetStats = async () => {
 
-    if (!confirm("Reset all dashboard stats ?")) return;
+  if (!confirm("Reset all dashboard stats ?")) return;
 
-    await fetch("/.netlify/functions/track", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        type: "reset"
-      })
-    });
+  await fetch("/.netlify/functions/track", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      type: "reset"
+    })
+  });
 
-    loadStats();
+  visitorHistory.current = [];   // reset visiteurs 10 min
 
-  };
+  loadStats();
+
+};
 
   useEffect(() => {
 

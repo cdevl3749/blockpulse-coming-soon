@@ -310,6 +310,38 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               <span>Innovation 100% belge</span>
             </p>
 
+            <p className="text-sm text-gray-600 flex items-center justify-center md:justify-start gap-2 mt-1">
+              🚚 Livraison gratuite :
+              
+              {/* Belgique */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
+                <rect width="1" height="2" x="0" fill="#000000"/>
+                <rect width="1" height="2" x="1" fill="#FFD90C"/>
+                <rect width="1" height="2" x="2" fill="#EF3340"/>
+              </svg>
+
+              {/* France */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
+                <rect width="1" height="2" x="0" fill="#0055A4"/>
+                <rect width="1" height="2" x="1" fill="#FFFFFF"/>
+                <rect width="1" height="2" x="2" fill="#EF4135"/>
+              </svg>
+
+              {/* Pays-Bas */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
+                <rect width="3" height="0.66" y="0" fill="#AE1C28"/>
+                <rect width="3" height="0.66" y="0.66" fill="#FFFFFF"/>
+                <rect width="3" height="0.66" y="1.33" fill="#21468B"/>
+              </svg>
+
+              {/* Allemagne */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
+                <rect width="3" height="0.66" y="0" fill="#000000"/>
+                <rect width="3" height="0.66" y="0.66" fill="#DD0000"/>
+                <rect width="3" height="0.66" y="1.33" fill="#FFCE00"/>
+              </svg>
+            </p>
+
             {/* Offre */}
             <p className="text-sm sm:text-base mt-3 font-bold text-orange-600">
               Offre de lancement : -22% pour les 50 premiers
@@ -419,7 +451,7 @@ const FAQ = () => {
     },
     {
       question: "Quand vais-je recevoir mon BlockPulse ?",
-      answer: "BlockPulse est actuellement en stock. La livraison est effectuée sous 3 à 5 jours ouvrés en Belgique et en France après validation de la commande."
+      answer: "BlockPulse est actuellement en stock. La livraison est effectuée sous 3 à 5 jours ouvrés en Belgique, en France, aux Pays-Bas et en Allemagne après validation de la commande."
     },
     {
       question: "Y a-t-il une garantie ?",
@@ -882,7 +914,7 @@ const PricingSection = () => {
   <li className="flex items-start gap-2 sm:gap-3">
     <span className="text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0">✓</span>
     <span className="text-sm sm:text-base text-gray-700">
-      <strong>Livraison incluse</strong> (Belgique & France)
+      🚚 Livraison gratuite sous 3 à 5 jours — Belgique, France, Pays-Bas & Allemagne
     </span>
   </li>
 
@@ -939,7 +971,7 @@ const PricingSection = () => {
             <p className="text-center text-gray-800 text-lg font-semibold mb-3">
               69 € TTC
               <span className="block text-sm font-semibold text-green-700 mt-1">
-                🚚 Livraison gratuite sous 3 à 5 jours — Belgique & France
+                🚚 Livraison gratuite sous 3 à 5 jours — Belgique, France, Pays-Bas & Allemagne
               </span>
             </p>
 
@@ -1316,7 +1348,7 @@ const CGVPage = () => {
         <h3 className="text-xl font-bold mb-3">Article 2 – Prix</h3>
         <p>
           Les prix sont exprimés en euros, toutes taxes comprises (TTC).
-          La livraison en Belgique et en France.
+          La livraison est disponible en Belgique, France, Pays-Bas et Allemagne.
         </p>
       </section>
 
@@ -1542,6 +1574,20 @@ const V2LiteSection = () => {
                     <rect width="1" height="2" x="2" fill="#EF4135" />
                   </svg>
 
+                  {/* Drapeau Pays-Bas */}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
+                    <rect width="3" height="0.66" y="0" fill="#AE1C28" />
+                    <rect width="3" height="0.66" y="0.66" fill="#FFFFFF" />
+                    <rect width="3" height="0.66" y="1.33" fill="#21468B" />
+                  </svg>
+
+                  {/* Drapeau Allemagne */}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="18" height="12">
+                    <rect width="3" height="0.66" y="0" fill="#000000" />
+                    <rect width="3" height="0.66" y="0.66" fill="#DD0000" />
+                    <rect width="3" height="0.66" y="1.33" fill="#FFCE00" />
+                  </svg>
+
                 </span>
               </li>
 
@@ -1598,7 +1644,7 @@ const V2LiteSection = () => {
             </div>
 
             <p className="text-sm text-gray-500 mb-4">
-              Livraison gratuite en Belgique & France • Paiement sécurisé
+              Livraison gratuite en Belgique, France, Pays-Bas & Allemagne • Paiement sécurisé
             </p>
 
             <button

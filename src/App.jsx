@@ -278,6 +278,9 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
     </span>
   </span>
 </h2>
+<p className="mt-3 text-sm text-gray-700 text-center md:text-left">
+⚡ Avoid expensive electricity hours and <span className="font-semibold text-green-600">save money on your energy bill</span>.
+</p>
             <div className="mt-4 flex items-center justify-center md:justify-start gap-2">
               
               <span className="text-sm sm:text-base font-semibold text-orange-600">

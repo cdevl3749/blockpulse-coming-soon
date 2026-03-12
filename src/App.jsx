@@ -1494,6 +1494,16 @@ const CGVPage = () => {
 }
 
 const V2LiteSection = () => {
+  const [viewers, setViewers] = useState(2);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    const random = Math.floor(Math.random() * 4) + 1; // entre 1 et 4
+    setViewers(random);
+  }, 6000);
+
+  return () => clearInterval(interval);
+}, []);
   const startCheckoutLite = async () => {
      // 👇 tracking clic V2 Lite
   fetch("/.netlify/functions/track", {
@@ -1628,6 +1638,10 @@ const V2LiteSection = () => {
             >
               🚚 Commander V2 Lite — 39€
             </button>
+
+            <p className="text-xs text-orange-600 mt-2 font-semibold animate-pulse">
+            👀 {viewers} personnes consultent cette offre actuellement
+            </p>
 
             <p className="text-xs font-semibold text-green-700 bg-green-100 inline-block px-3 py-1 rounded-full mb-2">
               ⭐ Version la plus populaire

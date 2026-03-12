@@ -1639,8 +1639,8 @@ useEffect(() => {
               🚚 Commander V2 Lite — 39€
             </button>
 
-            <p className="text-xs text-orange-600 mt-2 font-semibold animate-pulse">
-            👀 {viewers} personnes consultent cette offre actuellement
+            <p className="text-xs text-orange-600 mt-2 font-semibold animate-pulse text-center">
+            👀 {viewers} {viewers === 1 ? "personne consulte" : "personnes consultent"} cette offre actuellement
             </p>
 
             <p className="text-xs font-semibold text-green-700 bg-green-100 inline-block px-3 py-1 rounded-full mb-2">

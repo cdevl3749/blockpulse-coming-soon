@@ -310,6 +310,39 @@ const HeroSection = ({ fundingData, scrollToOffer }) => {
               <span>Innovation 100% belge</span>
             </p>
 
+            <div className="mt-3 flex items-center gap-2 text-sm font-medium text-blue-700 leading-tight">
+  <svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 60 40"
+width="18"
+height="12"
+>
+  <rect width="60" height="40" fill="#003399"/>
+  <g fill="#FFCC00">
+    <circle cx="30" cy="8" r="1.6"/>
+    <circle cx="41" cy="11" r="1.6"/>
+    <circle cx="49" cy="20" r="1.6"/>
+    <circle cx="41" cy="29" r="1.6"/>
+    <circle cx="30" cy="32" r="1.6"/>
+    <circle cx="19" cy="29" r="1.6"/>
+    <circle cx="11" cy="20" r="1.6"/>
+    <circle cx="19" cy="11" r="1.6"/>
+  </g>
+</svg>
+  <span>Disponible en Europe</span>
+</div>
+<p className="text-sm text-blue-700 flex items-center gap-2">
+<svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 3 2"
+width="18"
+height="12"
+>
+  <rect width="3" height="2" fill="#21468B"/>
+  <rect width="3" height="1.33" y="0" fill="#AE1C28"/>
+  <rect width="3" height="0.66" y="0.66" fill="#FFFFFF"/>
+</svg>
+
+<span>Déjà utilisé par des utilisateurs aux Pays-Bas</span>
+</p>
             <p className="text-sm text-gray-600 flex items-center justify-center md:justify-start gap-2 mt-1">
               🚚 Livraison gratuite :
               

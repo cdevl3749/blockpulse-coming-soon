@@ -997,10 +997,10 @@ const PricingSection = () => {
             
 
             <p className="mt-3 text-center text-sm text-green-700 font-semibold">
-              🎁 Offre TikTok : <span className="font-bold">–15 % appliqués automatiquement</span>
+              🎁 Offre lancement : <span className="font-bold">–22 % appliqués automatiquement</span>
             </p>
             <p className="text-center text-xs text-gray-500">
-              via le lien dans la bio • aucun code à entrer
+              offre limitée aux premières commandes
             </p>
 
             {/* AJOUTEZ ICI - Juste après le bouton </button> et avant le <p className="mt-3..."> */}
@@ -1634,7 +1634,7 @@ useEffect(() => {
 
             <button
               onClick={startCheckoutLite}
-              className="w-full mt-3 py-3 rounded-lg bg-gradient-to-r from-green-500 to-orange-500 text-white font-semibold hover:shadow-lg transition-all"
+              className="w-fulOffre TikTokl mt-3 py-3 rounded-lg bg-gradient-to-r from-green-500 to-orange-500 text-white font-semibold hover:shadow-lg transition-all"
             >
               🚚 Commander V2 Lite — 39€
             </button>

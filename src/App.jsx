@@ -890,6 +890,21 @@ const PricingSection = () => {
       <span className="text-gray-400 line-through text-xl sm:text-2xl">89€</span>
     </div>
   </div>
+
+  <button 
+  onClick={() => startCheckout("standard")}
+  className="w-full mt-4 py-4 sm:py-5 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-2xl text-base sm:text-lg"
+  >
+    🚚 Commander maintenant — 69€
+  </button>
+
+  <p className="text-xs text-gray-500 text-center mt-2">
+    <span className="text-green-600 font-semibold">✓</span> Paiement sécurisé
+    <span className="mx-1 text-gray-300">•</span>
+    <span className="text-green-600 font-semibold">✓</span> Garantie 2 ans
+    <span className="mx-1 text-gray-300">•</span>
+    <span className="text-green-600 font-semibold">✓</span> Livraison gratuite
+  </p>
   
   <p className="text-center text-xs sm:text-sm text-gray-500 mt-2">TTC - Livraison incluse</p>
   
@@ -979,12 +994,7 @@ const PricingSection = () => {
               Installation en 30 secondes • Aucun réglage nécessaire
             </p>
 
-            <button 
-              onClick={() => startCheckout("standard")}
-              className="w-full py-4 sm:py-5 rounded-lg font-bold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 text-white hover:shadow-2xl text-base sm:text-lg"
-            >
-              🚚 Commander maintenant
-            </button>
+            
 
             <p className="mt-3 text-center text-sm text-green-700 font-semibold">
               🎁 Offre TikTok : <span className="font-bold">–15 % appliqués automatiquement</span>

@@ -793,7 +793,7 @@ const TestimonialsSection = () => {
 const PricingSection = () => {
 
   const totalBoitiers = 50;
-  const boitiersRestants = 27;
+  const boitiersRestants = 24;
 
   const progress = ((totalBoitiers - boitiersRestants) / totalBoitiers) * 100;
 
@@ -1608,11 +1608,6 @@ const V2LiteSection = () => {
 
               <li className="flex items-start gap-2">
                 <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
-                <span>Basé sur les heures belges et françaises</span>
-              </li>
-
-              <li className="flex items-start gap-2">
-                <span className="text-green-600 font-bold leading-none mt-0.5">✓</span>
                 <span>Aucun réglage complexe</span>
               </li>
 
@@ -1622,26 +1617,17 @@ const V2LiteSection = () => {
               </li>
             </ul>
 
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <p className="font-semibold text-gray-800 mb-2">
-                📦 Contenu du colis
-              </p>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• 1× BlockPulse V2 Lite</li>
-                <li>• 1× Alimentation USB 5V (prise EU)</li>
-                <li>• 1× Câble USB</li>
-                <li>• 1× Guide de démarrage rapide</li>
-                <li>• ☀️ Mini panneau solaire offert (50 premières commandes)</li>
-              </ul>
-              <p className="mt-2 text-xs text-gray-500">
-                Version V2 Lite avec indication par LEDs uniquement.
-              </p>
-            </div>
-
             <div className="flex items-baseline justify-center md:justify-start gap-3 mb-4">
               <span className="text-4xl font-bold text-green-600">39 €</span>
               <span className="text-gray-500 text-sm">TTC</span>
             </div>
+
+            <button
+              onClick={startCheckoutLite}
+              className="w-full mt-3 py-3 rounded-lg bg-gradient-to-r from-green-500 to-orange-500 text-white font-semibold hover:shadow-lg transition-all"
+            >
+              🚚 Commander V2 Lite — 39€
+            </button>
 
             <p className="text-xs font-semibold text-green-700 bg-green-100 inline-block px-3 py-1 rounded-full mb-2">
               ⭐ Version la plus populaire
@@ -1656,13 +1642,22 @@ const V2LiteSection = () => {
             <p className="text-sm text-gray-500 mb-4">
               Livraison gratuite en Belgique, France, Pays-Bas & Allemagne • Paiement sécurisé
             </p>
-
-            <button
-              onClick={startCheckoutLite}
-              className="px-6 py-3 rounded-lg bg-gradient-to-r from-green-500 to-orange-500 text-white font-semibold hover:shadow-lg transition-all"
-            >
-              🚚 Commander V2 Lite — 39€
-            </button>
+           
+           <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="font-semibold text-gray-800 mb-2">
+                📦 Contenu du colis
+              </p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• 1× BlockPulse V2 Lite</li>
+                <li>• 1× Alimentation USB 5V (prise EU)</li>
+                <li>• 1× Câble USB</li>
+                <li>• 1× Guide de démarrage rapide</li>
+                <li>• ☀️ Mini panneau solaire offert (50 premières commandes)</li>
+              </ul>
+              <p className="mt-2 text-xs text-gray-500">
+                Version V2 Lite avec indication par LEDs uniquement.
+              </p>
+            </div>
 
            <p className="mt-2 text-xs text-green-700 font-semibold text-center md:text-left">
               ✔ Aucun abonnement • aucun compte à créer

@@ -2,11 +2,13 @@ import { useEffect, useState, useRef } from "react";
 
 export default function Dashboard() {
 
-  const [stats, setStats] = useState({
+    const [stats, setStats] = useState({
     visitors: 0,
     clickOrder: 0,
     stripeStart: 0,
     paymentSuccess: 0,
+    lastClickCountry: null,
+    lastStripeCountry: null,
     countries: {},
     activeVisitors: 0,
     sources: {
@@ -83,7 +85,7 @@ export default function Dashboard() {
 
         notify(
           "🛒 Intérêt produit",
-          "Quelqu’un a cliqué sur Commander"
+          `Quelqu’un a cliqué sur Commander (${data.lastClickCountry || "?"})`
         );
 
       }
@@ -92,7 +94,7 @@ export default function Dashboard() {
 
         notify(
           "💳 Paiement commencé",
-          "Quelqu’un est arrivé sur Stripe Checkout"
+          `Quelqu’un est arrivé sur Stripe (${data.lastStripeCountry || "?"})`
         );
 
       }
@@ -220,9 +222,19 @@ export default function Dashboard() {
 
         <div>🔥 Visiteurs 10 min<br /><b>{visitorsLast10Min}</b></div>
 
-        <div>🛒 Clic Commander<br /><b>{stats.clickOrder}</b></div>
+        <div>
+        🛒 Clic Commander<br />
+        <b>{stats.clickOrder}</b>
+        <br />
+        <small>{stats.lastClickCountry}</small>
+        </div>
 
-        <div>💳 Arrivés sur Stripe<br /><b>{stats.stripeStart}</b></div>
+        <div>
+        💳 Arrivés sur Stripe<br />
+        <b>{stats.stripeStart}</b>
+        <br />
+        <small>{stats.lastStripeCountry}</small>
+        </div>
 
         <div>✅ Paiements réussis<br /><b>{stats.paymentSuccess}</b></div>
 

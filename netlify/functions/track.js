@@ -28,7 +28,9 @@ export default async (request) => {
       paymentSuccess: 0,
       countries: {},
       activeVisitors: 0,
-      lastPing: 0
+      lastPing: 0,
+      lastClickCountry: null,
+      lastStripeCountry: null
     };
   }
 
@@ -37,6 +39,8 @@ export default async (request) => {
   if (!stats.activeVisitors) stats.activeVisitors = 0;
   if (!stats.lastPing) stats.lastPing = 0;
   if (!stats.paymentSuccess) stats.paymentSuccess = 0;
+  if (!stats.lastClickCountry) stats.lastClickCountry = null;
+  if (!stats.lastStripeCountry) stats.lastStripeCountry = null;
 
   // 👇 RESET DES STATS
   if (data.type === "reset") {
@@ -47,7 +51,9 @@ export default async (request) => {
       paymentSuccess: 0,
       countries: {},
       activeVisitors: 0,
-      lastPing: 0
+      lastPing: 0,
+      lastClickCountry: null,
+      lastStripeCountry: null
     };
   }
 
@@ -88,10 +94,22 @@ export default async (request) => {
     stats.lastPing = Date.now();
   }
 
-  // 👇 AUTRES EVENTS
-  if (data.type === "click_order") stats.clickOrder++;
-  if (data.type === "stripe_start") stats.stripeStart++;
-  if (data.type === "payment_success") stats.paymentSuccess++;
+  // 👇 CLIC COMMANDER
+  if (data.type === "click_order") {
+    stats.clickOrder++;
+    stats.lastClickCountry = country;
+  }
+
+  // 👇 ARRIVÉE STRIPE
+  if (data.type === "stripe_start") {
+    stats.stripeStart++;
+    stats.lastStripeCountry = country;
+  }
+
+  // 👇 PAIEMENT RÉUSSI
+  if (data.type === "payment_success") {
+    stats.paymentSuccess++;
+  }
 
   // 👇 CALCUL VISITEURS ACTIFS (30 sec)
   if (stats.lastPing && Date.now() - stats.lastPing < 30000) {
@@ -106,4 +124,5 @@ export default async (request) => {
   return new Response(JSON.stringify(stats), {
     headers: { "Content-Type": "application/json" }
   });
+
 };

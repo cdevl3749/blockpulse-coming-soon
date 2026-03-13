@@ -1457,7 +1457,7 @@ const CGVPage = () => {
 
       // Si cookies déjà acceptés, page_view
       if (accepted) {
-        trackPageView(window.location.pathname);
+        trackPageView(window.location.pathname + window.location.search);
       }
     }
   }, []);
@@ -1809,7 +1809,7 @@ function Home() {
     
     // ✅ Si cookies déjà acceptés, tracker la page
     if (accepted) {
-      trackPageView(window.location.pathname);
+      trackPageView(window.location.pathname + window.location.search);
     }
   }
 }, []);

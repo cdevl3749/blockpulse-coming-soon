@@ -102,7 +102,12 @@ export default async (request) => {
   }
 
   // 👇 SOURCE (reddit / tiktok / direct)
-  const source = data.source || "direct";
+  let source = data.source || "direct";
+
+  // normalisation source
+  if (source.includes("tiktok")) source = "tiktok";
+  if (source.includes("reddit")) source = "reddit";
+  if (!["reddit", "tiktok"].includes(source)) source = "direct";
 
   // 👇 VISITE
   if (data.type === "visit") {

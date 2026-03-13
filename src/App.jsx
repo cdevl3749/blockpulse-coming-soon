@@ -1971,15 +1971,18 @@ function RouteTracker() {
 
   if (!alreadyVisited) {
 
+    const params = new URLSearchParams(window.location.search);
+    const source = params.get("src") || "direct";
+
     fetch("/.netlify/functions/track", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        type: "visit",
-        page: location.pathname
-      })
+      type: "visit",
+      source: source
+    })
     });
 
     sessionStorage.setItem("bp_visit", "true");

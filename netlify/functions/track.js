@@ -30,7 +30,14 @@ export default async (request) => {
       activeVisitors: 0,
       lastPing: 0,
       lastClickCountry: null,
-      lastStripeCountry: null
+      lastStripeCountry: null,
+      lastClickSource: null,
+      lastStripeSource: null,
+      sources: {
+        reddit: 0,
+        tiktok: 0,
+        direct: 0
+      }
     };
   }
 
@@ -41,6 +48,16 @@ export default async (request) => {
   if (!stats.paymentSuccess) stats.paymentSuccess = 0;
   if (!stats.lastClickCountry) stats.lastClickCountry = null;
   if (!stats.lastStripeCountry) stats.lastStripeCountry = null;
+  if (!stats.lastClickSource) stats.lastClickSource = null;
+  if (!stats.lastStripeSource) stats.lastStripeSource = null;
+
+  if (!stats.sources) {
+    stats.sources = {
+      reddit: 0,
+      tiktok: 0,
+      direct: 0
+    };
+  }
 
   // 👇 RESET DES STATS
   if (data.type === "reset") {
@@ -53,7 +70,14 @@ export default async (request) => {
       activeVisitors: 0,
       lastPing: 0,
       lastClickCountry: null,
-      lastStripeCountry: null
+      lastStripeCountry: null,
+      lastClickSource: null,
+      lastStripeSource: null,
+      sources: {
+        reddit: 0,
+        tiktok: 0,
+        direct: 0
+      }
     };
   }
 
@@ -77,6 +101,9 @@ export default async (request) => {
     }
   }
 
+  // 👇 SOURCE (reddit / tiktok / direct)
+  const source = data.source || "direct";
+
   // 👇 VISITE
   if (data.type === "visit") {
 
@@ -87,6 +114,11 @@ export default async (request) => {
     }
 
     stats.countries[country]++;
+
+    if (stats.sources[source] !== undefined) {
+      stats.sources[source]++;
+    }
+
   }
 
   // 👇 PING VISITEUR ACTIF
@@ -98,12 +130,14 @@ export default async (request) => {
   if (data.type === "click_order") {
     stats.clickOrder++;
     stats.lastClickCountry = country;
+    stats.lastClickSource = source;
   }
 
   // 👇 ARRIVÉE STRIPE
   if (data.type === "stripe_start") {
     stats.stripeStart++;
     stats.lastStripeCountry = country;
+    stats.lastStripeSource = source;
   }
 
   // 👇 PAIEMENT RÉUSSI

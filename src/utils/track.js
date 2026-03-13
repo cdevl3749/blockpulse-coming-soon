@@ -1,6 +1,16 @@
 export async function trackPageView(path) {
   try {
 
+    // 👇 lire paramètres URL
+    const params = new URLSearchParams(window.location.search);
+
+    let source =
+      params.get("ref") ||
+      params.get("promo") ||
+      (document.referrer.includes("tiktok") && "tiktok") ||
+      (document.referrer.includes("reddit") && "reddit") ||
+      "direct";
+
     await fetch("/.netlify/functions/track", {
       method: "POST",
       headers: {
@@ -8,7 +18,8 @@ export async function trackPageView(path) {
       },
       body: JSON.stringify({
         type: "visit",
-        page: path
+        page: path,
+        source: source
       })
     });
 

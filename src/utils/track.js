@@ -5,10 +5,14 @@ export async function trackPageView(path) {
 
     const params = new URLSearchParams(window.location.search);
 
-    if (params.get("ref") === "reddit") {
+    const ref = params.get("ref");
+
+    // détecter toutes les variantes reddit
+    if (ref && ref.startsWith("reddit")) {
       source = "reddit";
     }
 
+    // détecter TikTok
     if (params.get("promo") === "tiktok") {
       source = "tiktok";
     }

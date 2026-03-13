@@ -1,15 +1,17 @@
 export async function trackPageView(path) {
   try {
 
-    // 👇 lire paramètres URL
+    let source = "direct";
+
     const params = new URLSearchParams(window.location.search);
 
-    let source =
-      params.get("ref") ||
-      params.get("promo") ||
-      (document.referrer.includes("tiktok") && "tiktok") ||
-      (document.referrer.includes("reddit") && "reddit") ||
-      "direct";
+    if (params.get("ref") === "reddit") {
+      source = "reddit";
+    }
+
+    if (params.get("promo") === "tiktok") {
+      source = "tiktok";
+    }
 
     await fetch("/.netlify/functions/track", {
       method: "POST",

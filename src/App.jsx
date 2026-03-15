@@ -1155,12 +1155,28 @@ const Footer = ({ onLegalClick, onPrivacyClick, onCGVClick }) => {
                 className="flex items-center gap-2 hover:text-white transition-colors"
                 aria-label="TikTok BlockPulse"
               >
+                
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12.004 2c1.073 0 2.115.195 3.092.555v3.04c-.844-.114-1.674-.387-2.431-.806v7.418c0 3.05-2.48 5.52-5.53 5.52-3.05 0-5.53-2.47-5.53-5.52 0-3.05 2.48-5.52 5.53-5.52.29 0 .57.025.844.073v3.065a2.44 2.44 0 00-.844-.148c-1.35 0-2.444 1.094-2.444 2.444s1.094 2.444 2.444 2.444 2.444-1.094 2.444-2.444V2z"/>
                 </svg>
                 <span>@blockpulse_be</span>
               </a>
 
+            </li>
+
+            <li>
+            <a
+              href="https://www.facebook.com/profile.php?id=61579493155311"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-white transition-colors"
+              aria-label="Facebook BlockPulse"
+            >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22 12.073C22 6.477 17.523 2 11.927 2S1.854 6.477 1.854 12.073c0 5.016 3.657 9.176 8.438 9.92v-7.02H7.897v-2.9h2.395V9.845c0-2.366 1.408-3.674 3.563-3.674 1.032 0 2.112.184 2.112.184v2.326h-1.19c-1.174 0-1.54.729-1.54 1.477v1.774h2.622l-.419 2.9h-2.203v7.02c4.781-.744 8.438-4.904 8.438-9.92z"/>
+            </svg>
+            <span>Facebook</span>
+            </a>
             </li>
 
             </ul>

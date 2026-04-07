@@ -11,13 +11,12 @@ import deviceScreen from "./assets/blockpulse-v2lite.png";
 const sendStat = (type) => {
   const lang = navigator.language || "";
 
-  let country = "BE";
+  let country = "BE"; // 👈 défaut Belgique
 
-  if (lang.includes("-")) {
-    country = lang.split("-")[1];
-  }
-
-  country = country.toUpperCase();
+  if (lang.startsWith("nl")) country = "NL";
+  else if (lang.startsWith("de")) country = "DE";
+  else if (lang.startsWith("en")) country = "GB";
+  else if (lang.startsWith("fr")) country = "BE"; // 👈 IMPORTANT
 
   fetch("/.netlify/functions/stats", {
     method: "POST",

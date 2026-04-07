@@ -1,16 +1,25 @@
-let stats = {
-  visitors: 0,
-  clicks: 0,
-  stripe: 0,
-  payments: 0,
-  countries: {},
-  paymentSessions: {},
-};
+import { getStore } from "@netlify/blobs";
 
 export async function handler(event) {
+  const store = getStore("blockpulse");
+
+  let stats = await store.get("stats", { type: "json" });
+
+  // 👉 Init si vide
+  if (!stats) {
+    stats = {
+      visitors: 0,
+      clicks: 0,
+      stripe: 0,
+      payments: 0,
+      countries: {},
+      paymentSessions: {},
+    };
+  }
+
   const method = event.httpMethod;
 
-  // 👉 GET = récupérer les stats
+  // 👉 GET
   if (method === "GET") {
     return {
       statusCode: 200,
@@ -18,7 +27,7 @@ export async function handler(event) {
     };
   }
 
-  // 👉 POST = ajouter une action
+  // 👉 POST
   if (method === "POST") {
     const body = JSON.parse(event.body || "{}");
 
@@ -52,9 +61,12 @@ export async function handler(event) {
         (stats.countries[body.country] || 0) + 1;
     }
 
+    // 👉 IMPORTANT: sauvegarde persistante
+    await store.set("stats", JSON.stringify(stats));
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true }),
+      body: JSON.stringify({ success: true, stats }),
     };
   }
 
@@ -68,6 +80,8 @@ export async function handler(event) {
       countries: {},
       paymentSessions: {},
     };
+
+    await store.set("stats", JSON.stringify(stats));
 
     return {
       statusCode: 200,

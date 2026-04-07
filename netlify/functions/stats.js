@@ -2,7 +2,9 @@ let stats = {
   visitors: 0,
   clicks: 0,
   stripe: 0,
+  payments: 0,
   countries: {},
+  paymentSessions: {},
 };
 
 export async function handler(event) {
@@ -18,7 +20,7 @@ export async function handler(event) {
 
   // 👉 POST = ajouter une action
   if (method === "POST") {
-    const body = JSON.parse(event.body);
+    const body = JSON.parse(event.body || "{}");
 
     if (body.type === "visit") {
       stats.visitors++;
@@ -28,8 +30,21 @@ export async function handler(event) {
       stats.clicks++;
     }
 
-    if (body.type === "stripe") {
+    if (body.type === "stripe" || body.type === "stripe_start") {
       stats.stripe++;
+    }
+
+    if (body.type === "payment_success") {
+      const sessionId = body.session_id;
+
+      if (sessionId) {
+        if (!stats.paymentSessions[sessionId]) {
+          stats.paymentSessions[sessionId] = true;
+          stats.payments++;
+        }
+      } else {
+        stats.payments++;
+      }
     }
 
     if (body.country) {
@@ -49,7 +64,9 @@ export async function handler(event) {
       visitors: 0,
       clicks: 0,
       stripe: 0,
+      payments: 0,
       countries: {},
+      paymentSessions: {},
     };
 
     return {
@@ -57,4 +74,9 @@ export async function handler(event) {
       body: JSON.stringify({ reset: true }),
     };
   }
+
+  return {
+    statusCode: 405,
+    body: JSON.stringify({ error: "Method not allowed" }),
+  };
 }

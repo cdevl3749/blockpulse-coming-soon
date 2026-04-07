@@ -7,7 +7,12 @@ export default function PaymentSuccess() {
   const lang = params.get("lang") || "en";
 
   useEffect(() => {
-    if (sessionStorage.getItem("bp_payment")) return;
+    const sessionId = params.get("session_id");
+
+    if (!sessionId) return;
+
+    const alreadyTracked = sessionStorage.getItem("bp_payment_" + sessionId);
+    if (alreadyTracked) return;
 
     fetch("/.netlify/functions/track", {
       method: "POST",
@@ -15,12 +20,19 @@ export default function PaymentSuccess() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        type: "payment_success"
+        type: "payment_success",
+        session_id: sessionId
       })
-    });
+    })
+      .then(() => {
+        console.log("✅ Payment tracked");
+      })
+      .catch((err) => {
+        console.error("❌ Tracking error:", err);
+      });
 
-    sessionStorage.setItem("bp_payment", "true");
-  }, []);
+    sessionStorage.setItem("bp_payment_" + sessionId, "true");
+  }, [location.search]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
@@ -35,7 +47,7 @@ export default function PaymentSuccess() {
         <p className="text-gray-600 mb-6 leading-relaxed">
           Thank you! Your order has been successfully registered.
           <br /><br />
-          Thank you! Your order has been successfully registered. You will receive a confirmation email with delivery details.
+          You will receive a confirmation email with delivery details shortly.
         </p>
 
         <div className="mb-6 text-sm text-gray-500">

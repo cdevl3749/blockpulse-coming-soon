@@ -40,7 +40,7 @@ export default function Dashboard() {
 
     const interval = setInterval(() => {
       loadStats();
-    }, 3000);
+    }, 5000); // ✅ plus stable
 
     return () => clearInterval(interval);
   }, []);
@@ -60,7 +60,12 @@ export default function Dashboard() {
       }
 
       if (data.stripe > previous.stripe) {
-        sendNotification("💳 New Stripe visit", `Stripe visits: ${data.stripe}`);
+        sendNotification("💳 Stripe visit", `Stripe: ${data.stripe}`);
+      }
+
+      // 🔥 AJOUT IMPORTANT (VENTES)
+      if (data.payments > previous.payments) {
+        sendNotification("🔥 Vente réussie !", `Total: ${data.payments}`);
       }
     }
 
@@ -90,27 +95,34 @@ export default function Dashboard() {
           </button>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        {/* ===== KPIs ===== */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="text-sm text-slate-500">👀 Visiteurs</div>
-            <div className="mt-2 text-3xl font-bold">{data.visitors}</div>
+            <div className="mt-2 text-3xl font-bold">{data.visitors || 0}</div>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="text-sm text-slate-500">🛒 Clic Commander</div>
-            <div className="mt-2 text-3xl font-bold">{data.clicks}</div>
+            <div className="mt-2 text-3xl font-bold">{data.clicks || 0}</div>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="text-sm text-slate-500">💳 Arrivés sur Stripe</div>
-            <div className="mt-2 text-3xl font-bold">{data.stripe}</div>
+            <div className="mt-2 text-3xl font-bold">{data.stripe || 0}</div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="text-sm text-slate-500">✅ Paiements réussis</div>
+            <div className="mt-2 text-3xl font-bold">{data.payments || 0}</div>
           </div>
         </div>
 
+        {/* ===== PAYS ===== */}
         <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="text-xl font-bold">🌍 Pays</h2>
 
-          {Object.keys(data.countries).length === 0 ? (
+          {!data.countries || Object.keys(data.countries).length === 0 ? (
             <p className="mt-3 text-slate-500">Aucune donnée pour le moment.</p>
           ) : (
             <div className="mt-4 space-y-2">

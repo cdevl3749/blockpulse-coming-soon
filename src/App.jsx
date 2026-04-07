@@ -502,14 +502,17 @@ const startCheckout = async (product) => {
     const langToSend = lang; // simple pour l’instant
 
     // 👉 détecte pays (simple version)
-   const browserLang = navigator.language;
+   const browserLang = navigator.language || "";
 
     let country = "BE";
 
-    if (browserLang.includes("GB")) country = "GB";
-    else if (browserLang.includes("FR")) country = "FR";
-    else if (browserLang.includes("DE")) country = "DE";
-    else if (browserLang.includes("NL")) country = "NL";
+    // 🔥 on détecte le pays correctement
+    if (browserLang.includes("-")) {
+      country = browserLang.split("-")[1].toUpperCase();
+    }
+
+    // fallback simple
+    if (!country) country = "BE";
 
     const res = await fetch("/.netlify/functions/create-checkout", {
       method: "POST",

@@ -80,6 +80,43 @@ exports.handler = async function (event) {
         ? process.env.STRIPE_TIKTOK_COUPON_ID
         : null;
 
+    // 🔥 SHIPPING LOGIC
+    const isEU = EU_COUNTRIES.includes(country);
+
+    const shippingOptions = isEU
+      ? [
+          {
+            shipping_rate_data: {
+              type: "fixed_amount",
+              fixed_amount: {
+                amount: 0,
+                currency: "eur",
+              },
+              display_name: "Free shipping (EU)",
+              delivery_estimate: {
+                minimum: { unit: "business_day", value: 2 },
+                maximum: { unit: "business_day", value: 5 },
+              },
+            },
+          },
+        ]
+      : [
+          {
+            shipping_rate_data: {
+              type: "fixed_amount",
+              fixed_amount: {
+                amount: 1200, // 12€
+                currency: "eur",
+              },
+              display_name: "International shipping",
+              delivery_estimate: {
+                minimum: { unit: "business_day", value: 5 },
+                maximum: { unit: "business_day", value: 10 },
+              },
+            },
+          },
+        ];
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
@@ -104,8 +141,7 @@ exports.handler = async function (event) {
         allowed_countries: ALLOWED_SHIPPING_COUNTRIES,
       },
 
-      // 👇 téléphone NON obligatoire (comme tu voulais)
-      // phone_number_collection supprimé
+      shipping_options: shippingOptions,
 
       metadata: {
         product,

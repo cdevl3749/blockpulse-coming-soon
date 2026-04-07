@@ -9,7 +9,8 @@ import deviceLite from "./assets/blockpulse-screen.png";
 import deviceScreen from "./assets/blockpulse-v2lite.png";
 
 const sendStat = (type) => {
-  const country = navigator.language || "unknown";
+  const lang = navigator.language || "";
+  const country = lang.includes("-") ? lang.split("-")[1] : "unknown";
 
   fetch("/.netlify/functions/stats", {
     method: "POST",

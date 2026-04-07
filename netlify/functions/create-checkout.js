@@ -1,8 +1,6 @@
-import Stripe from "stripe";
+const Stripe = require("stripe");
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2023-10-16",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const EU_COUNTRIES = [
   "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR",
@@ -50,7 +48,7 @@ function getProductPriceId(product, country) {
     : process.env.STRIPE_PRICE_ID;
 }
 
-export const handler = async (event) => {
+exports.handler = async function (event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -106,9 +104,8 @@ export const handler = async (event) => {
         allowed_countries: ALLOWED_SHIPPING_COUNTRIES,
       },
 
-      phone_number_collection: {
-        enabled: true,
-      },
+      // 👇 téléphone NON obligatoire (comme tu voulais)
+      // phone_number_collection supprimé
 
       metadata: {
         product,

@@ -122,13 +122,13 @@ export const handler = async (event) => {
       success_url: `${process.env.CLIENT_URL}/paiement/success?session_id={CHECKOUT_SESSION_ID}&lang=${lang}`,
       cancel_url: `${process.env.CLIENT_URL}/paiement/cancel?lang=${lang}`,
 
-      billing_address_collection: "required",
+      billing_address_collection: "auto",
 
       shipping_address_collection: {
         allowed_countries: ALLOWED_SHIPPING_COUNTRIES,
       },
 
-      shipping_options: [getShippingOption(country)],
+      //shipping_options: [getShippingOption(country)],
 
       phone_number_collection: {
         enabled: true,
@@ -164,7 +164,10 @@ export const handler = async (event) => {
       body: JSON.stringify({ url: session.url }),
     };
   } catch (error) {
-    console.error("Stripe checkout error:", error);
+    console.error("Stripe checkout error FULL:", {
+  message: error.message,
+  stack: error.stack,
+});
 
     return {
       statusCode: 500,

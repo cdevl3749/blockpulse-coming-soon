@@ -14,7 +14,7 @@ export default function PaymentSuccess() {
     const alreadyTracked = sessionStorage.getItem("bp_payment_" + sessionId);
     if (alreadyTracked) return;
 
-    fetch("/.netlify/functions/track", {
+    fetch("/.netlify/functions/stats", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

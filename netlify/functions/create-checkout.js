@@ -1,0 +1,172 @@
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+const EU_COUNTRIES = [
+  "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR",
+  "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL",
+  "PL", "PT", "RO", "SK", "SI", "ES", "SE"
+];
+
+const ALLOWED_SHIPPING_COUNTRIES = [
+  ...EU_COUNTRIES,
+  "GB",
+  "US",
+  "JP",
+  "CA",
+  "CH",
+  "NO"
+];
+
+function getSafeLang(lang) {
+  return ["fr", "de", "en"].includes(lang) ? lang : "fr";
+}
+
+function getSafeCountry(country) {
+  if (!country || typeof country !== "string") return "BE";
+  return country.toUpperCase();
+}
+
+function isEuropeanCountry(country) {
+  return EU_COUNTRIES.includes(country);
+}
+
+function getStripeLocale(lang, country) {
+  if (lang === "en" && country === "GB") return "en-GB";
+  if (lang === "en") return "en";
+  if (lang === "de") return "de";
+  return "fr";
+}
+
+function getProductPriceId(product, country) {
+  const isGB = country === "GB";
+
+  if (product === "lite") {
+    return isGB
+      ? process.env.STRIPE_PRICE_LITE_GBP_ID
+      : process.env.STRIPE_PRICE_LITE_ID;
+  }
+
+  return isGB
+    ? process.env.STRIPE_PRICE_STANDARD_GBP_ID
+    : process.env.STRIPE_PRICE_ID;
+}
+
+function getShippingOption(country) {
+  const isEU = isEuropeanCountry(country);
+  const isGB = country === "GB";
+
+  return {
+    shipping_rate_data: {
+      type: "fixed_amount",
+      display_name: isEU ? "Free shipping" : "International shipping",
+      fixed_amount: {
+        amount: isEU ? 0 : isGB ? 1200 : 1200,
+        currency: isGB ? "gbp" : "eur",
+      },
+      delivery_estimate: {
+        minimum: { unit: "business_day", value: 3 },
+        maximum: { unit: "business_day", value: 7 },
+      },
+    },
+  };
+}
+
+export const handler = async (event) => {
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method not allowed" }),
+    };
+  }
+
+  try {
+    const body = JSON.parse(event.body || "{}");
+
+    const product = body.product === "lite" ? "lite" : "standard";
+    const source = body.source || "direct";
+    const promo = body.promo || null;
+    const lang = getSafeLang(body.lang);
+    const country = getSafeCountry(body.country);
+
+    const priceId = getProductPriceId(product, country);
+
+    if (!priceId) {
+      console.error("Missing Stripe price ID", { product, country });
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Stripe price ID missing" }),
+      };
+    }
+
+    const promoCode =
+      promo === "TIKTOK15" ? process.env.STRIPE_TIKTOK_COUPON_ID : null;
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+
+      locale: getStripeLocale(lang, country),
+
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+
+      discounts: promoCode ? [{ coupon: promoCode }] : [],
+
+      success_url: `${process.env.CLIENT_URL}/paiement/success?session_id={CHECKOUT_SESSION_ID}&lang=${lang}`,
+      cancel_url: `${process.env.CLIENT_URL}/paiement/cancel?lang=${lang}`,
+
+      billing_address_collection: "required",
+
+      shipping_address_collection: {
+        allowed_countries: ALLOWED_SHIPPING_COUNTRIES,
+      },
+
+      shipping_options: [getShippingOption(country)],
+
+      phone_number_collection: {
+        enabled: true,
+      },
+
+      metadata: {
+        product,
+        source,
+        lang,
+        country,
+      },
+    });
+
+    try {
+      await fetch(`${process.env.CLIENT_URL}/.netlify/functions/track`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "stripe_start",
+          product,
+          source,
+          country,
+        }),
+      });
+    } catch (err) {
+      console.log("Tracking stripe_start failed:", err);
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ url: session.url }),
+    };
+  } catch (error) {
+    console.error("Stripe checkout error:", error);
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  }
+};

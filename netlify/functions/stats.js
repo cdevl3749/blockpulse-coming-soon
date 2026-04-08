@@ -45,7 +45,11 @@ export async function handler(event) {
   let store;
 
   try {
-    store = getStore("blockpulse");
+    store = getStore({
+    name: "blockpulse",
+    siteID: process.env.NETLIFY_BLOBS_SITE_ID,
+    token: process.env.NETLIFY_BLOBS_TOKEN,
+    });
   } catch (err) {
     console.log("getStore error:", err);
     return {

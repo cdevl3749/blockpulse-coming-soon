@@ -21,14 +21,15 @@ const sendStat = (type) => {
   fetch("/.netlify/functions/stats", {
   method: "POST",
   headers: {
-    "Content-Type": "application/json", // 🔥 OBLIGATOIRE
+    "Content-Type": "application/json",
   },
   body: JSON.stringify({
     type,
     country,
   }),
-  keepalive: true, // 🔥 IMPORTANT (mobile + reload)
+  keepalive: true,
 }).catch(() => {});
+};
 
 const COOKIE_STORAGE_KEY = "blockpulse_cookie_consent";
 

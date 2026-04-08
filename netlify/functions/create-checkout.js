@@ -18,6 +18,10 @@ const ALLOWED_SHIPPING_COUNTRIES = [
   "NO"
 ];
 
+// ✅ TES SHIPPING RATES (important)
+const SHIPPING_RATE_EU = "shr_1TJzqQKn0lmTcQ11oH2YCNy9";
+const SHIPPING_RATE_INTL = "shr_1TJzxHKn0lmTcQ11f9aDO8nk";
+
 function getSafeLang(lang) {
   return ["fr", "de", "en"].includes(lang) ? lang : "fr";
 }
@@ -80,40 +84,18 @@ exports.handler = async function (event) {
         ? process.env.STRIPE_TIKTOK_COUPON_ID
         : null;
 
-    // 🔥 SHIPPING LOGIC
+    // 🔥 SHIPPING LOGIC PROPRE (avec tes rates)
     const isEU = EU_COUNTRIES.includes(country);
 
     const shippingOptions = isEU
       ? [
           {
-            shipping_rate_data: {
-              type: "fixed_amount",
-              fixed_amount: {
-                amount: 0,
-                currency: "eur",
-              },
-              display_name: "Free shipping (EU)",
-              delivery_estimate: {
-                minimum: { unit: "business_day", value: 2 },
-                maximum: { unit: "business_day", value: 5 },
-              },
-            },
+            shipping_rate: SHIPPING_RATE_EU,
           },
         ]
       : [
           {
-            shipping_rate_data: {
-              type: "fixed_amount",
-              fixed_amount: {
-                amount: 1200, // 12€
-                currency: "eur",
-              },
-              display_name: "International shipping",
-              delivery_estimate: {
-                minimum: { unit: "business_day", value: 5 },
-                maximum: { unit: "business_day", value: 10 },
-              },
-            },
+            shipping_rate: SHIPPING_RATE_INTL,
           },
         ];
 

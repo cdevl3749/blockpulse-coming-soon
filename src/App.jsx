@@ -78,6 +78,8 @@ const TEXT = {
   productScreenButton: "Get my Screen",
   productScreenSub: "For people who want more detail",
 
+  shipping: "Free shipping • EU: 2–3 days • Worldwide: 5–7 days",
+
   trustTitle: "Why people trust BlockPulse",
 
   trust1Title: "Real physical product",
@@ -173,6 +175,8 @@ const TEXT = {
   ],
   productScreenButton: "Commander écran",
   productScreenSub: "Pour ceux qui veulent plus de détails",
+
+  shipping: "Livraison gratuite • Europe: 2–3 jours • Monde: 5–7 jours",
 
   trustTitle: "Pourquoi les gens font confiance à BlockPulse",
 
@@ -287,6 +291,9 @@ const TEXT = {
     ],
     productScreenButton: "Display bestellen",
     productScreenSub: "Für mehr Details",
+
+    shipping: "Kostenloser Versand • EU: 2–3 Tage • Weltweit: 5–7 Tage",
+
     trustTitle: "Warum Menschen BlockPulse vertrauen",
 
     trust1Title: "Echtes Produkt",
@@ -393,6 +400,9 @@ const TEXT = {
     ],
     productScreenButton: "Bestel scherm",
     productScreenSub: "Voor wie meer details wil",
+
+    shipping: "Gratis verzending • EU: 2–3 dagen • Wereldwijd: 5–7 dagen",
+
     trustTitle: "Waarom mensen BlockPulse vertrouwen",
 
     trust1Title: "Echt fysiek product",
@@ -726,6 +736,7 @@ const startCheckout = async (product) => {
                 points={t.productLitePoints}
                 button={t.productLiteButton}
                 subtext={t.productLiteSub}
+                shipping={t.shipping}
                 onClick={() => {
                   sendStat("click");
                   startCheckout("lite");
@@ -743,6 +754,7 @@ const startCheckout = async (product) => {
                 points={t.productScreenPoints}
                 button={t.productScreenButton}
                 subtext={t.productScreenSub}
+                shipping={t.shipping}
                 onClick={() => {
                   sendStat("click");
                   startCheckout("standard");
@@ -1042,6 +1054,8 @@ function ProductCard({
   badge,
   subtext,
   isLoading,
+  shipping,
+  isLite
 }) {
   return (
     <div
@@ -1055,9 +1069,13 @@ function ProductCard({
         </div>
       )}
 
-      <div className="flex h-36 items-center justify-center rounded-2xl bg-slate-50 p-3">
-        <img src={image} alt={title} className="h-full object-contain" />
-      </div>
+    <div className="flex h-28 items-center justify-center rounded-2xl bg-slate-50 px-3 py-2">
+      <img
+        src={image}
+        alt={title}
+        className="h-full w-auto object-contain drop-shadow-md scale-105"
+      />
+    </div>
 
       <h3 className="mt-3 text-lg font-bold text-slate-900">{title}</h3>
       <p className="mt-1 min-h-[40px] text-sm leading-relaxed text-slate-600">
@@ -1076,6 +1094,10 @@ function ProductCard({
             </div>
           )}
         </div>
+      </div>
+
+      <div className="mt-2 text-xs text-slate-600">
+        {shipping}
       </div>
 
       <ul className="mt-3 space-y-1.5 text-sm text-slate-700">

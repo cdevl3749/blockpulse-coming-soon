@@ -19,13 +19,16 @@ const sendStat = (type) => {
   else if (lang.startsWith("fr")) country = "BE"; // 👈 IMPORTANT
 
   fetch("/.netlify/functions/stats", {
-    method: "POST",
-    body: JSON.stringify({
-      type,
-      country,
-    }),
-  });
-};
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json", // 🔥 OBLIGATOIRE
+  },
+  body: JSON.stringify({
+    type,
+    country,
+  }),
+  keepalive: true, // 🔥 IMPORTANT (mobile + reload)
+}).catch(() => {});
 
 const COOKIE_STORAGE_KEY = "blockpulse_cookie_consent";
 

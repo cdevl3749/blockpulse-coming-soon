@@ -1,47 +1,107 @@
 import { getStore } from "@netlify/blobs";
 
+const DEFAULT_STATS = {
+  visitors: 0,
+  clicks: 0,
+  stripe: 0,
+  payments: 0,
+  countries: {},
+  paymentSessions: {},
+};
+
+async function loadStats(store) {
+  try {
+    const data = await store.get("stats", { type: "json" });
+    if (!data) return { ...DEFAULT_STATS };
+    return {
+      ...DEFAULT_STATS,
+      ...data,
+      countries: data.countries || {},
+      paymentSessions: data.paymentSessions || {},
+    };
+  } catch (err) {
+    console.log("Load stats error:", err);
+    return { ...DEFAULT_STATS };
+  }
+}
+
+async function saveStats(store, stats) {
+  try {
+    await store.set("stats", JSON.stringify(stats));
+    return true;
+  } catch (err) {
+    console.log("Save stats error:", err);
+    return false;
+  }
+}
+
 export async function handler(event) {
+  const method = event.httpMethod;
+  const headers = {
+    "Content-Type": "application/json",
+    "Cache-Control": "no-store",
+  };
+
   let store;
-  let stats;
 
   try {
     store = getStore("blockpulse");
-    stats = await store.get("stats", { type: "json" });
   } catch (err) {
-    console.log("Blobs error:", err);
-  }
-
-  // 👉 fallback si erreur ou vide
-  if (!stats) {
-    stats = {
-      visitors: 0,
-      clicks: 0,
-      stripe: 0,
-      payments: 0,
-      countries: {},
-      paymentSessions: {},
+    console.log("getStore error:", err);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({
+        error: "Store init failed",
+        message: err.message,
+      }),
     };
   }
 
-  const method = event.httpMethod;
-
   try {
-    // 👉 GET
+    // =========================
+    // GET => lire les stats
+    // =========================
     if (method === "GET") {
+      const stats = await loadStats(store);
+
       return {
         statusCode: 200,
+        headers,
         body: JSON.stringify(stats),
       };
     }
 
-    // 👉 POST
+    // =========================
+    // POST => enregistrer un event
+    // =========================
     if (method === "POST") {
       const body = JSON.parse(event.body || "{}");
+      const stats = await loadStats(store);
 
-      if (body.type === "visit") stats.visitors++;
-      if (body.type === "click") stats.clicks++;
-      if (body.type === "stripe" || body.type === "stripe_start") stats.stripe++;
+      console.log("Incoming event:", body);
 
+      // 1) VISIT
+      if (body.type === "visit") {
+        stats.visitors++;
+
+        if (body.country) {
+          stats.countries[body.country] =
+            (stats.countries[body.country] || 0) + 1;
+        }
+      }
+
+      // 2) CLICK CTA
+      if (body.type === "click") {
+        stats.clicks++;
+      }
+
+      // 3) STRIPE START
+      if (body.type === "stripe" || body.type === "stripe_start") {
+        stats.stripe++;
+      }
+
+      // 4) PAYMENT SUCCESS (dédup session)
       if (body.type === "payment_success") {
         const sessionId = body.session_id;
 
@@ -55,59 +115,46 @@ export async function handler(event) {
         }
       }
 
-      if (body.country) {
-        stats.countries[body.country] =
-          (stats.countries[body.country] || 0) + 1;
-      }
-
-      // 👉 sauvegarde (protégée)
-      try {
-        if (store) {
-          await store.set("stats", JSON.stringify(stats));
-        }
-      } catch (err) {
-        console.log("Save error:", err);
-      }
+      const saved = await saveStats(store, stats);
 
       return {
         statusCode: 200,
-        body: JSON.stringify({ success: true }),
+        headers,
+        body: JSON.stringify({
+          success: true,
+          saved,
+          stats,
+        }),
       };
     }
 
-    // 👉 RESET
+    // =========================
+    // DELETE => reset
+    // =========================
     if (method === "DELETE") {
-      stats = {
-        visitors: 0,
-        clicks: 0,
-        stripe: 0,
-        payments: 0,
-        countries: {},
-        paymentSessions: {},
-      };
-
-      try {
-        if (store) {
-          await store.set("stats", JSON.stringify(stats));
-        }
-      } catch (err) {
-        console.log("Reset save error:", err);
-      }
+      const saved = await saveStats(store, { ...DEFAULT_STATS });
 
       return {
         statusCode: 200,
-        body: JSON.stringify({ reset: true }),
+        headers,
+        body: JSON.stringify({
+          reset: true,
+          saved,
+        }),
       };
     }
 
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: "Method not allowed" }),
     };
-
   } catch (err) {
+    console.log("Handler fatal error:", err);
+
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({
         error: "Internal error",
         message: err.message,

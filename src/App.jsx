@@ -32,6 +32,7 @@ const sendStat = (type) => {
 };
 
 const COOKIE_STORAGE_KEY = "blockpulse_cookie_consent";
+const VISIT_STORAGE_KEY = "blockpulse_visit_tracked";
 
 const TEXT = {
   en: {
@@ -498,7 +499,11 @@ export default function App() {
 
 useEffect(() => {
   const browserLang = navigator.language.toLowerCase();
-  sendStat("visit");
+
+  if (!sessionStorage.getItem(VISIT_STORAGE_KEY)) {
+    sendStat("visit");
+    sessionStorage.setItem(VISIT_STORAGE_KEY, "true");
+  }
 
   if (browserLang.startsWith("fr")) setLang("fr");
   else if (browserLang.startsWith("de")) setLang("de");

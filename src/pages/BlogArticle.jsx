@@ -87,7 +87,9 @@ export default function BlogArticle() {
     else setLang("en");
   }, []);
 
-  const t = TEXT[lang] || TEXT.en;
+  const t = TEXT[lang] ? TEXT[lang] : TEXT.en;
+
+    if (!t) return null;
 
   // ✅ SEO dynamique
   useEffect(() => {

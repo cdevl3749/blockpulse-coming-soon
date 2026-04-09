@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import energyBg from "./assets/energy.png";
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 import Dashboard from "./pages/Dashboard";
+
+import Blog from "./pages/Blog";
+
+import BlogArticle from "./pages/BlogArticle";
 
 import deviceLite from "./assets/blockpulse-screen.png";
 import deviceScreen from "./assets/blockpulse-v2lite.png";
@@ -113,6 +117,7 @@ const TEXT = {
   footerContact: "Contact",
 
   footerBottom: "Secure payment • Powered by Stripe • 14-day guarantee",
+  footerBlog: "Energy tips & electricity prices",
 
   howTitle: "How it works",
   howDesc: "BlockPulse is made to be understood immediately. You do not need to open an app or read graphs.",
@@ -211,6 +216,7 @@ const TEXT = {
   footerContact: "Contact",
 
   footerBottom: "Paiement sécurisé • Propulsé par Stripe • Garantie 14 jours",
+  footerBlog: "Conseils énergie et prix de l’électricité",
 
   // ✅ IMPORTANT (utilisé dans le hero)
   legendCheap: "Pas cher",
@@ -325,6 +331,7 @@ const TEXT = {
     footerContact: "Kontakt",
 
     footerBottom: "Sichere Zahlung • Powered by Stripe • 14 Tage Garantie",
+    footerBlog: "Energietipps und Strompreise",
     legendCheap: "Günstig",
     legendNormal: "Normal",
     legendExpensive: "Teuer",
@@ -434,6 +441,7 @@ const TEXT = {
     footerContact: "Contact",
 
     footerBottom: "Veilige betaling • Powered by Stripe • 14 dagen garantie",
+    footerBlog: "Energietips en elektriciteitsprijzen",
     legendCheap: "Goedkoop",
     legendNormal: "Normaal",
     legendExpensive: "Duur",
@@ -833,6 +841,12 @@ const startCheckout = async (product) => {
                 >
                   {t.footerHow}
                 </button>
+                <Link
+                  to="/blog"
+                  className="text-left transition hover:text-white"
+                >
+                  {t.footerBlog}
+                </Link>
                 <button
                   onClick={() => {
                   sendStat("click");
@@ -1038,6 +1052,8 @@ const startCheckout = async (product) => {
 }
 />
 
+<Route path="/blog" element={<Blog />} />
+<Route path="/blog/electricity-cheapest-time" element={<BlogArticle />} />
 <Route path="/dashboard" element={<Dashboard />} />
 
 </Routes>

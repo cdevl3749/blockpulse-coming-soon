@@ -17,7 +17,7 @@ const TEXT = {
     p3:
       "Electricity prices depend on supply and demand. When many people use electricity at the same time, prices increase. When demand is low, prices drop.",
     p4:
-      "Renewable energy like solar and wind also affects prices. For example, sunny afternoons or windy nights can make electricity cheaper.",
+      "Renewable energy like solar and wind also affects prices.",
     h3: "How to save money easily",
     p5:
       "You don’t need to change everything. Just shifting a few habits can make a difference:",
@@ -27,14 +27,13 @@ const TEXT = {
       "Avoid heavy usage during peak hours",
     ],
     conclusion:
-      "The key is simple: use electricity when it's cheaper. A simple visual signal can help you build that habit without effort.",
+      "The key is simple: use electricity when it's cheaper.",
     seoTitle: "What is the cheapest time to use electricity? | BlockPulse",
     seoDescription:
-      "Discover when electricity is cheapest, why prices change, and how to reduce your bill with simple habits.",
+      "Discover when electricity is cheapest and how to reduce your bill.",
     helper:
-      "Most people don’t know when it's the right moment to use electricity. Having a simple signal can make it effortless.",
+      "Most people don’t know when it's the right moment to use electricity.",
 
-    // 👍 + CTA
     likeTitle: "👍 This article was helpful?",
     likeHelper: "Helps us create better content",
     likeButton: "Helpful",
@@ -46,34 +45,25 @@ const TEXT = {
     back: "← Retour au blog",
     title: "Quel est le meilleur moment pour utiliser l’électricité ?",
     intro:
-      "Le prix de l’électricité varie au cours de la journée. Savoir quand consommer peut réduire votre facture sans changer votre mode de vie.",
+      "Le prix de l’électricité varie au cours de la journée.",
     h1: "Quand l’électricité est-elle la moins chère ?",
-    p1:
-      "Dans la plupart des pays européens, l’électricité est moins chère pendant les heures creuses. Généralement la nuit (22h – 7h) et parfois le week-end.",
-    p2:
-      "La période la plus chère est souvent en soirée (17h – 21h), lorsque la demande est la plus forte.",
+    p1: "Souvent la nuit (22h – 7h).",
+    p2: "Plus cher le soir (17h – 21h).",
     h2: "Pourquoi le prix change ?",
-    p3:
-      "Le prix dépend de l’offre et de la demande. Quand beaucoup de personnes consomment en même temps, les prix augmentent.",
-    p4:
-      "Les énergies renouvelables influencent aussi les prix. Par exemple, beaucoup de soleil ou de vent peut faire baisser les coûts.",
-    h3: "Comment économiser facilement",
-    p5:
-      "Pas besoin de tout changer. Quelques habitudes suffisent :",
+    p3: "Offre et demande.",
+    p4: "Les renouvelables influencent aussi.",
+    h3: "Comment économiser",
+    p5: "Quelques habitudes suffisent :",
     list: [
-      "Lancer les machines la nuit",
-      "Charger les appareils aux heures creuses",
-      "Éviter les heures de pointe",
+      "Machines la nuit",
+      "Charger hors pointe",
+      "Éviter le soir",
     ],
-    conclusion:
-      "Le plus important est simple : consommer au bon moment. Un signal visuel peut vous aider à adopter ce réflexe facilement.",
+    conclusion: "Consommer au bon moment est la clé.",
     seoTitle: "Quel est le meilleur moment pour utiliser l’électricité ? | BlockPulse",
-    seoDescription:
-      "Découvrez quand l’électricité est la moins chère et comment réduire votre facture avec des gestes simples.",
-    helper:
-      "Le plus difficile n’est pas de consommer moins, mais de savoir quand consommer. Un signal simple peut tout changer.",
+    seoDescription: "Réduisez votre facture avec des gestes simples.",
+    helper: "Un signal simple peut tout changer.",
 
-    // 👍 + CTA
     likeTitle: "👍 Cet article vous a été utile ?",
     likeHelper: "Nous aide à créer du meilleur contenu",
     likeButton: "Utile",
@@ -84,54 +74,62 @@ const TEXT = {
 
 export default function BlogArticle() {
   const [lang, setLang] = useState("en");
-
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
     const browserLang = (navigator.language || "").toLowerCase();
-
     if (browserLang.startsWith("fr")) setLang("fr");
     else setLang("en");
   }, []);
 
-  const t = TEXT[lang] ? TEXT[lang] : TEXT.en;
-  if (!t) return null;
+  const t = TEXT[lang] || TEXT.en;
 
+  // SEO
   useEffect(() => {
     document.title = t.seoTitle;
 
     let meta = document.querySelector('meta[name="description"]');
-
     if (!meta) {
       meta = document.createElement("meta");
       meta.name = "description";
       document.head.appendChild(meta);
     }
-
     meta.setAttribute("content", t.seoDescription);
   }, [t]);
 
+  // 👉 LOAD GLOBAL LIKES
   useEffect(() => {
-    const saved = localStorage.getItem("blog_liked");
-    const count = localStorage.getItem("blog_likes_count");
+    fetch("/.netlify/functions/stat")
+      .then(res => res.json())
+      .then(data => {
+        if (data.blogLikes !== undefined) setLikes(data.blogLikes);
+      })
+      .catch(() => {});
 
+    const saved = localStorage.getItem("blog_liked");
     if (saved === "true") setLiked(true);
-    if (count) setLikes(parseInt(count));
   }, []);
 
-  const handleLike = () => {
+  // 👉 CLICK LIKE (GLOBAL)
+  const handleLike = async () => {
     if (liked) return;
 
-    const newCount = likes + 1;
-    setLikes(newCount);
     setLiked(true);
+    setLikes(prev => prev + 1);
 
     localStorage.setItem("blog_liked", "true");
-    localStorage.setItem("blog_likes_count", newCount.toString());
+
+    try {
+      await fetch("/.netlify/functions/stat", {
+        method: "POST",
+        body: JSON.stringify({ type: "blog_like" }),
+      });
+    } catch (e) {
+      console.log("like failed (offline)");
+    }
   };
 
-  // 🚀 CTA scroll produit
   const goToProduct = () => {
     window.location.href = "/#v2lite";
   };
@@ -148,10 +146,7 @@ export default function BlogArticle() {
         <div className="absolute inset-0 bg-white/60" />
 
         <div className="relative z-10 mx-auto max-w-4xl px-4 py-16">
-          <Link
-            to="/blog"
-            className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-emerald-900 shadow"
-          >
+          <Link to="/blog" className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-emerald-900 shadow">
             {t.back}
           </Link>
 
@@ -168,23 +163,23 @@ export default function BlogArticle() {
       {/* CONTENT */}
       <section className="mx-auto max-w-3xl px-4 py-12">
         <h2 className="text-2xl font-bold text-emerald-900">{t.h1}</h2>
-        <p className="mt-4 text-slate-700">{t.p1}</p>
-        <p className="mt-2 text-slate-700">{t.p2}</p>
+        <p className="mt-4">{t.p1}</p>
+        <p className="mt-2">{t.p2}</p>
 
         <h2 className="mt-8 text-2xl font-bold text-emerald-900">{t.h2}</h2>
-        <p className="mt-4 text-slate-700">{t.p3}</p>
-        <p className="mt-2 text-slate-700">{t.p4}</p>
+        <p className="mt-4">{t.p3}</p>
+        <p className="mt-2">{t.p4}</p>
 
         <h2 className="mt-8 text-2xl font-bold text-emerald-900">{t.h3}</h2>
-        <p className="mt-4 text-slate-700">{t.p5}</p>
+        <p className="mt-4">{t.p5}</p>
 
-        <ul className="mt-4 list-disc pl-6 text-slate-700">
+        <ul className="mt-4 list-disc pl-6">
           {t.list.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
 
-        <p className="mt-8 text-lg font-semibold text-emerald-900">
+        <p className="mt-8 font-semibold text-emerald-900">
           {t.conclusion}
         </p>
 
@@ -192,33 +187,32 @@ export default function BlogArticle() {
           {t.helper}
         </p>
 
-        {/* 🚀 CTA PRODUIT */}
+        {/* CTA */}
         <div className="mt-6 text-center">
-          <button
-            onClick={goToProduct}
-            className="text-emerald-700 font-semibold underline hover:text-emerald-900"
-          >
+          <button onClick={goToProduct} className="text-emerald-700 font-semibold underline hover:text-emerald-900">
             {t.cta}
           </button>
         </div>
 
-        {/* 👍 LIKE SYSTEM */}
+        {/* LIKE */}
         <div className="mt-10 p-6 border rounded-xl text-center">
-          <p className="text-sm text-slate-500 mb-2">
-            {t.likeHelper}
-          </p>
+          <p className="text-sm text-slate-500 mb-2">{t.likeHelper}</p>
 
-          <p className="font-semibold text-emerald-900 mb-3">
-            {t.likeTitle}
-          </p>
+          {likes > 0 && (
+                <p className="text-xs text-slate-500 mb-2">
+                {lang === "fr"
+                    ? `${likes} personnes trouvent cela utile`
+                    : `${likes} people found this helpful`}
+                </p>
+            )}
+
+          <p className="font-semibold text-emerald-900 mb-3">{t.likeTitle}</p>
 
           <button
             onClick={handleLike}
             disabled={liked}
-            className={`px-5 py-2 rounded-full text-white font-semibold transition ${
-              liked
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-emerald-600 hover:bg-emerald-700"
+            className={`px-5 py-2 rounded-full text-white font-semibold ${
+              liked ? "bg-gray-400" : "bg-emerald-600 hover:bg-emerald-700"
             }`}
           >
             👍 {liked ? t.likeThanks : t.likeButton} ({likes})

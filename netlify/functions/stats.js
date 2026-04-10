@@ -7,6 +7,7 @@ const DEFAULT_STATS = {
   payments: 0,
   countries: {},
   paymentSessions: {},
+  blogLikes: 0, // 🔥 AJOUT
 };
 
 async function loadStats(store) {
@@ -18,6 +19,7 @@ async function loadStats(store) {
       ...data,
       countries: data.countries || {},
       paymentSessions: data.paymentSessions || {},
+      blogLikes: data.blogLikes || 0, // 🔥 AJOUT SÉCURITÉ
     };
   } catch (err) {
     console.log("Load stats error:", err);
@@ -46,9 +48,9 @@ export async function handler(event) {
 
   try {
     store = getStore({
-    name: "blockpulse",
-    siteID: process.env.NETLIFY_BLOBS_SITE_ID,
-    token: process.env.NETLIFY_BLOBS_TOKEN,
+      name: "blockpulse",
+      siteID: process.env.NETLIFY_BLOBS_SITE_ID,
+      token: process.env.NETLIFY_BLOBS_TOKEN,
     });
   } catch (err) {
     console.log("getStore error:", err);
@@ -117,6 +119,11 @@ export async function handler(event) {
         } else {
           stats.payments++;
         }
+      }
+
+      // 🔥 5) BLOG LIKE (NOUVEAU)
+      if (body.type === "blog_like") {
+        stats.blogLikes = (stats.blogLikes || 0) + 1;
       }
 
       const saved = await saveStats(store, stats);

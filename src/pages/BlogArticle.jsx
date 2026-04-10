@@ -28,15 +28,18 @@ const TEXT = {
     ],
     conclusion:
       "The key is simple: use electricity when it's cheaper. A simple visual signal can help you build that habit without effort.",
-
-    // ✅ SEO
     seoTitle: "What is the cheapest time to use electricity? | BlockPulse",
     seoDescription:
       "Discover when electricity is cheapest, why prices change, and how to reduce your bill with simple habits.",
-    
-    // ✅ subtle conversion
     helper:
       "Most people don’t know when it's the right moment to use electricity. Having a simple signal can make it effortless.",
+
+    // 👍 + CTA
+    likeTitle: "👍 This article was helpful?",
+    likeHelper: "Helps us create better content",
+    likeButton: "Helpful",
+    likeThanks: "Thanks!",
+    cta: "👉 See how it works in 10 seconds",
   },
 
   fr: {
@@ -64,34 +67,37 @@ const TEXT = {
     ],
     conclusion:
       "Le plus important est simple : consommer au bon moment. Un signal visuel peut vous aider à adopter ce réflexe facilement.",
-
-    // ✅ SEO
     seoTitle: "Quel est le meilleur moment pour utiliser l’électricité ? | BlockPulse",
     seoDescription:
       "Découvrez quand l’électricité est la moins chère et comment réduire votre facture avec des gestes simples.",
-
     helper:
       "Le plus difficile n’est pas de consommer moins, mais de savoir quand consommer. Un signal simple peut tout changer.",
+
+    // 👍 + CTA
+    likeTitle: "👍 Cet article vous a été utile ?",
+    likeHelper: "Nous aide à créer du meilleur contenu",
+    likeButton: "Utile",
+    likeThanks: "Merci !",
+    cta: "👉 Voir comment ça marche en 10 secondes",
   },
 };
 
 export default function BlogArticle() {
   const [lang, setLang] = useState("en");
 
+  const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState(false);
+
   useEffect(() => {
     const browserLang = (navigator.language || "").toLowerCase();
 
     if (browserLang.startsWith("fr")) setLang("fr");
-    else if (browserLang.startsWith("de")) setLang("en"); // fallback propre
-    else if (browserLang.startsWith("nl")) setLang("en");
     else setLang("en");
   }, []);
 
   const t = TEXT[lang] ? TEXT[lang] : TEXT.en;
+  if (!t) return null;
 
-    if (!t) return null;
-
-  // ✅ SEO dynamique
   useEffect(() => {
     document.title = t.seoTitle;
 
@@ -105,6 +111,30 @@ export default function BlogArticle() {
 
     meta.setAttribute("content", t.seoDescription);
   }, [t]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("blog_liked");
+    const count = localStorage.getItem("blog_likes_count");
+
+    if (saved === "true") setLiked(true);
+    if (count) setLikes(parseInt(count));
+  }, []);
+
+  const handleLike = () => {
+    if (liked) return;
+
+    const newCount = likes + 1;
+    setLikes(newCount);
+    setLiked(true);
+
+    localStorage.setItem("blog_liked", "true");
+    localStorage.setItem("blog_likes_count", newCount.toString());
+  };
+
+  // 🚀 CTA scroll produit
+  const goToProduct = () => {
+    window.location.href = "/#v2lite";
+  };
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
@@ -158,10 +188,42 @@ export default function BlogArticle() {
           {t.conclusion}
         </p>
 
-        {/* 🔥 BOOST CONVERSION DISCRET */}
         <p className="mt-6 text-sm text-slate-600">
           {t.helper}
         </p>
+
+        {/* 🚀 CTA PRODUIT */}
+        <div className="mt-6 text-center">
+          <button
+            onClick={goToProduct}
+            className="text-emerald-700 font-semibold underline hover:text-emerald-900"
+          >
+            {t.cta}
+          </button>
+        </div>
+
+        {/* 👍 LIKE SYSTEM */}
+        <div className="mt-10 p-6 border rounded-xl text-center">
+          <p className="text-sm text-slate-500 mb-2">
+            {t.likeHelper}
+          </p>
+
+          <p className="font-semibold text-emerald-900 mb-3">
+            {t.likeTitle}
+          </p>
+
+          <button
+            onClick={handleLike}
+            disabled={liked}
+            className={`px-5 py-2 rounded-full text-white font-semibold transition ${
+              liked
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-emerald-600 hover:bg-emerald-700"
+            }`}
+          >
+            👍 {liked ? t.likeThanks : t.likeButton} ({likes})
+          </button>
+        </div>
       </section>
     </div>
   );

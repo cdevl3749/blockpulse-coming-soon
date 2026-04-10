@@ -20,7 +20,7 @@ const ALLOWED_SHIPPING_COUNTRIES = [
 
 // ✅ TES SHIPPING RATES (important)
 const SHIPPING_RATE_EU = "shr_1TJzqQKn0lmTcQ11oH2YCNy9";
-const SHIPPING_RATE_INTL = "shr_1TJzxHKn0lmTcQ11f9aDO8nk";
+const SHIPPING_RATE_INTL = "shr_1TKmemKn0lmTcQ11cn1EF72E";
 
 function getSafeLang(lang) {
   return ["fr", "de", "en"].includes(lang) ? lang : "fr";

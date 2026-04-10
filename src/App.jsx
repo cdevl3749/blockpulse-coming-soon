@@ -1105,11 +1105,11 @@ function ProductCard({
         </div>
       )}
 
-    <div className="h-32 w-full overflow-hidden rounded-2xl bg-white">
+    <div className="h-40 w-full flex items-center justify-center bg-white rounded-2xl p-2 overflow-hidden">
       <img
         src={image}
         alt={title}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-cover object-center rounded-xl transition duration-300"
       />
     </div>
 

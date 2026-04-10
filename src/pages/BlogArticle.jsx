@@ -103,7 +103,7 @@ export default function BlogArticle() {
     fetch("/.netlify/functions/stat")
       .then(res => res.json())
       .then(data => {
-        const count = data.stats?.blogLikes || 0;
+        const count = data.blogLikes || 0;
         setLikes(count);
       })
       .catch(() => {});

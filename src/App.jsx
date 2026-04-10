@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import energyBg from "./assets/energy.png";
+import wind from "./assets/wind.png";
 
 import { Routes, Route, Link } from "react-router-dom";
 
@@ -74,7 +75,7 @@ const TEXT = {
   productLiteUrgency: "⚡ Limited launch price",
 
   productScreenTitle: "Screen",
-  productScreenDesc: "See price, time and status at a glance.",
+  productScreenDesc: "See real-time price, time and status — in your language.",
   productScreenPoints: [
     "Live price display",
     "Time + status",
@@ -173,7 +174,7 @@ const TEXT = {
   productLiteUrgency: "⚡ Prix de lancement limité",
 
   productScreenTitle: "Écran",
-  productScreenDesc: "Affiche le prix, l’heure et le statut.",
+  productScreenDesc: "Voyez le prix en temps réel, l’heure et le statut — dans votre langue.",
   productScreenPoints: [
     "Prix en temps réel",
     "Heure + statut",
@@ -290,7 +291,7 @@ const TEXT = {
     productLiteUrgency: "⚡ Begrenzter Einführungspreis",
 
     productScreenTitle: "Display",
-    productScreenDesc: "Preis, Zeit und Status auf einen Blick.",
+    productScreenDesc: "Preis, Zeit und Status in Echtzeit — in Ihrer Sprache.",
     productScreenPoints: [
       "Live Preis",
       "Zeit + Status",
@@ -400,7 +401,7 @@ const TEXT = {
     productLiteUrgency: "⚡ Tijdelijke lanceringsprijs",
 
     productScreenTitle: "Scherm",
-    productScreenDesc: "Zie prijs, tijd en status in één oogopslag.",
+    productScreenDesc: "Zie prijs, tijd en status in realtime — in jouw taal.",
     productScreenPoints: [
       "Live prijs",
       "Tijd + status",
@@ -640,10 +641,24 @@ const startCheckout = async (product) => {
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${energyBg})` }}
-        />
-        <div className="absolute inset-0 bg-white/45" />
+  className="absolute inset-0 bg-cover"
+  style={{
+    backgroundImage: `url(${energyBg})`,
+    backgroundPosition: window.innerWidth < 768 ? "center" : "120% center"
+  }}
+/>
+<img
+  src={wind}
+  className="
+    absolute 
+    pointer-events-none
+
+    right-[-20px] top-[120px] h-[200px] opacity-10
+
+    md:right-[-120px] md:top-[-20px] md:h-[110%] md:opacity-60 md:blur-[1px]
+  "
+/>
+        <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/30 to-white/10" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="mb-6 flex items-center justify-between gap-4">
@@ -1090,11 +1105,11 @@ function ProductCard({
         </div>
       )}
 
-    <div className="flex h-28 items-center justify-center rounded-2xl bg-slate-50 px-3 py-2">
+    <div className="h-32 w-full overflow-hidden rounded-2xl bg-white">
       <img
         src={image}
         alt={title}
-        className="h-full w-auto object-contain drop-shadow-md scale-105"
+        className="h-full w-full object-cover"
       />
     </div>
 

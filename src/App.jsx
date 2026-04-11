@@ -62,6 +62,7 @@ const TEXT = {
 
   trustedLine: "Trusted checkout with Stripe • Clear legal pages • Cookie choice",
   ideal: "Ideal for people who want a simple signal instead of another app.",
+  heroClarify: "Does not control appliances — it simply shows when it’s a better time to use electricity.",
 
   productLiteTitle: "V2 Lite",
   productLiteDesc: "See instantly when it’s a good time to use electricity.",
@@ -236,6 +237,7 @@ const TEXT = {
   trustedLine: "Paiement sécurisé avec Stripe • Pages légales claires • Choix des cookies",
 
   ideal: "Idéal pour ceux qui veulent un signal simple sans application.",
+  heroClarify: "Ne contrôle pas vos appareils — il indique simplement quand c’est un meilleur moment pour utiliser l’électricité.",
 
   howTitle: "Comment ça marche",
   howDesc: "BlockPulse est conçu pour être compris immédiatement. Pas besoin d’application ni de graphiques.",
@@ -349,6 +351,7 @@ const TEXT = {
     trustedLine: "Sichere Zahlung mit Stripe • Klare rechtliche Seiten • Cookie-Auswahl",
 
     ideal: "Ideal für Menschen, die ein einfaches Signal statt einer App wollen.",
+    heroClarify: "Steuert keine Geräte — es zeigt einfach, wann ein besserer Zeitpunkt für den Stromverbrauch ist.",
     howTitle: "Wie funktioniert es",
     howDesc: "BlockPulse ist so konzipiert, dass es sofort verstanden wird. Keine App oder Diagramme nötig.",
 
@@ -459,6 +462,7 @@ const TEXT = {
     trustedLine: "Veilige betaling met Stripe • Duidelijke juridische pagina’s • Cookie keuze",
 
     ideal: "Ideaal voor mensen die een simpel signaal willen zonder app.",
+    heroClarify: "Stuurt geen apparaten aan — het toont gewoon wanneer het een beter moment is om elektriciteit te gebruiken.",
     howTitle: "Hoe werkt het",
     howDesc: "BlockPulse is ontworpen om meteen begrepen te worden. Geen app of grafieken nodig.",
 
@@ -714,6 +718,10 @@ const startCheckout = async (product) => {
               <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-700 sm:text-lg">
                 {t.noApp}
               </p>
+
+              <div className="mt-3 inline-flex max-w-xl rounded-xl bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-slate-200">
+                ℹ️ {t.heroClarify}
+              </div>
 
               <div className="mt-6 flex flex-wrap gap-2">
               {t.badges?.map((item) => (

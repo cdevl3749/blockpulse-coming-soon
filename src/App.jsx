@@ -124,6 +124,12 @@ const TEXT = {
   howTitle: "How it works",
   howDesc: "BlockPulse is made to be understood immediately. You do not need to open an app or read graphs.",
 
+  howExplain1: "BlockPulse reads electricity price signals and turns them into a simple color:",
+  howExplainGreen: "Green → good time to use electricity",
+  howExplainYellow: "Yellow → normal",
+  howExplainRed: "Red → expensive",
+  howExplain2: "No app. No data to check. Just a quick glance.",
+
   step1Title: "Look",
   step1Text: "Check the color in one second.",
 
@@ -242,6 +248,12 @@ const TEXT = {
   howTitle: "Comment ça marche",
   howDesc: "BlockPulse est conçu pour être compris immédiatement. Pas besoin d’application ni de graphiques.",
 
+  howExplain1: "BlockPulse lit les signaux de prix de l’électricité et les transforme en une couleur simple :",
+  howExplainGreen: "Vert → bon moment pour utiliser l’électricité",
+  howExplainYellow: "Jaune → normal",
+  howExplainRed: "Rouge → cher",
+  howExplain2: "Pas d’application. Aucune donnée à vérifier. Un simple coup d’œil suffit.",
+
   step1Title: "Regarder",
   step1Text: "Regardez la couleur en une seconde.",
 
@@ -355,6 +367,12 @@ const TEXT = {
     howTitle: "Wie funktioniert es",
     howDesc: "BlockPulse ist so konzipiert, dass es sofort verstanden wird. Keine App oder Diagramme nötig.",
 
+    howExplain1: "BlockPulse liest Strompreissignale und wandelt sie in eine einfache Farbe um:",
+    howExplainGreen: "Grün → guter Zeitpunkt, um Strom zu nutzen",
+    howExplainYellow: "Gelb → normal",
+    howExplainRed: "Rot → teuer",
+    howExplain2: "Keine App. Keine Daten zu prüfen. Nur ein kurzer Blick.",
+
     step1Title: "Schauen",
     step1Text: "Sehen Sie die Farbe in einer Sekunde.",
 
@@ -465,6 +483,12 @@ const TEXT = {
     heroClarify: "Stuurt geen apparaten aan — het toont gewoon wanneer het een beter moment is om elektriciteit te gebruiken.",
     howTitle: "Hoe werkt het",
     howDesc: "BlockPulse is ontworpen om meteen begrepen te worden. Geen app of grafieken nodig.",
+
+    howExplain1: "BlockPulse leest elektriciteitsprijssignalen en zet die om in een eenvoudige kleur:",
+    howExplainGreen: "Groen → goed moment om elektriciteit te gebruiken",
+    howExplainYellow: "Geel → normaal",
+    howExplainRed: "Rood → duur",
+    howExplain2: "Geen app. Geen data om te controleren. Eén snelle blik is genoeg.",
 
     step1Title: "Kijken",
     step1Text: "Bekijk de kleur in één seconde.",
@@ -646,10 +670,12 @@ const startCheckout = async (product) => {
       <section className="relative overflow-hidden">
         <div
   className="absolute inset-0 bg-cover"
-  style={{
-    backgroundImage: `url(${energyBg})`,
-    backgroundPosition: window.innerWidth < 768 ? "center" : "120% center"
-  }}
+ style={{
+  backgroundImage: `url(${energyBg})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat"
+}}
 />
 <img
   src={wind}
@@ -803,20 +829,41 @@ const startCheckout = async (product) => {
       </section>
 
       {/* HOW */}
-      <section id="how" className="bg-stone-50 pt-10 pb-6">
-        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-emerald-950">{t.howTitle}</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-slate-600">
-            {t.howDesc}
-          </p>
+<section id="how" className="bg-stone-50 pt-10 pb-6">
+  <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
 
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            <Step number="1" title={t.step1Title} text={t.step1Text} />
-            <Step number="2" title={t.step2Title} text={t.step2Text} />
-            <Step number="3" title={t.step3Title} text={t.step3Text} />
-          </div>
-        </div>
-      </section>
+    {/* 🔥 NOUVEAU BLOC (explication claire) */}
+    <div className="mb-6 mx-auto max-w-2xl rounded-2xl bg-emerald-50 border border-emerald-200 p-5 text-left shadow-sm">
+      <div className="text-sm text-slate-700">
+        {t.howExplain1}
+      </div>
+
+      <ul className="mt-2 space-y-1 text-sm text-slate-700">
+        <li>🟢 {t.howExplainGreen}</li>
+        <li>🟡 {t.howExplainYellow}</li>
+        <li>🔴 {t.howExplainRed}</li>
+      </ul>
+
+      <div className="mt-2 text-sm text-slate-700">
+        {t.howExplain2}
+      </div>
+    </div>
+
+    {/* TON CONTENU EXISTANT */}
+    <h2 className="text-3xl font-bold text-emerald-950">{t.howTitle}</h2>
+
+    <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-slate-600">
+      {t.howDesc}
+    </p>
+
+    <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <Step number="1" title={t.step1Title} text={t.step1Text} />
+      <Step number="2" title={t.step2Title} text={t.step2Text} />
+      <Step number="3" title={t.step3Title} text={t.step3Text} />
+    </div>
+
+  </div>
+</section>
 
       {/* TRUST */}
       <section className="pt-10 pb-6">

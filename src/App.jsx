@@ -537,10 +537,14 @@ export default function App() {
 useEffect(() => {
   const browserLang = navigator.language.toLowerCase();
 
+ const consent = localStorage.getItem("blockpulse_cookie_consent");
+
+if (consent === "accepted") {
   if (!sessionStorage.getItem(VISIT_STORAGE_KEY)) {
     sendStat("visit");
     sessionStorage.setItem(VISIT_STORAGE_KEY, "true");
   }
+}
 
   if (browserLang.startsWith("fr")) setLang("fr");
   else if (browserLang.startsWith("de")) setLang("de");

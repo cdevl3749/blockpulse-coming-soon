@@ -23,7 +23,7 @@ const sendStat = (type) => {
   else if (lang.startsWith("en")) country = "GB";
   else if (lang.startsWith("fr")) country = "BE"; // 👈 IMPORTANT
 
-  fetch("/.netlify/functions/stats", {
+fetch("/.netlify/functions/stats", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -32,7 +32,6 @@ const sendStat = (type) => {
     type,
     country,
   }),
-  keepalive: true,
 }).catch(() => {});
 };
 

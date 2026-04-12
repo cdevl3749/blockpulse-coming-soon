@@ -536,14 +536,16 @@ export default function App() {
 useEffect(() => {
   const browserLang = navigator.language.toLowerCase();
 
- const consent = localStorage.getItem("blockpulse_cookie_consent");
+  const consent = localStorage.getItem("bp_cookie_consent") 
+    || localStorage.getItem("blockpulse_cookie_consent")
+    || localStorage.getItem("cookiesAccepted");
 
-if (consent === "accepted") {
-  if (!sessionStorage.getItem(VISIT_STORAGE_KEY)) {
-    sendStat("visit");
-    sessionStorage.setItem(VISIT_STORAGE_KEY, "true");
+  if (consent === "accepted" || consent === "true") {
+    if (!sessionStorage.getItem(VISIT_STORAGE_KEY)) {
+      sendStat("visit");
+      sessionStorage.setItem(VISIT_STORAGE_KEY, "true");
+    }
   }
-}
 
   if (browserLang.startsWith("fr")) setLang("fr");
   else if (browserLang.startsWith("de")) setLang("de");
@@ -623,9 +625,14 @@ const startCheckout = async (product) => {
   };
 
   const acceptCookies = () => {
-    localStorage.setItem(COOKIE_STORAGE_KEY, "accepted");
-    setCookieConsent("accepted");
-  };
+  localStorage.setItem(COOKIE_STORAGE_KEY, "accepted");
+  localStorage.setItem("bp_cookie_consent", "accepted"); // ✅ sync les deux clés
+  setCookieConsent("accepted");
+  if (!sessionStorage.getItem(VISIT_STORAGE_KEY)) {
+    sendStat("visit");
+    sessionStorage.setItem(VISIT_STORAGE_KEY, "true");
+  }
+};
 
   const refuseCookies = () => {
     localStorage.setItem(COOKIE_STORAGE_KEY, "refused");

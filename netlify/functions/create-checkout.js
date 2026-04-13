@@ -18,7 +18,7 @@ const ALLOWED_SHIPPING_COUNTRIES = [
   "NO"
 ];
 
-// ✅ TES SHIPPING RATES (important)
+// (On garde tes rates pour plus tard, mais on ne les utilise plus)
 const SHIPPING_RATE_EU = "shr_1TJzqQKn0lmTcQ11oH2YCNy9";
 const SHIPPING_RATE_INTL = "shr_1TKmemKn0lmTcQ11cn1EF72E";
 
@@ -84,21 +84,6 @@ exports.handler = async function (event) {
         ? process.env.STRIPE_TIKTOK_COUPON_ID
         : null;
 
-    // 🔥 SHIPPING LOGIC PROPRE (avec tes rates)
-    const isEU = EU_COUNTRIES.includes(country);
-
-    const shippingOptions = isEU
-      ? [
-          {
-            shipping_rate: SHIPPING_RATE_EU,
-          },
-        ]
-      : [
-          {
-            shipping_rate: SHIPPING_RATE_INTL,
-          },
-        ];
-
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
@@ -119,11 +104,13 @@ exports.handler = async function (event) {
 
       billing_address_collection: "auto",
 
+      // ✅ On garde l’adresse pour livraison
       shipping_address_collection: {
         allowed_countries: ALLOWED_SHIPPING_COUNTRIES,
       },
 
-      shipping_options: shippingOptions,
+      // ❌ IMPORTANT : plus aucun frais de livraison
+      // shipping_options supprimé
 
       metadata: {
         product,

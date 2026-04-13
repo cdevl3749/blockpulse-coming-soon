@@ -1197,9 +1197,9 @@ function ProductCard({
         </div>
       </div>
 
-     <div className="mt-2 text-xs font-semibold text-emerald-700">
-      🌍 EU: Free shipping • Worldwide: only €4 (≈ $4.5)
-     </div>
+    <div className="mt-2 text-xs font-semibold text-emerald-700">
+      🌍 {shipping}
+    </div>
 
       <ul className="mt-3 space-y-1.5 text-sm text-slate-700">
         {points.map((p) => (

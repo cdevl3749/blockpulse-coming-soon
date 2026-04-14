@@ -17,7 +17,7 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- ARTICLE -->
+  <!-- ARTICLE 1 -->
   <url>
     <loc>https://blockpulse.be/blog/electricity-cheapest-time</loc>
     <lastmod>2026-04-14</lastmod>
@@ -25,7 +25,15 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- FAQ (🔥 IMPORTANT) -->
+  <!-- ARTICLE 2 (🔥 NOUVEAU) -->
+  <url>
+    <loc>https://blockpulse.be/blog/best-time-washing-machine</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- FAQ -->
   <url>
     <loc>https://blockpulse.be/faq</loc>
     <lastmod>2026-04-14</lastmod>

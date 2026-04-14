@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/Blog";
 
 import BlogArticle from "./pages/BlogArticle";
+import BlogArticle2 from "./pages/BlogArticle2";
 import FAQ from "./pages/FAQ";
 
 import deviceLite from "./assets/blockpulse-screen.png";
@@ -1154,6 +1155,7 @@ const startCheckout = async (product) => {
 <Route path="/blog" element={<Blog />} />
 <Route path="/faq" element={<FAQ />} />
 <Route path="/blog/electricity-cheapest-time" element={<BlogArticle />} />
+<Route path="/blog/best-time-washing-machine" element={<BlogArticle2 />} />
 <Route path="/dashboard" element={<Dashboard />} />
 
 </Routes>

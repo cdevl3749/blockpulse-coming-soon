@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- HOME -->
   <url>
     <loc>https://blockpulse.be/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-04-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
+  <!-- BLOG -->
   <url>
     <loc>https://blockpulse.be/blog</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-04-14</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
+  <!-- ARTICLE -->
   <url>
     <loc>https://blockpulse.be/blog/electricity-cheapest-time</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-04-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+
+  <!-- FAQ (🔥 IMPORTANT) -->
+  <url>
+    <loc>https://blockpulse.be/faq</loc>
+    <lastmod>2026-04-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
 </urlset>

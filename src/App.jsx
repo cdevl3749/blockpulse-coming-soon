@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/Blog";
 
 import BlogArticle from "./pages/BlogArticle";
+import FAQ from "./pages/FAQ";
 
 import deviceLite from "./assets/blockpulse-screen.png";
 import deviceScreen from "./assets/blockpulse-v2lite.png";
@@ -160,6 +161,8 @@ const TEXT = {
   cookiesText3: "Analytics cookies are only used if you accept.",
   cookiesChange: "Change my cookie choice",
 
+  footerFAQ: "FAQ",
+
   close: "Close",
 },
   fr: {
@@ -284,6 +287,8 @@ const TEXT = {
   cookiesText3: "Les cookies analytiques sont activés uniquement avec votre consentement.",
   cookiesChange: "Modifier mon choix",
 
+  footerFAQ: "Questions fréquentes",
+
   close: "Fermer",
 },
 
@@ -401,6 +406,9 @@ const TEXT = {
     cookiesText2: "Notwendige Cookies sind erforderlich.",
     cookiesText3: "Analyse nur nach Zustimmung.",
     cookiesChange: "Cookie-Einstellung ändern",
+
+    footerFAQ: "FAQ",
+
     close: "Schließen",
           },
 
@@ -518,6 +526,9 @@ const TEXT = {
     cookiesText2: "Noodzakelijke cookies zorgen voor werking.",
     cookiesText3: "Analytics cookies alleen na toestemming.",
     cookiesChange: "Cookie keuze wijzigen",
+
+    footerFAQ: "Veelgestelde vragen",
+
     close: "Sluiten",
               },
     };
@@ -927,6 +938,14 @@ const startCheckout = async (product) => {
                 >
                   {t.footerBlog}
                 </Link>
+
+                <Link
+                  to="/faq"
+                  className="text-left transition hover:text-white"
+                >
+                  {t.footerFAQ}
+                </Link>
+
                 <button
                   onClick={() => {
                   sendStat("click");
@@ -1133,6 +1152,7 @@ const startCheckout = async (product) => {
 />
 
 <Route path="/blog" element={<Blog />} />
+<Route path="/faq" element={<FAQ />} />
 <Route path="/blog/electricity-cheapest-time" element={<BlogArticle />} />
 <Route path="/dashboard" element={<Dashboard />} />
 

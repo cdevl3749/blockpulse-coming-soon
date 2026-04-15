@@ -72,6 +72,16 @@ const TEXT = {
     "No app needed",
     "Simple for everyday use"
   ],
+  productLiteOptions: [
+  {
+    label: "☀️ Solar panel (+9€)",
+    desc: "works without outlet"
+  },
+  {
+    label: "🔋 Powerbank (+15€)",
+    desc: "works at night"
+  }
+],
   productLiteButton: "Get my V2 Lite",
   productLiteSub: "Best choice for most homes",
   productLiteUrgency: "⚡ Limited launch price",
@@ -179,6 +189,16 @@ const TEXT = {
     "Pas d’application",
     "Simple à utiliser"
   ],
+    productLiteOptions: [
+  {
+    label: "☀️ Panneau solaire (+9€)",
+    desc: "fonctionne sans prise"
+  },
+  {
+    label: "🔋 Powerbank (+15€)",
+    desc: "autonomie la nuit"
+  }
+],
   productLiteButton: "Commander V2 Lite",
   productLiteSub: "Le meilleur choix pour la plupart des foyers",
   productLiteUrgency: "⚡ Prix de lancement limité",
@@ -305,6 +325,16 @@ const TEXT = {
       "Keine App nötig",
       "Einfach zu bedienen"
     ],
+    productLiteOptions: [
+  {
+    label: "☀️ Solarpanel (+9€)",
+    desc: "funktioniert ohne Steckdose"
+  },
+  {
+    label: "🔋 Powerbank (+15€)",
+    desc: "funktioniert nachts"
+  }
+],
     productLiteButton: "V2 Lite bestellen",
     productLiteSub: "Beste Wahl für die meisten Haushalte",
     productLiteUrgency: "⚡ Begrenzter Einführungspreis",
@@ -425,6 +455,16 @@ const TEXT = {
       "Geen app nodig",
       "Eenvoudig in gebruik"
     ],
+    productLiteOptions: [
+  {
+    label: "☀️ Zonnepaneel (+9€)",
+    desc: "werkt zonder stopcontact"
+  },
+  {
+    label: "🔋 Powerbank (+15€)",
+    desc: "werkt 's nachts"
+  }
+],
     productLiteButton: "Bestel V2 Lite",
     productLiteSub: "Beste keuze voor de meeste huizen",
     productLiteUrgency: "⚡ Tijdelijke lanceringsprijs",
@@ -541,6 +581,8 @@ export default function App() {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
   const [lang, setLang] = useState("en");
 
   const t = TEXT[lang] || TEXT.en;
@@ -565,7 +607,7 @@ useEffect(() => {
   else setLang("en");
 }, []);
 
-const startCheckout = async (product) => {
+const startCheckout = async (product, options = []) => {
   sendStat("stripe");
   if (isLoading) return; // 🔥 anti double clic
 
@@ -573,6 +615,11 @@ const startCheckout = async (product) => {
 
   try {
     const langToSend = lang; // simple pour l’instant
+
+    const formattedOptions = {
+    solar: options.includes(0),
+    powerbank: options.includes(1),
+  };
 
     // 👉 détecte pays (simple version)
    const browserLang = navigator.language || "";
@@ -597,6 +644,7 @@ const startCheckout = async (product) => {
         lang: langToSend,
         country,
         source: "landing",
+        options: formattedOptions,
       }),
     });
 
@@ -821,9 +869,12 @@ const startCheckout = async (product) => {
                 button={t.productLiteButton}
                 subtext={t.productLiteSub}
                 shipping={t.shipping}
+                options={t.productLiteOptions}
+                selectedOptions={selectedOptions}
+                setSelectedOptions={setSelectedOptions}
                 onClick={() => {
                   sendStat("click");
-                  startCheckout("lite");
+                  startCheckout("lite", selectedOptions);
                 }}
                 isLoading={isLoading}
                 featured
@@ -950,7 +1001,7 @@ const startCheckout = async (product) => {
                 <button
                   onClick={() => {
                   sendStat("click");
-                  startCheckout("lite");
+                  startCheckout("lite", selectedOptions);
                 }}
                   className="text-left transition hover:text-white"
                 >
@@ -1168,6 +1219,9 @@ function ProductCard({
   title,
   desc,
   points,
+  options,
+  selectedOptions,
+  setSelectedOptions,
   button,
   onClick,
   featured,
@@ -1228,6 +1282,32 @@ function ProductCard({
           <li key={p}>• {p}</li>
         ))}
       </ul>
+
+    {options && (
+  <div className="mt-3 rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs text-slate-700 space-y-2">
+    {options.map((o, i) => (
+      <label key={i} className="flex items-start gap-2 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={selectedOptions?.includes(i)}
+          onChange={() => {
+            if (!selectedOptions || !setSelectedOptions) return;
+
+            if (selectedOptions.includes(i)) {
+              setSelectedOptions(selectedOptions.filter(x => x !== i));
+            } else {
+              setSelectedOptions([...selectedOptions, i]);
+            }
+          }}
+        />
+        <div>
+          <div>{o.label}</div>
+          <div className="text-slate-500 text-[11px]">→ {o.desc}</div>
+        </div>
+      </label>
+    ))}
+  </div>
+)}
 
       {subtext && (
         <div className="mt-3 text-xs font-medium text-slate-500">{subtext}</div>

@@ -18,10 +18,6 @@ const ALLOWED_SHIPPING_COUNTRIES = [
   "NO"
 ];
 
-// (On garde tes rates pour plus tard, mais on ne les utilise plus)
-const SHIPPING_RATE_EU = "shr_1TJzqQKn0lmTcQ11oH2YCNy9";
-const SHIPPING_RATE_INTL = "shr_1TKmemKn0lmTcQ11cn1EF72E";
-
 function getSafeLang(lang) {
   return ["fr", "de", "en"].includes(lang) ? lang : "fr";
 }
@@ -84,18 +80,37 @@ exports.handler = async function (event) {
         ? process.env.STRIPE_TIKTOK_COUPON_ID
         : null;
 
+    // ✅ BASE PRODUIT
+    const lineItems = [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ];
+
+    // ✅ OPTIONS
+    if (body.options) {
+      if (body.options.solar) {
+        lineItems.push({
+          price: "price_1TMav1Kn0lmTcQ115PNrqZk1", // 🔥 remplace ici
+          quantity: 1,
+        });
+      }
+
+      if (body.options.powerbank) {
+        lineItems.push({
+          price: "price_1TMaysKn0lmTcQ116adoUsEg", // 🔥 remplace ici
+          quantity: 1,
+        });
+      }
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
-
       locale: getStripeLocale(lang, country),
 
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
+      line_items: lineItems,
 
       discounts: promoCode ? [{ coupon: promoCode }] : [],
 
@@ -104,13 +119,9 @@ exports.handler = async function (event) {
 
       billing_address_collection: "auto",
 
-      // ✅ On garde l’adresse pour livraison
       shipping_address_collection: {
         allowed_countries: ALLOWED_SHIPPING_COUNTRIES,
       },
-
-      // ❌ IMPORTANT : plus aucun frais de livraison
-      // shipping_options supprimé
 
       metadata: {
         product,

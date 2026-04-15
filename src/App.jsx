@@ -878,6 +878,7 @@ const startCheckout = async (product, options = []) => {
                 }}
                 isLoading={isLoading}
                 featured
+                isLite
               />
 
               <ProductCard
@@ -1234,6 +1235,12 @@ function ProductCard({
   shipping,
   isLite
 }) {
+  const basePrice = 29;
+
+const totalPrice =
+  basePrice +
+  (selectedOptions?.includes(0) ? 9 : 0) +
+  (selectedOptions?.includes(1) ? 15 : 0);
   return (
     <div
       className={`rounded-3xl bg-white p-4 shadow-lg ring-1 ring-slate-200 ${
@@ -1264,7 +1271,9 @@ function ProductCard({
           <div className="text-xs font-semibold text-orange-600">{urgency}</div>
         )}
         <div className="mt-1 flex items-center gap-2">
-          <div className="text-2xl font-bold text-emerald-700">{price}</div>
+          <div className="text-2xl font-bold text-emerald-700">
+            {isLite ? `€${totalPrice}` : price}
+          </div>
           {oldPrice && (
             <div className="text-sm text-slate-400 line-through">
               {oldPrice}

@@ -10,6 +10,7 @@ import Blog from "./pages/Blog";
 
 import BlogArticle from "./pages/BlogArticle";
 import BlogArticle2 from "./pages/BlogArticle2";
+import BlogArticle3 from "./pages/BlogArticle3";
 import FAQ from "./pages/FAQ";
 
 import deviceLite from "./assets/blockpulse-screen.png";
@@ -93,6 +94,7 @@ const TEXT = {
     "Time + status",
     "More detailed view"
   ],
+  usageLine: "Perfect for running your washing machine, dishwasher or dryer at the right time.",
   productScreenButton: "Get my Screen",
   productScreenSub: "For people who want more detail",
 
@@ -189,6 +191,7 @@ const TEXT = {
     "Pas d’application",
     "Simple à utiliser"
   ],
+  usageLine: "Parfait pour lancer machine à laver, lave-vaisselle ou sèche-linge au bon moment.",
     productLiteOptions: [
   {
     label: "☀️ Panneau solaire (+9€)",
@@ -325,6 +328,7 @@ const TEXT = {
       "Keine App nötig",
       "Einfach zu bedienen"
     ],
+    usageLine: "Perfekt für Waschmaschine, Geschirrspüler oder Trockner zum richtigen Zeitpunkt.",
     productLiteOptions: [
   {
     label: "☀️ Solarpanel (+9€)",
@@ -455,6 +459,7 @@ const TEXT = {
       "Geen app nodig",
       "Eenvoudig in gebruik"
     ],
+    usageLine: "Perfect om je wasmachine, vaatwasser of droger op het juiste moment te gebruiken.",
     productLiteOptions: [
   {
     label: "☀️ Zonnepaneel (+9€)",
@@ -853,6 +858,10 @@ const startCheckout = async (product, options = []) => {
               <div className="mt-4 text-sm text-slate-700">
                 {t.ideal}
               </div>
+
+              <div className="mt-3 inline-flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2 text-sm font-medium text-emerald-900 shadow-sm">
+                ⚡ {t.usageLine}
+              </div>
             </div>
 
             {/* PRODUCTS */}
@@ -1208,6 +1217,7 @@ const startCheckout = async (product, options = []) => {
 <Route path="/faq" element={<FAQ />} />
 <Route path="/blog/electricity-cheapest-time" element={<BlogArticle />} />
 <Route path="/blog/best-time-washing-machine" element={<BlogArticle2 />} />
+<Route path="/blog/why-electricity-bill-high" element={<BlogArticle3 />} />
 <Route path="/dashboard" element={<Dashboard />} />
 
 </Routes>

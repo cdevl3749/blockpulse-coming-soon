@@ -12,10 +12,14 @@ const BLOG_TEXT = {
     articleDesc:
       "Discover the best hours to use electricity and save money without changing your habits.",
 
-    // ✅ NOUVEL ARTICLE
     article2Title: "Best time to run a washing machine",
     article2Desc:
       "Find out when to use your washing machine to save electricity easily.",
+
+    // ✅ NOUVEL ARTICLE 3
+    article3Title: "Why is your electricity bill so high?",
+    article3Desc:
+      "Understand why your electricity bill may be too high and discover simple ways to reduce it.",
 
     readMore: "Read article →",
 
@@ -33,10 +37,14 @@ const BLOG_TEXT = {
     articleDesc:
       "Découvrez les meilleures heures pour consommer l’électricité et faire des économies sans changer vos habitudes.",
 
-    // ✅ NOUVEL ARTICLE
     article2Title: "Meilleur moment pour utiliser la machine à laver",
     article2Desc:
       "Découvrez quand lancer votre machine pour économiser de l’électricité facilement.",
+
+    // ✅ NOUVEL ARTICLE 3
+    article3Title: "Pourquoi votre facture d’électricité est-elle si élevée ?",
+    article3Desc:
+      "Comprenez pourquoi votre facture peut être trop élevée et découvrez comment la réduire simplement.",
 
     readMore: "Lire l’article →",
 
@@ -54,10 +62,14 @@ const BLOG_TEXT = {
     articleDesc:
       "Entdecken Sie die besten Zeiten, um Strom zu nutzen und ohne großen Aufwand Geld zu sparen.",
 
-    // ✅ NOUVEL ARTICLE
     article2Title: "Beste Zeit für die Waschmaschine",
     article2Desc:
       "Erfahren Sie, wann Sie Ihre Waschmaschine am besten nutzen, um Strom zu sparen.",
+
+    // ✅ NOUVEL ARTICLE 3
+    article3Title: "Warum ist Ihre Stromrechnung so hoch?",
+    article3Desc:
+      "Verstehen Sie, warum Ihre Stromrechnung hoch sein kann und wie Sie sie einfach senken können.",
 
     readMore: "Artikel lesen →",
 
@@ -75,10 +87,14 @@ const BLOG_TEXT = {
     articleDesc:
       "Ontdek de beste uren om elektriciteit te gebruiken en te besparen zonder je gewoontes te veranderen.",
 
-    // ✅ NOUVEL ARTICLE
     article2Title: "Beste moment voor de wasmachine",
     article2Desc:
       "Ontdek wanneer je je wasmachine gebruikt om elektriciteit te besparen.",
+
+    // ✅ NOUVEL ARTICLE 3
+    article3Title: "Waarom is je elektriciteitsfactuur zo hoog?",
+    article3Desc:
+      "Ontdek waarom je elektriciteitsfactuur hoog kan zijn en hoe je die eenvoudig verlaagt.",
 
     readMore: "Artikel lezen →",
 
@@ -102,7 +118,6 @@ export default function Blog() {
 
   const t = BLOG_TEXT[lang] || BLOG_TEXT.en;
 
-  // ✅ SEO dynamique
   useEffect(() => {
     document.title = t.seoTitle;
 
@@ -178,6 +193,24 @@ export default function Blog() {
 
             <p className="mt-2 text-slate-600">
               {t.article2Desc}
+            </p>
+
+            <div className="mt-3 text-sm font-semibold text-emerald-700">
+              {t.readMore}
+            </div>
+          </Link>
+
+          {/* ✅ ARTICLE 3 */}
+          <Link
+            to="/blog/why-electricity-bill-high"
+            className="block rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 transition hover:shadow-xl"
+          >
+            <h2 className="text-xl font-bold text-emerald-900">
+              {t.article3Title}
+            </h2>
+
+            <p className="mt-2 text-slate-600">
+              {t.article3Desc}
             </p>
 
             <div className="mt-3 text-sm font-semibold text-emerald-700">

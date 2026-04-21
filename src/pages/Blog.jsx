@@ -21,6 +21,10 @@ const BLOG_TEXT = {
     article3Desc:
       "Understand why your electricity bill may be too high and discover simple ways to reduce it.",
 
+    article4Title: "Best time to use a coffee machine",
+    article4Desc:
+    "Learn when to use your coffee machine to avoid peak electricity prices and save a little every day.",
+
     readMore: "Read article →",
 
     seoTitle: "Energy tips & electricity prices | BlockPulse",
@@ -45,6 +49,10 @@ const BLOG_TEXT = {
     article3Title: "Pourquoi votre facture d’électricité est-elle si élevée ?",
     article3Desc:
       "Comprenez pourquoi votre facture peut être trop élevée et découvrez comment la réduire simplement.",
+
+    article4Title: "Quand utiliser une machine à café ?",
+    article4Desc:
+    "Découvrez le meilleur moment pour utiliser votre machine à café et éviter les heures les plus chères.",
 
     readMore: "Lire l’article →",
 
@@ -71,6 +79,10 @@ const BLOG_TEXT = {
     article3Desc:
       "Verstehen Sie, warum Ihre Stromrechnung hoch sein kann und wie Sie sie einfach senken können.",
 
+    article4Title: "Wann sollte man eine Kaffeemaschine benutzen?",
+    article4Desc:
+    "Erfahren Sie, wann Sie Ihre Kaffeemaschine am besten nutzen, um teure Stromzeiten zu vermeiden.",
+
     readMore: "Artikel lesen →",
 
     seoTitle: "Energietipps und Strompreise | BlockPulse",
@@ -95,6 +107,10 @@ const BLOG_TEXT = {
     article3Title: "Waarom is je elektriciteitsfactuur zo hoog?",
     article3Desc:
       "Ontdek waarom je elektriciteitsfactuur hoog kan zijn en hoe je die eenvoudig verlaagt.",
+
+    article4Title: "Wanneer gebruik je best een koffiemachine?",
+    article4Desc:
+    "Ontdek het beste moment om je koffiemachine te gebruiken en dure piekmomenten te vermijden.",
 
     readMore: "Artikel lezen →",
 
@@ -217,6 +233,24 @@ export default function Blog() {
               {t.readMore}
             </div>
           </Link>
+
+          {/* ✅ ARTICLE 4 */}
+            <Link
+            to="/blog/best-time-coffee-machine"
+            className="block rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 transition hover:shadow-xl"
+            >
+            <h2 className="text-xl font-bold text-emerald-900">
+                {t.article4Title}
+            </h2>
+
+            <p className="mt-2 text-slate-600">
+                {t.article4Desc}
+            </p>
+
+            <div className="mt-3 text-sm font-semibold text-emerald-700">
+                {t.readMore}
+            </div>
+            </Link>
 
         </div>
       </section>

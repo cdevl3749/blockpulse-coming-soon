@@ -11,6 +11,7 @@ import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import BlogArticle2 from "./pages/BlogArticle2";
 import BlogArticle3 from "./pages/BlogArticle3";
+import BlogArticle4 from "./pages/BlogArticle4";
 import FAQ from "./pages/FAQ";
 
 import deviceLite from "./assets/blockpulse-screen.png";
@@ -1218,6 +1219,7 @@ const startCheckout = async (product, options = []) => {
 <Route path="/blog/electricity-cheapest-time" element={<BlogArticle />} />
 <Route path="/blog/best-time-washing-machine" element={<BlogArticle2 />} />
 <Route path="/blog/why-electricity-bill-high" element={<BlogArticle3 />} />
+<Route path="/blog/best-time-coffee-machine" element={<BlogArticle4 />} />
 <Route path="/dashboard" element={<Dashboard />} />
 
 </Routes>

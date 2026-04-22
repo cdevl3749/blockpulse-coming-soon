@@ -8,11 +8,6 @@ const BLOG_TEXT = {
     title: "Energy Tips & Electricity Prices",
     desc: "Learn when electricity is cheapest and how to reduce your energy bill easily.",
 
-    featuredBadge: "New article",
-    featuredTitle: "Cheapest time to use electricity in the Netherlands",
-    featuredDesc:
-      "A simple guide to understand when electricity is usually cheapest in the Netherlands and how to avoid expensive habits.",
-
     articleTitle: "What is the cheapest time to use electricity?",
     articleDesc:
       "Discover the best hours to use electricity and save money without changing your habits.",
@@ -21,17 +16,14 @@ const BLOG_TEXT = {
     article2Desc:
       "Find out when to use your washing machine to save electricity easily.",
 
+    // ✅ NOUVEL ARTICLE 3
     article3Title: "Why is your electricity bill so high?",
     article3Desc:
       "Understand why your electricity bill may be too high and discover simple ways to reduce it.",
 
     article4Title: "Best time to use a coffee machine",
     article4Desc:
-      "Learn when to use your coffee machine to avoid peak electricity prices and save a little every day.",
-
-    article5Title: "Cheapest time to use electricity in the Netherlands",
-    article5Desc:
-      "Understand how electricity timing works in the Netherlands and which daily habits can quietly increase your bill.",
+    "Learn when to use your coffee machine to avoid peak electricity prices and save a little every day.",
 
     readMore: "Read article →",
 
@@ -45,11 +37,6 @@ const BLOG_TEXT = {
     title: "Conseils énergie et prix de l’électricité",
     desc: "Découvrez quand l’électricité est la moins chère et comment réduire votre facture simplement.",
 
-    featuredBadge: "Nouvel article",
-    featuredTitle: "Quand l’électricité est-elle la moins chère aux Pays-Bas ?",
-    featuredDesc:
-      "Un guide simple pour comprendre quand l’électricité est généralement la moins chère aux Pays-Bas et éviter les mauvaises habitudes.",
-
     articleTitle: "Quel est le meilleur moment pour utiliser l’électricité ?",
     articleDesc:
       "Découvrez les meilleures heures pour consommer l’électricité et faire des économies sans changer vos habitudes.",
@@ -58,17 +45,14 @@ const BLOG_TEXT = {
     article2Desc:
       "Découvrez quand lancer votre machine pour économiser de l’électricité facilement.",
 
+    // ✅ NOUVEL ARTICLE 3
     article3Title: "Pourquoi votre facture d’électricité est-elle si élevée ?",
     article3Desc:
       "Comprenez pourquoi votre facture peut être trop élevée et découvrez comment la réduire simplement.",
 
     article4Title: "Quand utiliser une machine à café ?",
     article4Desc:
-      "Découvrez le meilleur moment pour utiliser votre machine à café et éviter les heures les plus chères.",
-
-    article5Title: "Quand l’électricité est-elle la moins chère aux Pays-Bas ?",
-    article5Desc:
-      "Comprenez comment le timing de l’électricité fonctionne aux Pays-Bas et quelles habitudes quotidiennes augmentent discrètement votre facture.",
+    "Découvrez le meilleur moment pour utiliser votre machine à café et éviter les heures les plus chères.",
 
     readMore: "Lire l’article →",
 
@@ -82,11 +66,6 @@ const BLOG_TEXT = {
     title: "Energietipps und Strompreise",
     desc: "Erfahren Sie, wann Strom am günstigsten ist und wie Sie Ihre Rechnung einfach senken können.",
 
-    featuredBadge: "Neuer Artikel",
-    featuredTitle: "Wann ist Strom in den Niederlanden am günstigsten?",
-    featuredDesc:
-      "Ein einfacher Leitfaden, um zu verstehen, wann Strom in den Niederlanden meist am günstigsten ist und welche Gewohnheiten teuer werden können.",
-
     articleTitle: "Wann ist Strom am günstigsten?",
     articleDesc:
       "Entdecken Sie die besten Zeiten, um Strom zu nutzen und ohne großen Aufwand Geld zu sparen.",
@@ -95,17 +74,14 @@ const BLOG_TEXT = {
     article2Desc:
       "Erfahren Sie, wann Sie Ihre Waschmaschine am besten nutzen, um Strom zu sparen.",
 
+    // ✅ NOUVEL ARTICLE 3
     article3Title: "Warum ist Ihre Stromrechnung so hoch?",
     article3Desc:
       "Verstehen Sie, warum Ihre Stromrechnung hoch sein kann und wie Sie sie einfach senken können.",
 
     article4Title: "Wann sollte man eine Kaffeemaschine benutzen?",
     article4Desc:
-      "Erfahren Sie, wann Sie Ihre Kaffeemaschine am besten nutzen, um teure Stromzeiten zu vermeiden.",
-
-    article5Title: "Wann ist Strom in den Niederlanden am günstigsten?",
-    article5Desc:
-      "Verstehen Sie, wie Stromzeiten in den Niederlanden funktionieren und welche täglichen Gewohnheiten Ihre Rechnung erhöhen können.",
+    "Erfahren Sie, wann Sie Ihre Kaffeemaschine am besten nutzen, um teure Stromzeiten zu vermeiden.",
 
     readMore: "Artikel lesen →",
 
@@ -119,11 +95,6 @@ const BLOG_TEXT = {
     title: "Energietips en elektriciteitsprijzen",
     desc: "Ontdek wanneer elektriciteit het goedkoopst is en hoe je eenvoudig je energiefactuur verlaagt.",
 
-    featuredBadge: "Nieuw artikel",
-    featuredTitle: "Wanneer is elektriciteit het goedkoopst in Nederland?",
-    featuredDesc:
-      "Een eenvoudige gids om te begrijpen wanneer elektriciteit in Nederland meestal het goedkoopst is en welke gewoontes je factuur verhogen.",
-
     articleTitle: "Wanneer is elektriciteit het goedkoopst?",
     articleDesc:
       "Ontdek de beste uren om elektriciteit te gebruiken en te besparen zonder je gewoontes te veranderen.",
@@ -132,17 +103,14 @@ const BLOG_TEXT = {
     article2Desc:
       "Ontdek wanneer je je wasmachine gebruikt om elektriciteit te besparen.",
 
+    // ✅ NOUVEL ARTICLE 3
     article3Title: "Waarom is je elektriciteitsfactuur zo hoog?",
     article3Desc:
       "Ontdek waarom je elektriciteitsfactuur hoog kan zijn en hoe je die eenvoudig verlaagt.",
 
     article4Title: "Wanneer gebruik je best een koffiemachine?",
     article4Desc:
-      "Ontdek het beste moment om je koffiemachine te gebruiken en dure piekmomenten te vermijden.",
-
-    article5Title: "Wanneer is elektriciteit het goedkoopst in Nederland?",
-    article5Desc:
-      "Begrijp hoe timing van elektriciteit in Nederland werkt en welke dagelijkse gewoontes je factuur stilletjes verhogen.",
+    "Ontdek het beste moment om je koffiemachine te gebruiken en dure piekmomenten te vermijden.",
 
     readMore: "Artikel lezen →",
 
@@ -151,34 +119,6 @@ const BLOG_TEXT = {
       "Ontdek wanneer elektriciteit het goedkoopst is en hoe je eenvoudig energie kunt besparen.",
   },
 };
-
-const BLOG_ARTICLES = (t) => [
-  {
-    to: "/blog/electricity-cheapest-time",
-    title: t.articleTitle,
-    desc: t.articleDesc,
-  },
-  {
-    to: "/blog/best-time-washing-machine",
-    title: t.article2Title,
-    desc: t.article2Desc,
-  },
-  {
-    to: "/blog/why-electricity-bill-high",
-    title: t.article3Title,
-    desc: t.article3Desc,
-  },
-  {
-    to: "/blog/best-time-coffee-machine",
-    title: t.article4Title,
-    desc: t.article4Desc,
-  },
-  {
-    to: "/blog/cheapest-electricity-netherlands",
-    title: t.article5Title,
-    desc: t.article5Desc,
-  },
-];
 
 export default function Blog() {
   const [lang, setLang] = useState("en");
@@ -193,7 +133,6 @@ export default function Blog() {
   }, []);
 
   const t = BLOG_TEXT[lang] || BLOG_TEXT.en;
-  const articles = BLOG_ARTICLES(t);
 
   useEffect(() => {
     document.title = t.seoTitle;
@@ -218,7 +157,7 @@ export default function Blog() {
         />
         <div className="absolute inset-0 bg-white/60" />
 
-        <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="relative z-10 mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
           <Link
             to="/"
             className="inline-flex rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-emerald-900 shadow transition hover:bg-white"
@@ -238,46 +177,81 @@ export default function Blog() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-        <Link
-          to="/blog/cheapest-electricity-netherlands"
-          className="group block overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-900 to-emerald-700 p-8 text-white shadow-xl transition hover:shadow-2xl"
-        >
-          <div className="inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-50">
-            {t.featuredBadge}
-          </div>
+      <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid gap-6">
 
-          <h2 className="mt-4 text-2xl font-extrabold sm:text-3xl">
-            {t.featuredTitle}
-          </h2>
+          {/* ARTICLE 1 */}
+          <Link
+            to="/blog/electricity-cheapest-time"
+            className="block rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 transition hover:shadow-xl"
+          >
+            <h2 className="text-xl font-bold text-emerald-900">
+              {t.articleTitle}
+            </h2>
 
-          <p className="mt-3 max-w-3xl text-emerald-50/90">
-            {t.featuredDesc}
-          </p>
+            <p className="mt-2 text-slate-600">
+              {t.articleDesc}
+            </p>
 
-          <div className="mt-5 text-sm font-semibold text-white group-hover:underline">
-            {t.readMore}
-          </div>
-        </Link>
+            <div className="mt-3 text-sm font-semibold text-emerald-700">
+              {t.readMore}
+            </div>
+          </Link>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {articles.slice(0, 4).map((article) => (
+          {/* ARTICLE 2 */}
+          <Link
+            to="/blog/best-time-washing-machine"
+            className="block rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 transition hover:shadow-xl"
+          >
+            <h2 className="text-xl font-bold text-emerald-900">
+              {t.article2Title}
+            </h2>
+
+            <p className="mt-2 text-slate-600">
+              {t.article2Desc}
+            </p>
+
+            <div className="mt-3 text-sm font-semibold text-emerald-700">
+              {t.readMore}
+            </div>
+          </Link>
+
+          {/* ✅ ARTICLE 3 */}
+          <Link
+            to="/blog/why-electricity-bill-high"
+            className="block rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 transition hover:shadow-xl"
+          >
+            <h2 className="text-xl font-bold text-emerald-900">
+              {t.article3Title}
+            </h2>
+
+            <p className="mt-2 text-slate-600">
+              {t.article3Desc}
+            </p>
+
+            <div className="mt-3 text-sm font-semibold text-emerald-700">
+              {t.readMore}
+            </div>
+          </Link>
+
+          {/* ✅ ARTICLE 4 */}
             <Link
-              key={article.to}
-              to={article.to}
-              className="block rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 transition hover:shadow-xl"
+            to="/blog/best-time-coffee-machine"
+            className="block rounded-2xl bg-white p-6 shadow-lg ring-1 ring-slate-200 transition hover:shadow-xl"
             >
-              <h2 className="text-xl font-bold text-emerald-900">
-                {article.title}
-              </h2>
+            <h2 className="text-xl font-bold text-emerald-900">
+                {t.article4Title}
+            </h2>
 
-              <p className="mt-2 text-slate-600">{article.desc}</p>
+            <p className="mt-2 text-slate-600">
+                {t.article4Desc}
+            </p>
 
-              <div className="mt-3 text-sm font-semibold text-emerald-700">
+            <div className="mt-3 text-sm font-semibold text-emerald-700">
                 {t.readMore}
-              </div>
+            </div>
             </Link>
-          ))}
+
         </div>
       </section>
     </div>
